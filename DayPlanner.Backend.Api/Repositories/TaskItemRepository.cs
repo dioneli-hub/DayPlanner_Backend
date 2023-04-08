@@ -53,20 +53,7 @@ namespace DayPlanner.Backend.Api.Repositories
             return saved > 0 ? true : false;
         }
 
-        public ICollection<TaskItem> GetTasks()
-        {
-            throw new NotImplementedException();
-        }
-
-        ICollection<TaskItem> ITaskItemRepository.GetTodaysTasks()
-        {
-            throw new NotImplementedException();
-        }
-
-        TaskItem ITaskItemRepository.GetTaskItem(int taskItemId)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         
     }
