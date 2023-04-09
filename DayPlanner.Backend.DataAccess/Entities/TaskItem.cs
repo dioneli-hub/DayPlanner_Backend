@@ -9,6 +9,14 @@
 
         public DateTime CreatedAt { get; set; }
 
+        public int CreatorId { get; set; }
+
+        public User Creator { get; set; }  
+
+        //public int? PerformerId { get; set; }
+
+        //public User? Performer { get; set; }  
+
         public int BoardId { get; set; }
 
         public Board? Board { get; set; }

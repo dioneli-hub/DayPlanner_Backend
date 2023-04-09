@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DayPlanner.Backend.DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230408152613_Initial")]
+    [Migration("20230409085021_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -33,11 +33,19 @@ namespace DayPlanner.Backend.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatorId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("Boards", (string)null);
                 });
@@ -56,6 +64,9 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("CreatorId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
 
@@ -67,7 +78,48 @@ namespace DayPlanner.Backend.DataAccess.Migrations
 
                     b.HasIndex("BoardId");
 
+                    b.HasIndex("CreatorId");
+
                     b.ToTable("TaskItems", (string)null);
+                });
+
+            modelBuilder.Entity("DayPlanner.Backend.DataAccess.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("DayPlanner.Backend.DataAccess.Entities.Board", b =>
+                {
+                    b.HasOne("DayPlanner.Backend.DataAccess.Entities.User", "Creator")
+                        .WithMany("Boards")
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Creator");
                 });
 
             modelBuilder.Entity("DayPlanner.Backend.DataAccess.Entities.TaskItem", b =>
@@ -75,14 +127,29 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.HasOne("DayPlanner.Backend.DataAccess.Entities.Board", "Board")
                         .WithMany("Tasks")
                         .HasForeignKey("BoardId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("DayPlanner.Backend.DataAccess.Entities.User", "Creator")
+                        .WithMany("Tasks")
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Board");
+
+                    b.Navigation("Creator");
                 });
 
             modelBuilder.Entity("DayPlanner.Backend.DataAccess.Entities.Board", b =>
                 {
+                    b.Navigation("Tasks");
+                });
+
+            modelBuilder.Entity("DayPlanner.Backend.DataAccess.Entities.User", b =>
+                {
+                    b.Navigation("Boards");
+
                     b.Navigation("Tasks");
                 });
 #pragma warning restore 612, 618

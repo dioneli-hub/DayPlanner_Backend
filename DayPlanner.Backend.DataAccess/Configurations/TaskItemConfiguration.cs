@@ -17,9 +17,20 @@ namespace DayPlanner.Backend.DataAccess.Configurations
 
             builder.HasOne(x => x.Board)
                 .WithMany(x => x.Tasks)
-                .HasForeignKey(x => x.BoardId);
+                .HasForeignKey(x => x.BoardId)
+                .OnDelete(DeleteBehavior.NoAction); ;
 
-            
+            builder.HasOne(x => x.Creator)
+                .WithMany(x => x.Tasks)
+                .HasForeignKey(x => x.CreatorId)
+                .OnDelete(DeleteBehavior.NoAction); ;
+
+            //performer
+            //builder.HasOne(x => x.Performer)
+            //    .WithMany(x => x.Tasks)
+            //    .HasForeignKey(x => x.PerformerId);
+
+
             builder.ToTable("TaskItems");
         }
 
