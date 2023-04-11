@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using DayPlanner.Backend.Api.ApiModels;
-using DayPlanner.Backend.Api.DTOs;
 using DayPlanner.Backend.Api.Interfaces;
 using DayPlanner.Backend.DataAccess.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +23,7 @@ namespace DayPlanner.Backend.Api.Controllers
         //[ProducesResponseType(200, Type = typeof(IEnumerable<Task>))]
         public IActionResult GetBoards()
         {
-            var boards = _mapper.Map<List<BoardDto>>(_boardRepository.GetBoards());
+            var boards = _mapper.Map<List<BoardModel>>(_boardRepository.GetBoards());
 
             if (!ModelState.IsValid)
             {
@@ -42,7 +41,7 @@ namespace DayPlanner.Backend.Api.Controllers
             if (!_boardRepository.BoardExists(boardId))
                 return NotFound();
 
-            var board = _mapper.Map<BoardDto>(_boardRepository.GetBoard(boardId));
+            var board = _mapper.Map<BoardModel>(_boardRepository.GetBoard(boardId));
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -53,7 +52,7 @@ namespace DayPlanner.Backend.Api.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateBoard([FromBody] BoardDto boardCreate)
+        public IActionResult CreateBoard([FromBody] CreateBoardModel boardCreate)
         {
             if (boardCreate == null)
                 return BadRequest(ModelState);
@@ -62,8 +61,9 @@ namespace DayPlanner.Backend.Api.Controllers
                 return BadRequest(ModelState);
 
             var boardMap = _mapper.Map<Board>(boardCreate);
+            var currentUserId = this.CurrentUserId;
 
-            if (!_boardRepository.CreateBoard(boardMap))
+            if (!_boardRepository.CreateBoard(currentUserId, boardMap))
             {
                 ModelState.AddModelError("", "Something went wrong...");
                 return StatusCode(500, ModelState);
@@ -101,7 +101,7 @@ namespace DayPlanner.Backend.Api.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         public IActionResult UpdateBoard(int boardId, 
-            [FromBody] BoardDto updatedBoard)
+            [FromBody] BoardModel updatedBoard)
         {
             if (updatedBoard == null)
                 return BadRequest(ModelState);
@@ -130,7 +130,7 @@ namespace DayPlanner.Backend.Api.Controllers
         [Route("{boardId}/tasks")]
         [ProducesResponseType(400)]
         [ProducesResponseType(200)]
-        public ActionResult<TaskItem> AddTaskToBoard(
+        public ActionResult<TaskItemModel> AddTaskToBoard(
             [FromBody] AddTaskItemToBoardModel taskCreate,
             [FromRoute] int boardId)
         {
@@ -141,15 +141,22 @@ namespace DayPlanner.Backend.Api.Controllers
                 return BadRequest(ModelState);
 
             var taskMap = _mapper.Map<TaskItem>(taskCreate);
+            var currentUserId = this.CurrentUserId;
 
-            if (!_boardRepository.AddTask(boardId, taskMap))
+            
+            if (!_boardRepository.AddTask(currentUserId, boardId, taskMap))
             {
                 ModelState.AddModelError("", "Something went wrong...");
                 return StatusCode(500, ModelState);
             }
+
+            // var taskModel = _mapper.Map<TaskItemModel>(taskCreate); should be some method to return the created model
+
+            //add mapping and return TaskItem Model
+
             //var task = _boardRepository.AddTask(boardId, taskCreate.Text, taskCreate.DueDate);
             //var task = _taskItemRepository.Get(taskId);
-            return Ok("Successfully created");
+            return Ok("Successfully created"); 
         }
 
         [HttpDelete]
@@ -162,6 +169,13 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok();
         }
 
-       
+        // for now hard code
+        public int CurrentUserId
+        {
+            get
+            {
+                return 1;
+            }
+        }
     }
 }

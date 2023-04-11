@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using DayPlanner.Backend.Api.ApiModels;
-using DayPlanner.Backend.Api.DTOs;
 using DayPlanner.Backend.DataAccess.Entities;
 
 namespace DayPlanner.Backend.Api.Helper
@@ -9,10 +8,12 @@ namespace DayPlanner.Backend.Api.Helper
     {
         public MappingProfiles()
         {
-            CreateMap<Board, BoardDto>();
-            CreateMap<BoardDto, Board>();
-            CreateMap<TaskItem, TaskItemDto>();
+            CreateMap<Board, BoardModel>();
+            CreateMap<BoardModel, Board>();
+            CreateMap<TaskItem, TaskItemModel>();
             CreateMap<AddTaskItemToBoardModel, TaskItem>();
+            CreateMap<AddTaskItemToBoardModel, TaskItemModel>();
+            CreateMap<CreateBoardModel, Board>();
             CreateMap<EditTaskItemModel, TaskItem>();
         }
     }

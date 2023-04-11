@@ -4,6 +4,7 @@ using DayPlanner.Backend.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DayPlanner.Backend.DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230410213754_Somechanges")]
+    partial class Somechanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,17 +81,6 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.HasIndex("CreatorId");
 
                     b.ToTable("TaskItems", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 530,
-                            BoardId = 0,
-                            CreatedAt = new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 1,
-                            DueDate = new DateTime(2023, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "Jog 5km"
-                        });
                 });
 
             modelBuilder.Entity("DayPlanner.Backend.DataAccess.Entities.User", b =>
