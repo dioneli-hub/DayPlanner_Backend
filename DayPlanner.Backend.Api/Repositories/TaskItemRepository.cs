@@ -21,14 +21,19 @@ namespace DayPlanner.Backend.Api.Repositories
 
         public ICollection<TaskItem> GetTodaysTasks()
         {
-            return _context.TaskItems.
-                Where(t => t.DueDate == DateTime.Today)
+            // to-do: create a separate method for checking if one particular task is today's
+            return _context.TaskItems
+                //.Where(t => IsTaskForToday(t.DueDate))
+                .Where (item => item.DueDate >= DateTime.Now.Date &&
+                         item.DueDate <= DateTime.Now.AddDays(1))
                 .OrderBy(t => t.Id).ToList();
         }
 
         public TaskItem GetTaskItem(int taskItemId)
         {
-            return _context.TaskItems.Where(t => t.Id == taskItemId).FirstOrDefault();
+            return _context.TaskItems
+                .Where(t => t.Id == taskItemId)
+                .FirstOrDefault();
         }
 
         public bool TaskItemExists(int taskItemId)
@@ -53,7 +58,6 @@ namespace DayPlanner.Backend.Api.Repositories
             return saved > 0 ? true : false;
         }
 
-        
 
         
     }
