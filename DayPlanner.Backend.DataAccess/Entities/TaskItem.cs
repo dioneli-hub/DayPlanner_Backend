@@ -11,7 +11,7 @@
 
         public int CreatorId { get; set; }
 
-        public User Creator { get; set; }  
+        public User? Creator { get; set; }  //make not null later???
 
         //public int? PerformerId { get; set; }
 

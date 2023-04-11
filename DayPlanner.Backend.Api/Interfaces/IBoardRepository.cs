@@ -7,10 +7,10 @@ namespace DayPlanner.Backend.Api.Interfaces
         ICollection<Board> GetBoards();
         Board GetBoard(int boardId);
         bool BoardExists(int boardId);
-        bool CreateBoard(Board board);
+        bool CreateBoard(int currentUserId, Board board);
         bool DeleteBoard(Board board);
         bool UpdateBoard(Board board);
-        bool AddTask(int boardId, TaskItem taskMap);
+        bool AddTask(int currentUserId, int boardId, TaskItem taskMap);
         bool RemoveTask(int boardId, int taskId);
         
     }

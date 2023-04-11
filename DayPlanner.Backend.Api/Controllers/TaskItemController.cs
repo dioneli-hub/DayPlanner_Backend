@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using DayPlanner.Backend.Api.ApiModels;
-using DayPlanner.Backend.Api.DTOs;
 using DayPlanner.Backend.Api.Interfaces;
 using DayPlanner.Backend.DataAccess.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +23,7 @@ namespace DayPlanner.Backend.Api.Controllers
         //[ProducesResponseType(200, Type = typeof(IEnumerable<Task>))]
         public IActionResult GetTasks()
         {
-            var tasks = _mapper.Map<List<TaskItemDto>>(_taskItemRepository.GetTasks());
+            var tasks = _mapper.Map<List<TaskItemModel>>(_taskItemRepository.GetTasks());
 
             if (!ModelState.IsValid)
             {
@@ -46,7 +45,7 @@ namespace DayPlanner.Backend.Api.Controllers
             if (!_taskItemRepository.TaskItemExists(taskItemId))
                 return NotFound();
 
-            var taskItem = _mapper.Map<TaskItemDto>(_taskItemRepository.GetTaskItem(taskItemId));
+            var taskItem = _mapper.Map<TaskItemModel>(_taskItemRepository.GetTaskItem(taskItemId));
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -60,7 +59,7 @@ namespace DayPlanner.Backend.Api.Controllers
         [ProducesResponseType(200)]
         public IActionResult GetTodaysTasks()
         {
-            var todaysTasks = _mapper.Map<List<TaskItemDto>>(_taskItemRepository.GetTodaysTasks()); 
+            var todaysTasks = _mapper.Map<List<TaskItemModel>>(_taskItemRepository.GetTodaysTasks()); 
 
             if (!ModelState.IsValid)
             {
@@ -93,6 +92,7 @@ namespace DayPlanner.Backend.Api.Controllers
                 return BadRequest();
 
             var taskMap = _mapper.Map<TaskItem>(updatedTask);
+            
 
             if (!_taskItemRepository.UpdateTask(taskMap))
             {
@@ -125,6 +125,16 @@ namespace DayPlanner.Backend.Api.Controllers
             }
 
             return NoContent();
+        }
+
+
+        // for now hard code
+        public int CurrentUserId
+        {
+            get
+            {
+                return 1;
+            }
         }
 
     }

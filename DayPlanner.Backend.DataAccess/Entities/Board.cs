@@ -12,7 +12,7 @@ namespace DayPlanner.Backend.DataAccess.Entities
 
         public int CreatorId { get; set; }
 
-        public User Creator { get; set; }  
+        public User? Creator { get; set; }  // make not null later?
 
         public ICollection<TaskItem>? Tasks { get; set; }
 
