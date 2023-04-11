@@ -1,6 +1,7 @@
 ﻿using DayPlanner.Backend.Api.Interfaces;
 using DayPlanner.Backend.DataAccess;
 using DayPlanner.Backend.DataAccess.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace DayPlanner.Backend.Api.Repositories
 {
@@ -16,14 +17,15 @@ namespace DayPlanner.Backend.Api.Repositories
         ICollection<TaskItem> ITaskItemRepository.GetTasks()
         {
             return _context.TaskItems
-                .OrderBy(t => t.Id).ToList();
+                .Include(x => x.Board)
+                .OrderBy(t => t.Id)
+                .ToList();
         }
 
         public ICollection<TaskItem> GetTodaysTasks()
         {
-            // to-do: create a separate method for checking if one particular task is today's
             return _context.TaskItems
-                //.Where(t => IsTaskForToday(t.DueDate))
+                .Include(x => x.Board)
                 .Where (item => item.DueDate >= DateTime.Now.Date &&
                          item.DueDate <= DateTime.Now.AddDays(1))
                 .OrderBy(t => t.Id).ToList();
