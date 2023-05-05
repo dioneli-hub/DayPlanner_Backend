@@ -23,15 +23,7 @@ namespace DayPlanner.Backend.DataAccess
             new TaskItemConfiguration().Configure(modelBuilder.Entity<TaskItem>());
             new UserConfiguration().Configure(modelBuilder.Entity<User>());
 
-            modelBuilder.Entity<User>().HasData(
-                new User
-                {
-                    Id = 1,
-                    FirstName = "Henry",
-                    LastName = "Moor",
-                    Email = "hmoor@gmail.com",
-                    CreatedAt = new DateTime(2019, 05, 09, 9, 15, 0)
-                });
+            
 
             //modelBuilder.Entity<TaskItem>().HasData(
             //    new TaskItem

@@ -15,6 +15,9 @@ namespace DayPlanner.Backend.Api.Helper
             CreateMap<AddTaskItemToBoardModel, TaskItemModel>();
             CreateMap<CreateBoardModel, Board>();
             CreateMap<EditTaskItemModel, TaskItem>();
+
+            CreateMap<User, UserModel>();
+            CreateMap<CreateUserModel, User>();
         }
     }
 }
