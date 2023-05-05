@@ -1,4 +1,6 @@
 ﻿
+using DayPlanner.Backend.DataAccess.Entities;
+
 namespace DayPlanner.Backend.Api.ApiModels
 {
     public class TaskItemModel
@@ -11,6 +13,7 @@ namespace DayPlanner.Backend.Api.ApiModels
         public DateTime CreatedAt { get; set; }
 
         public int BoardId { get; set; }
+        public BoardModel? Board { get; set; }
 
         public int CreatorId { get; set; }
 
