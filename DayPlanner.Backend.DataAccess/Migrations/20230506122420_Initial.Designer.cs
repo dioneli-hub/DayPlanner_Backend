@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DayPlanner.Backend.DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230410214404_Somechanges2")]
-    partial class Somechanges2
+    [Migration("20230506122420_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -81,17 +81,6 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.HasIndex("CreatorId");
 
                     b.ToTable("TaskItems", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 530,
-                            BoardId = 0,
-                            CreatedAt = new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 1,
-                            DueDate = new DateTime(2023, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "Jog 5km"
-                        });
                 });
 
             modelBuilder.Entity("DayPlanner.Backend.DataAccess.Entities.User", b =>
@@ -117,19 +106,17 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SaltHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTimeOffset(new DateTime(2019, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
-                            Email = "hmoor@gmail.com",
-                            FirstName = "Henry",
-                            LastName = "Moor"
-                        });
                 });
 
             modelBuilder.Entity("DayPlanner.Backend.DataAccess.Entities.Board", b =>

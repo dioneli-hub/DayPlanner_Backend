@@ -169,12 +169,13 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok();
         }
 
-        // for now hard code
         public int CurrentUserId
         {
             get
             {
-                return 1;
+                var nameClaim = HttpContext.User.Identity!.Name;
+                return int.Parse(nameClaim!);
+
             }
         }
     }

@@ -133,7 +133,9 @@ namespace DayPlanner.Backend.Api.Controllers
         {
             get
             {
-                return 1;
+                var nameClaim = HttpContext.User.Identity!.Name;
+                return int.Parse(nameClaim!);
+
             }
         }
 

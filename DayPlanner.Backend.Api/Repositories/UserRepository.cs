@@ -34,7 +34,6 @@ namespace DayPlanner.Backend.Api.Repositories
 
         public bool RegisterUser(CreateUserModel model)
         {
-            
 
             var hashModel = HashManager.Generate(model.Password);
             var user = new User

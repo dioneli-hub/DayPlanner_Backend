@@ -54,7 +54,7 @@ namespace DayPlanner.Backend.Api.Controllers
         [AllowAnonymous]
         public IActionResult RegisterUser([FromBody] CreateUserModel model)
         {
-            if (!_userRepository.UserIsRegistered(model.Email))
+            if (_userRepository.UserIsRegistered(model.Email))
                 return NotFound();
 
 
@@ -65,15 +65,25 @@ namespace DayPlanner.Backend.Api.Controllers
                     return BadRequest(ModelState);
 
 
-                if (!_userRepository.RegisterUser( model))
+                if (!_userRepository.RegisterUser(model))
                 {
                     ModelState.AddModelError("", "Something went wrong...");
                     return StatusCode(500, ModelState);
                 }
 
                 return Ok("Successfully created");
+        }
+
+        public int CurrentUserId
+        {
+            get
+            {
+                var nameClaim = HttpContext.User.Identity!.Name;
+                return int.Parse(nameClaim!);
+
             }
         }
+    }
 
 
     }

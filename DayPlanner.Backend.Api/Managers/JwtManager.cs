@@ -34,9 +34,9 @@ namespace DayPlanner.Backend.Api.Managers
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     ValidateIssuer = true,
-                    ValidIssuer = "SocialNetwork.Issuer",
+                    ValidIssuer = "DayPlanner.Issuer",
                     ValidateAudience = true,
-                    ValidAudience = "SocialNetwork.Audience",
+                    ValidAudience = "DayPlanner.Audience",
                     IssuerSigningKey = new SymmetricSecurityKey(key)
                 };
 
@@ -58,8 +58,8 @@ namespace DayPlanner.Backend.Api.Managers
             };
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Issuer = "SocialNetwork.Issuer",
-                Audience = "SocialNetwork.Audience",
+                Issuer = "DayPlanner.Issuer",
+                Audience = "DayPlanner.Audience",
                 NotBefore = nowUtc.UtcDateTime,
                 Subject = new ClaimsIdentity(claims),
                 Expires = expires.UtcDateTime,
