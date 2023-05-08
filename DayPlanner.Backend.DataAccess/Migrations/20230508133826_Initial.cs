@@ -12,21 +12,15 @@ namespace DayPlanner.Backend.DataAccess.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "BoardMembers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SaltHash = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    BoardId = table.Column<int>(type: "int", nullable: false),
+                    MemberId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_BoardMembers", x => new { x.BoardId, x.MemberId });
                 });
 
             migrationBuilder.CreateTable(
@@ -42,10 +36,29 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Boards", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SaltHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BoardId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Boards_Users_CreatorId",
-                        column: x => x.CreatorId,
-                        principalTable: "Users",
+                        name: "FK_Users_Boards_BoardId",
+                        column: x => x.BoardId,
+                        principalTable: "Boards",
                         principalColumn: "Id");
                 });
 
@@ -77,6 +90,11 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_BoardMembers_MemberId",
+                table: "BoardMembers",
+                column: "MemberId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Boards_CreatorId",
                 table: "Boards",
                 column: "CreatorId");
@@ -90,11 +108,46 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                 name: "IX_TaskItems_CreatorId",
                 table: "TaskItems",
                 column: "CreatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_BoardId",
+                table: "Users",
+                column: "BoardId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_BoardMembers_Boards_BoardId",
+                table: "BoardMembers",
+                column: "BoardId",
+                principalTable: "Boards",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_BoardMembers_Users_MemberId",
+                table: "BoardMembers",
+                column: "MemberId",
+                principalTable: "Users",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Boards_Users_CreatorId",
+                table: "Boards",
+                column: "CreatorId",
+                principalTable: "Users",
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Users_Boards_BoardId",
+                table: "Users");
+
+            migrationBuilder.DropTable(
+                name: "BoardMembers");
+
             migrationBuilder.DropTable(
                 name: "TaskItems");
 

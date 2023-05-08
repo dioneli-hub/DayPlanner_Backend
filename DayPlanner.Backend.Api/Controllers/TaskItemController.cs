@@ -2,12 +2,14 @@
 using DayPlanner.Backend.Api.ApiModels;
 using DayPlanner.Backend.Api.Interfaces;
 using DayPlanner.Backend.DataAccess.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class TaskItemController : Controller
     {
         private readonly ITaskItemRepository _taskItemRepository;
@@ -127,8 +129,6 @@ namespace DayPlanner.Backend.Api.Controllers
             return NoContent();
         }
 
-
-        // for now hard code
         public int CurrentUserId
         {
             get
