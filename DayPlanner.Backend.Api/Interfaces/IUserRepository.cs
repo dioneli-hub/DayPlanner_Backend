@@ -13,5 +13,7 @@ namespace DayPlanner.Backend.Api.Interfaces
         bool UserIsRegistered(string email);
 
         bool UserExists(int userId);
+
+        User GetCurrentUser();
     }
 }

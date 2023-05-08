@@ -129,15 +129,7 @@ namespace DayPlanner.Backend.Api.Controllers
             return NoContent();
         }
 
-        public int CurrentUserId
-        {
-            get
-            {
-                var nameClaim = HttpContext.User.Identity!.Name;
-                return int.Parse(nameClaim!);
-
-            }
-        }
+        
 
     }
 }

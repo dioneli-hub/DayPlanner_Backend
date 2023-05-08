@@ -1,5 +1,6 @@
 ﻿using DayPlanner.Backend.Api.ApiModels;
 using DayPlanner.Backend.Api.Interfaces;
+using DayPlanner.Backend.Api.Interfaces.Context;
 using DayPlanner.Backend.Api.Managers;
 using DayPlanner.Backend.DataAccess;
 using DayPlanner.Backend.DataAccess.Entities;
@@ -10,10 +11,12 @@ namespace DayPlanner.Backend.Api.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly DataContext _context;
+        private readonly IUserContextService _userContextService;
 
-        public UserRepository(DataContext context)
+        public UserRepository(DataContext context, IUserContextService userContextService)
         {
             _context = context;
+            _userContextService = userContextService;
         }
 
         public ICollection<User> GetAllUsers()
@@ -48,6 +51,15 @@ namespace DayPlanner.Backend.Api.Repositories
 
             _context.Users.Add(user);
             return Save();
+        }
+
+        public User GetCurrentUser() 
+        {
+            var currentUserId = _userContextService.GetCurrentUserId();
+            var currentUser = _context.Users
+               //.Include(x => x.Avatar)
+               .FirstOrDefault(x => x.Id == currentUserId);
+            return currentUser!;
         }
 
         public bool Save()

@@ -73,18 +73,6 @@ namespace DayPlanner.Backend.Api.Controllers
 
                 return Ok("Successfully created");
         }
-
-        public int CurrentUserId
-        {
-            get
-            {
-                var nameClaim = HttpContext.User.Identity!.Name;
-                return int.Parse(nameClaim!);
-
-            }
-        }
     }
-
-
-    }
+}
 

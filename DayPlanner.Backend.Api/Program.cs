@@ -7,6 +7,8 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using DayPlanner.Backend.Api.Interfaces.Context;
+using DayPlanner.Backend.Api.Helper.HttpContext;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,11 @@ builder.Services.AddScoped<ITaskItemRepository, TaskItemRepository>();
 builder.Services.AddScoped<IBoardRepository, BoardRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IUserContextService, UserHttpContextService>();
+
+//HTTP CONTEXT
+builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
 
 //services cors
 builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>

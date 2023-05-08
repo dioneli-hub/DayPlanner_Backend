@@ -63,9 +63,8 @@ namespace DayPlanner.Backend.Api.Controllers
                 return BadRequest(ModelState);
 
             var boardMap = _mapper.Map<Board>(boardCreate);
-            var currentUserId = this.CurrentUserId;
 
-            if (!_boardRepository.CreateBoard(currentUserId, boardMap))
+            if (!_boardRepository.CreateBoard(boardMap))
             {
                 ModelState.AddModelError("", "Something went wrong...");
                 return StatusCode(500, ModelState);
@@ -143,10 +142,9 @@ namespace DayPlanner.Backend.Api.Controllers
                 return BadRequest(ModelState);
 
             var taskMap = _mapper.Map<TaskItem>(taskCreate);
-            var currentUserId = this.CurrentUserId;
 
             
-            if (!_boardRepository.AddTask(currentUserId, boardId, taskMap))
+            if (!_boardRepository.AddTask(boardId, taskMap))
             {
                 ModelState.AddModelError("", "Something went wrong...");
                 return StatusCode(500, ModelState);
@@ -171,14 +169,5 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok();
         }
 
-        public int CurrentUserId
-        {
-            get
-            {
-                var nameClaim = HttpContext.User.Identity!.Name;
-                return int.Parse(nameClaim!);
-
-            }
-        }
     }
 }

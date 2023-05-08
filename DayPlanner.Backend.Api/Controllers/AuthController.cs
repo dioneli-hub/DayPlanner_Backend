@@ -28,8 +28,7 @@ namespace DayPlanner.Backend.Api.Controllers
         [Authorize]
         public ActionResult<UserModel> AuthenticatedUser()
         {
-            var userId = this.CurrentUserId;
-            var user = _userRepository.GetUser(userId);
+            var user = _userRepository.GetCurrentUser();
             return Ok(user);
         }
 
@@ -41,14 +40,6 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok(token);
         }
 
-        public int CurrentUserId
-        {
-            get
-            {
-                var nameClaim = HttpContext.User.Identity!.Name;
-                return int.Parse(nameClaim!);
-
-            }
-        }
+        
     }
 }

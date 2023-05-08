@@ -2,7 +2,7 @@
 using DayPlanner.Backend.Api.ApiModels;
 using DayPlanner.Backend.DataAccess.Entities;
 
-namespace DayPlanner.Backend.Api.Helper
+namespace DayPlanner.Backend.Api.Helper.Mapping
 {
     public class MappingProfiles : Profile
     {

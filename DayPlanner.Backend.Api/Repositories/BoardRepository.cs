@@ -1,4 +1,5 @@
 ﻿using DayPlanner.Backend.Api.Interfaces;
+using DayPlanner.Backend.Api.Interfaces.Context;
 using DayPlanner.Backend.DataAccess;
 using DayPlanner.Backend.DataAccess.Entities;
 
@@ -7,10 +8,12 @@ namespace DayPlanner.Backend.Api.Repositories
     public class BoardRepository : IBoardRepository
     {
         private readonly DataContext _context;
+        private readonly IUserContextService _userContextService;
 
-        public BoardRepository(DataContext context)
+        public BoardRepository(DataContext context, IUserContextService userContextService)
         {
             _context = context;
+            _userContextService = userContextService;
         }
         public ICollection<Board> GetBoards()
         {
@@ -27,11 +30,11 @@ namespace DayPlanner.Backend.Api.Repositories
             return _context.Boards.Any(b => b.Id == boardId);
         }
 
-        public bool CreateBoard(int currentUserId, Board board)
+        public bool CreateBoard(Board board)
         {
             // improve later
             board.CreatedAt = DateTime.Now;
-            board.CreatorId = currentUserId;
+            board.CreatorId = _userContextService.GetCurrentUserId(); 
             
             
             _context.Add(board);
@@ -56,13 +59,13 @@ namespace DayPlanner.Backend.Api.Repositories
             return Save();
         }
 
-        public bool AddTask(int currentUserId, int boardId, TaskItem taskMap)
+        public bool AddTask(int boardId, TaskItem taskMap)
         {
             
             taskMap.BoardId = boardId;
             taskMap.CreatedAt = DateTime.Now;
             taskMap.Board = GetBoard(boardId);
-            taskMap.CreatorId = currentUserId;
+            taskMap.CreatorId = _userContextService.GetCurrentUserId(); ;
 
             _context.TaskItems.Add(taskMap);
             return Save();
