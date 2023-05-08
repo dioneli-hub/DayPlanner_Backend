@@ -34,7 +34,7 @@ namespace DayPlanner.Backend.Api.Repositories
             return query.ToList();
         }
 
-        public void MakeMember(int makeMemberUserId, int boardId)
+        public void AddBoardMember(int makeMemberUserId, int boardId) //AddBoardMember
         {
             var currentUserId = _userContextService.GetCurrentUserId();
             var board = _context.Boards
@@ -67,7 +67,7 @@ namespace DayPlanner.Backend.Api.Repositories
             }
         }
 
-        public void DeleteMember(int deleteMemberUserId, int boardId)
+        public void DeleteBoardMember(int deleteMemberUserId, int boardId) // deleteBoardMember
         {
             var currentUserId = _userContextService.GetCurrentUserId();
             var board = _context.Boards

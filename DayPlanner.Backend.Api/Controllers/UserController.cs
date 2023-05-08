@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DayPlanner.Backend.Api.ApiModels;
 using DayPlanner.Backend.Api.Interfaces;
+using DayPlanner.Backend.Api.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,11 +14,14 @@ namespace DayPlanner.Backend.Api.Controllers
     public class UserController : Controller
     {
         private readonly IUserRepository _userRepository;
+        private readonly IBoardMemberRepository _boardMemberRepository;
         private readonly IMapper _mapper;
 
-        public UserController(IUserRepository userRepository, IMapper mapper)
+        public UserController(IUserRepository userRepository,
+            IBoardMemberRepository boardMemberRepository, IMapper mapper)
         {
             _userRepository = userRepository;
+            _boardMemberRepository = boardMemberRepository;
             _mapper = mapper;
         }
 
@@ -72,6 +76,12 @@ namespace DayPlanner.Backend.Api.Controllers
                 }
 
                 return Ok("Successfully created");
+        }
+
+        [HttpGet("{userId}/boards", Name = nameof(GetUserMemberBoards))]
+        public ActionResult<BoardModel> GetUserMemberBoards(int userId) 
+        {
+            return Ok(_boardMemberRepository.GetUserMemberBoards(userId));//mapping
         }
     }
 }

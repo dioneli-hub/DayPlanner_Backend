@@ -20,6 +20,7 @@ builder.Services.AddScoped<ITaskItemRepository, TaskItemRepository>();
 builder.Services.AddScoped<IBoardRepository, BoardRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IBoardMemberRepository, BoardMemberRepository>();
 builder.Services.AddScoped<IUserContextService, UserHttpContextService>();
 
 //HTTP CONTEXT

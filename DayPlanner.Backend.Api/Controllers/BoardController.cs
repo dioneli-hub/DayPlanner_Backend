@@ -13,11 +13,13 @@ namespace DayPlanner.Backend.Api.Controllers
     public class BoardController : Controller
     {
         private readonly IBoardRepository _boardRepository;
+        private readonly IBoardMemberRepository _boardMemberRepository;
         private readonly IMapper _mapper;
 
-        public BoardController(IBoardRepository boardRepository, IMapper mapper)
+        public BoardController(IBoardRepository boardRepository, IBoardMemberRepository boardMemberRepository, IMapper mapper)
         {
             _boardRepository = boardRepository;
+            _boardMemberRepository = boardMemberRepository;
             _mapper = mapper;
         }
 
@@ -169,5 +171,33 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        [Route("{boardId}/members")]
+        public ActionResult<List<BoardMember>> GetBoardMembers(
+            [FromRoute] int boardId)
+        {
+            
+            return Ok(_boardMemberRepository.GetBoardMembers(boardId));
+        }
+
+        [HttpPost]
+        [Route("{boardId}/members")]
+        public ActionResult AddBoardMember(
+            [FromBody] int userId, //later will probably pass by email
+            [FromRoute] int boardId)
+        {
+            _boardMemberRepository.AddBoardMember(userId, boardId); //pass whole user as argument
+            return Ok("Success");
+        }
+
+        [HttpDelete]
+        [Route("{boardId}/members")]
+        public ActionResult DeleteBoardMember(
+            [FromBody] int userId, //later will probably pass by email
+            [FromRoute] int boardId)
+        {
+            _boardMemberRepository.DeleteBoardMember(userId, boardId); //pass whole user as argument
+            return Ok("Success");
+        }
     }
 }

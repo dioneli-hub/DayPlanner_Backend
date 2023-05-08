@@ -6,7 +6,7 @@ namespace DayPlanner.Backend.Api.Interfaces
     {
         ICollection<User> GetBoardMembers(int boardId); //automapper
         ICollection<Board> GetUserMemberBoards(int userId); //automapper
-        void MakeMember(int makeMemberUserId, int boardId);
-        void DeleteMember(int deleteMemberUserId, int boardId);
+        void AddBoardMember(int makeMemberUserId, int boardId);
+        void DeleteBoardMember(int deleteMemberUserId, int boardId);
     }
 }
