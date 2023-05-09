@@ -1,6 +1,7 @@
 ﻿using DayPlanner.Backend.Api.Interfaces;
 using DayPlanner.Backend.Api.Managers;
 using DayPlanner.Backend.DataAccess;
+using DayPlanner.Backend.Domain;
 
 namespace DayPlanner.Backend.Api.Repositories
 {

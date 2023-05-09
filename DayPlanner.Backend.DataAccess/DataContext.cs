@@ -1,5 +1,5 @@
 ﻿using DayPlanner.Backend.DataAccess.Configurations;
-using DayPlanner.Backend.DataAccess.Entities;
+using DayPlanner.Backend.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace DayPlanner.Backend.DataAccess

@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32414.318
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DayPlanner.Backend.Api", "DayPlanner.Backend.Api.csproj", "{FCB374B2-FA6E-4708-A736-261E8AAF60A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DayPlanner.Backend.Api", "DayPlanner.Backend.Api.csproj", "{FCB374B2-FA6E-4708-A736-261E8AAF60A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DayPlanner.Backend.DataAccess", "..\DayPlanner.Backend.DataAccess\DayPlanner.Backend.DataAccess.csproj", "{751B2167-4CAA-4B92-BEC1-520E156C8695}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DayPlanner.Backend.DataAccess", "..\DayPlanner.Backend.DataAccess\DayPlanner.Backend.DataAccess.csproj", "{751B2167-4CAA-4B92-BEC1-520E156C8695}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DayPlanner.Backend.Domain", "..\DayPlanner.Backend.Domain\DayPlanner.Backend.Domain.csproj", "{85761E1F-2674-4CAD-82DB-B4A1C68B26CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{751B2167-4CAA-4B92-BEC1-520E156C8695}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{751B2167-4CAA-4B92-BEC1-520E156C8695}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{751B2167-4CAA-4B92-BEC1-520E156C8695}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85761E1F-2674-4CAD-82DB-B4A1C68B26CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85761E1F-2674-4CAD-82DB-B4A1C68B26CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85761E1F-2674-4CAD-82DB-B4A1C68B26CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85761E1F-2674-4CAD-82DB-B4A1C68B26CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

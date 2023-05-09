@@ -1,6 +1,4 @@
-﻿using Microsoft.Identity.Client;
-
-namespace DayPlanner.Backend.DataAccess.Entities
+﻿namespace DayPlanner.Backend.Domain
 {
     public class Board
     {

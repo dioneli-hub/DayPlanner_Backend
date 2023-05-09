@@ -1,7 +1,8 @@
 ﻿using DayPlanner.Backend.Api.Interfaces;
 using DayPlanner.Backend.Api.Interfaces.Context;
 using DayPlanner.Backend.DataAccess;
-using DayPlanner.Backend.DataAccess.Entities;
+using DayPlanner.Backend.Api.ApiModels;
+using DayPlanner.Backend.Domain;
 
 namespace DayPlanner.Backend.Api.Repositories
 {
@@ -15,7 +16,7 @@ namespace DayPlanner.Backend.Api.Repositories
             _context = context;
             _userContextService = userContextService;
         }
-        public ICollection<Board> GetBoards()
+        public ICollection<Board> GetBoards() //mapper
         {
             return _context.Boards
                 .OrderBy(t => t.Id).ToList();
@@ -95,5 +96,7 @@ namespace DayPlanner.Backend.Api.Repositories
             _context.Update(task);
             return Save();
         }
+
+        
     }
 }

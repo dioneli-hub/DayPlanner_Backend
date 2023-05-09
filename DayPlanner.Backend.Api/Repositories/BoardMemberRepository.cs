@@ -1,7 +1,7 @@
 ﻿using DayPlanner.Backend.Api.Interfaces;
 using DayPlanner.Backend.Api.Interfaces.Context;
 using DayPlanner.Backend.DataAccess;
-using DayPlanner.Backend.DataAccess.Entities;
+using DayPlanner.Backend.Domain;
 
 namespace DayPlanner.Backend.Api.Repositories
 {
@@ -89,23 +89,23 @@ namespace DayPlanner.Backend.Api.Repositories
             }
         }
 
-        public void DeleteCurrentUserFromBoard(int boardId) // deleteBoardMember
-            // create a method that will help not to repete Delete Board Member and current user from board code
-        {
-            var currentUserId = _userContextService.GetCurrentUserId();
-            var board = _context.Boards
-                .FirstOrDefault(x => x.Id == boardId);
+        //public void DeleteCurrentUserFromBoard(int boardId) // deleteBoardMember
+        //    // create a method that will help not to repete Delete Board Member and current user from board code
+        //{
+        //    var currentUserId = _userContextService.GetCurrentUserId();
+        //    var board = _context.Boards
+        //        .FirstOrDefault(x => x.Id == boardId);
 
-            var membership = _context.BoardMembers
-                .FirstOrDefault(x => x.MemberId == currentUserId &&
-                                          x.BoardId == boardId);
+        //    var membership = _context.BoardMembers
+        //        .FirstOrDefault(x => x.MemberId == currentUserId &&
+        //                                  x.BoardId == boardId);
 
-            if (membership != null)
-            {
-                _context.BoardMembers.Remove(membership);
-                _context.SaveChanges();
-            }
-        }
+        //    if (membership != null)
+        //    {
+        //        _context.BoardMembers.Remove(membership);
+        //        _context.SaveChanges();
+        //    }
+        //}
 
         public ICollection<Board> GetCurrentUserMemberBoards()
         {

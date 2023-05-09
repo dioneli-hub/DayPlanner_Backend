@@ -20,4 +20,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DayPlanner.Backend.Domain\DayPlanner.Backend.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

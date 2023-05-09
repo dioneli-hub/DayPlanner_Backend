@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace DayPlanner.Backend.DataAccess.Entities
+﻿
+namespace DayPlanner.Backend.Domain
 {
     public class User
     {

@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using DayPlanner.Backend.Api.ApiModels;
 using DayPlanner.Backend.Api.Interfaces;
-using DayPlanner.Backend.DataAccess.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using DayPlanner.Backend.Domain;
 
 namespace DayPlanner.Backend.Api.Controllers
 {

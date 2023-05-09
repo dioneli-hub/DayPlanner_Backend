@@ -1,4 +1,4 @@
-﻿namespace DayPlanner.Backend.DataAccess.Entities
+﻿namespace DayPlanner.Backend.Domain
 {
     public class TaskItem
     {

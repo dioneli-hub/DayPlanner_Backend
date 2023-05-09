@@ -1,4 +1,4 @@
-﻿using DayPlanner.Backend.DataAccess.Entities;
+﻿using DayPlanner.Backend.Domain;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 

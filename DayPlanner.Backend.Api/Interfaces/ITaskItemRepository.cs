@@ -1,5 +1,4 @@
-﻿
-using DayPlanner.Backend.DataAccess.Entities;
+﻿using DayPlanner.Backend.Domain;
 
 namespace DayPlanner.Backend.Api.Interfaces
 {

@@ -1,7 +1,4 @@
-﻿
-using DayPlanner.Backend.DataAccess.Entities;
-
-namespace DayPlanner.Backend.Api.ApiModels
+﻿namespace DayPlanner.Backend.Api.ApiModels
 {
     public class TaskItemModel
     {
