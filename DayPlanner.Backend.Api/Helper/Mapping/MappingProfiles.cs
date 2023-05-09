@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DayPlanner.Backend.Api.ApiModels;
+using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.Domain;
 
 

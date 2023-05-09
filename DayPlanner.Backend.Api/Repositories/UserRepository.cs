@@ -1,4 +1,4 @@
-﻿using DayPlanner.Backend.Api.ApiModels;
+﻿using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.Api.Interfaces;
 using DayPlanner.Backend.Api.Interfaces.Context;
 using DayPlanner.Backend.Api.Managers;

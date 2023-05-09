@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DayPlanner.Backend.ApiModels\DayPlanner.Backend.ApiModels.csproj" />
     <ProjectReference Include="..\DayPlanner.Backend.DataAccess\DayPlanner.Backend.DataAccess.csproj" />
   </ItemGroup>
 

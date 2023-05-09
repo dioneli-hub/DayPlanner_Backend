@@ -1,5 +1,4 @@
 ﻿using DayPlanner.Backend.Api.Managers;
-using DayPlanner.Backend.Domain;
 
 namespace DayPlanner.Backend.Api.Interfaces
 {

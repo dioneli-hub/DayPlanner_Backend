@@ -1,7 +1,7 @@
 ﻿using DayPlanner.Backend.Api.Interfaces;
 using DayPlanner.Backend.Api.Interfaces.Context;
 using DayPlanner.Backend.DataAccess;
-using DayPlanner.Backend.Api.ApiModels;
+using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.Domain;
 
 namespace DayPlanner.Backend.Api.Repositories
@@ -23,7 +23,9 @@ namespace DayPlanner.Backend.Api.Repositories
         }
         public Board GetBoard(int boardId)
         {
-            return _context.Boards.Where(b => b.Id == boardId).FirstOrDefault();
+            return _context.Boards
+                .Where(b => b.Id == boardId)
+                .FirstOrDefault();
         }
 
         public bool BoardExists(int boardId)

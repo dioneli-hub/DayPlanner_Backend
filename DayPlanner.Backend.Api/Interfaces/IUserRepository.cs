@@ -1,5 +1,6 @@
-﻿using DayPlanner.Backend.Api.ApiModels;
+﻿
 using DayPlanner.Backend.Domain;
+using DayPlanner.Backend.ApiModels;
 
 namespace DayPlanner.Backend.Api.Interfaces
 {

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
-using System;
 
 namespace DayPlanner.Backend.Api.Managers
 {

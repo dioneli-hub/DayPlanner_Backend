@@ -1,4 +1,4 @@
-﻿namespace DayPlanner.Backend.Api.ApiModels
+﻿namespace DayPlanner.Backend.ApiModels
 {
     public class TaskItemModel
     {
