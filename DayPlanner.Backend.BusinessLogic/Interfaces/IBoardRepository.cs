@@ -1,6 +1,6 @@
 ﻿using DayPlanner.Backend.Domain;
 
-namespace DayPlanner.Backend.Api.Interfaces
+namespace DayPlanner.Backend.BusinessLogic.Interfaces
 {
     public interface IBoardRepository
     {

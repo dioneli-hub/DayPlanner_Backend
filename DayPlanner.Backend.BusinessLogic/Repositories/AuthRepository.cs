@@ -1,9 +1,9 @@
-﻿using DayPlanner.Backend.Api.Interfaces;
+﻿using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.Api.Managers;
 using DayPlanner.Backend.DataAccess;
-using DayPlanner.Backend.Domain;
+using DayPlanner.Backend.BusinessLogic.Managers;
 
-namespace DayPlanner.Backend.Api.Repositories
+namespace DayPlanner.Backend.BusinessLogic.Repositories
 {
     public class AuthRepository : IAuthRepository
     {

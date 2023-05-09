@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
-using DayPlanner.Backend.ApiModels;
+using DayPlanner.Backend.ApiModels.Board;
+using DayPlanner.Backend.ApiModels.TaskItem;
+using DayPlanner.Backend.ApiModels.User;
 using DayPlanner.Backend.Domain;
 
 

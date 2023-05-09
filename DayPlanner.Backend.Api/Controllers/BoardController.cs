@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
-using DayPlanner.Backend.ApiModels;
-using DayPlanner.Backend.Api.Interfaces;
+using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.Domain;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using DayPlanner.Backend.ApiModels.Board;
+using DayPlanner.Backend.ApiModels.TaskItem;
 
 namespace DayPlanner.Backend.Api.Controllers
 {

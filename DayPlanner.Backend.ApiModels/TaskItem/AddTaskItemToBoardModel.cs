@@ -1,4 +1,4 @@
-﻿namespace DayPlanner.Backend.ApiModels
+﻿namespace DayPlanner.Backend.ApiModels.TaskItem
 {
     public class AddTaskItemToBoardModel
     {

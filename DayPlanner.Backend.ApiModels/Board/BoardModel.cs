@@ -1,4 +1,4 @@
-﻿namespace DayPlanner.Backend.ApiModels
+﻿namespace DayPlanner.Backend.ApiModels.Board
 {
     public class BoardModel
     {

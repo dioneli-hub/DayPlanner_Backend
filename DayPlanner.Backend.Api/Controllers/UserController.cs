@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
-using DayPlanner.Backend.ApiModels;
-using DayPlanner.Backend.Api.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using DayPlanner.Backend.Domain;
-
+using DayPlanner.Backend.ApiModels.Board;
+using DayPlanner.Backend.ApiModels.User;
+using DayPlanner.Backend.BusinessLogic.Interfaces;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
@@ -84,11 +83,11 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok(_boardMemberRepository.GetUserMemberBoards(userId));//mapping
         }
 
-        [HttpGet("{userId}/boards", Name = nameof(GetCurrentUserMemberBoards))]
-        public ActionResult<BoardModel> GetCurrentUserMemberBoards()
-        {
-            return Ok(_boardMemberRepository.GetCurrentUserMemberBoards());//mapping
-        }
+        //[HttpGet("{userId}/boards", Name = nameof(GetCurrentUserMemberBoards))]
+        //public ActionResult<BoardModel> GetCurrentUserMemberBoards()
+        //{
+        //    return Ok(_boardMemberRepository.GetCurrentUserMemberBoards());//mapping
+        //}
     }
 }
 

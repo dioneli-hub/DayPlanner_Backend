@@ -1,10 +1,10 @@
-﻿using DayPlanner.Backend.Api.Interfaces;
-using DayPlanner.Backend.Api.Interfaces.Context;
+﻿using DayPlanner.Backend.BusinessLogic.Interfaces;
+using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
 using DayPlanner.Backend.DataAccess;
 using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.Domain;
 
-namespace DayPlanner.Backend.Api.Repositories
+namespace DayPlanner.Backend.BusinessLogic.Repositories
 {
     public class BoardRepository : IBoardRepository
     {

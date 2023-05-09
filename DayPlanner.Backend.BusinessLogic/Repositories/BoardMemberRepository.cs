@@ -1,9 +1,9 @@
-﻿using DayPlanner.Backend.Api.Interfaces;
-using DayPlanner.Backend.Api.Interfaces.Context;
+﻿using DayPlanner.Backend.BusinessLogic.Interfaces;
+using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
 using DayPlanner.Backend.DataAccess;
 using DayPlanner.Backend.Domain;
 
-namespace DayPlanner.Backend.Api.Repositories
+namespace DayPlanner.Backend.BusinessLogic.Repositories
 {
     public class BoardMemberRepository : IBoardMemberRepository
     {
@@ -107,14 +107,14 @@ namespace DayPlanner.Backend.Api.Repositories
         //    }
         //}
 
-        public ICollection<Board> GetCurrentUserMemberBoards()
-        {
-            var currentUserId = _userContextService.GetCurrentUserId();
-            var query = _context.BoardMembers
-                .Where(x => x.MemberId == currentUserId)
-                .Select(x => x.Board);
-            return query.ToList();
-        }
+        //public ICollection<Board> GetCurrentUserMemberBoards()
+        //{
+        //    var currentUserId = _userContextService.GetCurrentUserId();
+        //    var query = _context.BoardMembers
+        //        .Where(x => x.MemberId == currentUserId)
+        //        .Select(x => x.Board);
+        //    return query.ToList();
+        //}
 
 
     }

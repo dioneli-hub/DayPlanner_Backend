@@ -1,4 +1,4 @@
-﻿namespace DayPlanner.Backend.Api.Interfaces.Context
+﻿namespace DayPlanner.Backend.BusinessLogic.Interfaces.Context
 {
     public interface IUserContextService
     {

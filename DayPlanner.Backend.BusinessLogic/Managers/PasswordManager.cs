@@ -1,6 +1,6 @@
 ﻿using DayPlanner.Backend.Domain;
 
-namespace DayPlanner.Backend.Api.Managers
+namespace DayPlanner.Backend.BusinessLogic.Managers
 {
     public static class PasswordManager
     {

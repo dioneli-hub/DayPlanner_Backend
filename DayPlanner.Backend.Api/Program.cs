@@ -1,14 +1,13 @@
 using DayPlanner.Backend.DataAccess;
-using DayPlanner.Backend.Api.Interfaces;
-using DayPlanner.Backend.Api.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using DayPlanner.Backend.Api.Interfaces.Context;
 using DayPlanner.Backend.Api.Helper.HttpContext;
+using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
+using DayPlanner.Backend.BusinessLogic;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,12 +15,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddScoped<ITaskItemRepository, TaskItemRepository>();
-builder.Services.AddScoped<IBoardRepository, BoardRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IAuthRepository, AuthRepository>();
-builder.Services.AddScoped<IBoardMemberRepository, BoardMemberRepository>();
-builder.Services.AddScoped<IUserContextService, UserHttpContextService>();
+
+//USER HTTP CONTEXT SERVICE & OTHER BLL DEPENDENCIES
+builder.Services.AddBusinessLogicDependencies()
+                .AddScoped<IUserContextService, UserHttpContextService>();
+
 
 //HTTP CONTEXT
 builder.Services.AddControllersWithViews();

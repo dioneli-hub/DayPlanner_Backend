@@ -1,8 +1,8 @@
 ﻿
 using DayPlanner.Backend.Domain;
-using DayPlanner.Backend.ApiModels;
+using DayPlanner.Backend.ApiModels.User;
 
-namespace DayPlanner.Backend.Api.Interfaces
+namespace DayPlanner.Backend.BusinessLogic.Interfaces
 {
     public interface IUserRepository
     {

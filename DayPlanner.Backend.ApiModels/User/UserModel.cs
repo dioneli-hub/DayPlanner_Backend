@@ -1,4 +1,4 @@
-﻿namespace DayPlanner.Backend.ApiModels
+﻿namespace DayPlanner.Backend.ApiModels.User
 {
     public class UserModel
     {
@@ -8,6 +8,6 @@
         public string Email { get; set; }
 
         //public ApplicationFileModel Avatar { get; set; }
-        
+
     }
 }

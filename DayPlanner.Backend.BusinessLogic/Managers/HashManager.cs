@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
 
-namespace DayPlanner.Backend.Api.Managers
+namespace DayPlanner.Backend.BusinessLogic.Managers
 {
     public static class HashManager
     {

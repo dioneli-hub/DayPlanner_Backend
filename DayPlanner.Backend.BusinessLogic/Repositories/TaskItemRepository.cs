@@ -1,9 +1,9 @@
-﻿using DayPlanner.Backend.Api.Interfaces;
+﻿using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using DayPlanner.Backend.Domain;
 
-namespace DayPlanner.Backend.Api.Repositories
+namespace DayPlanner.Backend.BusinessLogic.Repositories
 {
     public class TaskItemRepository : ITaskItemRepository
     {

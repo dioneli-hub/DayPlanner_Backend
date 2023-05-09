@@ -1,4 +1,4 @@
-﻿namespace DayPlanner.Backend.Api.Managers
+﻿namespace DayPlanner.Backend.BusinessLogic.Managers
 {
     public class HashModel
     {

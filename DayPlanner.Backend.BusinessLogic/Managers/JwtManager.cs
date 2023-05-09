@@ -1,9 +1,10 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using DayPlanner.Backend.Api.Managers;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace DayPlanner.Backend.Api.Managers
+namespace DayPlanner.Backend.BusinessLogic.Managers
 {
     public static class JwtManager
     {
