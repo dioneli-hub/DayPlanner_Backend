@@ -88,5 +88,34 @@ namespace DayPlanner.Backend.Api.Repositories
                 _context.SaveChanges();
             }
         }
+
+        public void DeleteCurrentUserFromBoard(int boardId) // deleteBoardMember
+            // create a method that will help not to repete Delete Board Member and current user from board code
+        {
+            var currentUserId = _userContextService.GetCurrentUserId();
+            var board = _context.Boards
+                .FirstOrDefault(x => x.Id == boardId);
+
+            var membership = _context.BoardMembers
+                .FirstOrDefault(x => x.MemberId == currentUserId &&
+                                          x.BoardId == boardId);
+
+            if (membership != null)
+            {
+                _context.BoardMembers.Remove(membership);
+                _context.SaveChanges();
+            }
+        }
+
+        public ICollection<Board> GetCurrentUserMemberBoards()
+        {
+            var currentUserId = _userContextService.GetCurrentUserId();
+            var query = _context.BoardMembers
+                .Where(x => x.MemberId == currentUserId)
+                .Select(x => x.Board);
+            return query.ToList();
+        }
+
+
     }
 }

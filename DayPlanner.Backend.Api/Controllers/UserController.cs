@@ -83,6 +83,12 @@ namespace DayPlanner.Backend.Api.Controllers
         {
             return Ok(_boardMemberRepository.GetUserMemberBoards(userId));//mapping
         }
+
+        [HttpGet("{userId}/boards", Name = nameof(GetCurrentUserMemberBoards))]
+        public ActionResult<BoardModel> GetCurrentUserMemberBoards()
+        {
+            return Ok(_boardMemberRepository.GetCurrentUserMemberBoards());//mapping
+        }
     }
 }
 
