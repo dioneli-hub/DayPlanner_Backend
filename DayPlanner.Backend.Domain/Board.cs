@@ -6,11 +6,11 @@
 
         public string Name { get; set; } = string.Empty;
 
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
 
         public int CreatorId { get; set; }
 
-        public User Creator { get; set; }  // make not null later?
+        public User Creator { get; set; }
 
         public ICollection<TaskItem>? Tasks { get; set; }
         public ICollection<BoardMember>? BoardMemberships { get; set; }

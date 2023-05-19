@@ -3,7 +3,6 @@ using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.BusinessLogic.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using DayPlanner.Backend.BusinessLogic.Services;
-using DayPlanner.Backend.BusinessLogic.Interfaces;
 
 namespace DayPlanner.Backend.BusinessLogic
 {
@@ -13,12 +12,14 @@ namespace DayPlanner.Backend.BusinessLogic
         {
             services.AddScoped<ITaskItemRepository, TaskItemRepository>();
             services.AddScoped<IBoardRepository, BoardRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
+            //services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IBoardMemberRepository, BoardMemberRepository>();
 
             services.AddScoped<IUserProvider, UserProvider>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IBoardProvider, BoardProvider>();
+            services.AddScoped<IBoardService, BoardService>();
 
             return services;
         }

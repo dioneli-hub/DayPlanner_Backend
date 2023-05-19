@@ -12,16 +12,16 @@ namespace DayPlanner.Backend.Api.Controllers
     [Authorize]
     public class UserController : Controller
     {
-        private readonly IUserRepository _userRepository;
         private readonly IBoardMemberRepository _boardMemberRepository;
         private readonly IMapper _mapper;
         private readonly IUserProvider _userProvider;
         private readonly IUserService _userService;
 
-        public UserController(IUserRepository userRepository,
-            IBoardMemberRepository boardMemberRepository, IMapper mapper, IUserProvider userProvider, IUserService userService)
+        public UserController(IMapper mapper,
+            IBoardMemberRepository boardMemberRepository,  
+            IUserProvider userProvider, 
+            IUserService userService)
         {
-            _userRepository = userRepository;
             _boardMemberRepository = boardMemberRepository;
             _mapper = mapper;
             _userProvider = userProvider;

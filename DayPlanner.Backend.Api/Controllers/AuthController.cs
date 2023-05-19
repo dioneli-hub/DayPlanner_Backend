@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using DayPlanner.Backend.ApiModels.User;
 using DayPlanner.Backend.ApiModels.Auth;
+using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
@@ -14,26 +15,31 @@ namespace DayPlanner.Backend.Api.Controllers
     {
 
         private readonly IAuthRepository _authRepository;
-        private readonly IUserRepository _userRepository;
+        private readonly IUserContextService _userContextService;
+        private readonly IUserProvider _userProvider;
 
         public AuthController(IAuthRepository authRepository,
-            IUserRepository userContextService)
+            IUserContextService userContextService,
+            IUserProvider userProvider)
         {
             _authRepository = authRepository;
-            _userRepository = userContextService;
+            _userContextService = userContextService;
+            _userProvider = userProvider;
         }
 
         [HttpGet]
         [Authorize]
-        public ActionResult<UserModel> AuthenticatedUser()
+        public async Task<ActionResult<UserModel>> AuthenticatedUser()
         {
-            var user = _userRepository.GetCurrentUser();
+            var currentUserId = _userContextService.GetCurrentUserId();
+            var user = await _userProvider.GetUser(currentUserId);
+
             return Ok(user);
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult<TokenModel> Authenticate(AuthenticateModel model)
+        public ActionResult<TokenModel> Authenticate(AuthenticateModel model) // make async later
         {
             var token = _authRepository.Authenticate(model.Email, model.Password);
             return Ok(token);

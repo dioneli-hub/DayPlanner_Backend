@@ -11,14 +11,14 @@
 
         public int CreatorId { get; set; }
 
-        public User? Creator { get; set; }  //make not null later???
+        public User Creator { get; set; }  //make not null later???
 
-        //public int? PerformerId { get; set; }
+        //public int PerformerId { get; set; }
 
-        //public User? Performer { get; set; }  
+        //public User Performer { get; set; }  
 
         public int BoardId { get; set; }
 
-        public Board? Board { get; set; }
+        public Board Board { get; set; }
     }
 }

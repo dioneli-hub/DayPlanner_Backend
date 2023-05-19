@@ -6,7 +6,7 @@
 
         public string Name { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
 
         public int CreatorId { get; set; }
 
