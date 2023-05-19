@@ -15,84 +15,50 @@ namespace DayPlanner.Backend.Api.Controllers
         private readonly IUserRepository _userRepository;
         private readonly IBoardMemberRepository _boardMemberRepository;
         private readonly IMapper _mapper;
+        private readonly IUserProvider _userProvider;
+        private readonly IUserService _userService;
 
         public UserController(IUserRepository userRepository,
-            IBoardMemberRepository boardMemberRepository, IMapper mapper)
+            IBoardMemberRepository boardMemberRepository, IMapper mapper, IUserProvider userProvider, IUserService userService)
         {
             _userRepository = userRepository;
             _boardMemberRepository = boardMemberRepository;
             _mapper = mapper;
+            _userProvider = userProvider;
+            _userService = userService;
         }
 
-        [HttpGet(Name = nameof(GetAllUsers))]
-        public IActionResult GetAllUsers()
+        [HttpGet(Name = nameof(GetAllUsers))] 
+        public async Task<ActionResult<List<UserModel>>> GetAllUsers()
         {
-            var users = _userRepository.GetAllUsers(); // add mapper to simple user model
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            else
-            {
-                return Ok(users);
-            }
+            var users = await _userProvider.GetAllUsers();
+            return Ok(users);
         }
 
-        [HttpGet("{userId}", Name = nameof(GetUser))]
-        public ActionResult<UserModel> GetUser(int userId)
+        [HttpGet("{userId}", Name = nameof(GetUser))] // To change more
+        public async Task<ActionResult<UserModel>> GetUser(int userId)
         {
-            if (!_userRepository.UserExists(userId))
-                return NotFound();
-
-            var user = _mapper.Map<UserModel>(_userRepository.GetUser(userId));
-
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            var user = await _userProvider.GetUser(userId);
 
             return Ok(user);
         }
 
         [HttpPost(Name = nameof(RegisterUser))]
         [AllowAnonymous]
-        public IActionResult RegisterUser([FromBody] CreateUserModel model)
+        public async Task<ActionResult<UserModel>> RegisterUser([FromBody] CreateUserModel model)
         {
-            if (_userRepository.UserIsRegistered(model.Email))
-                return NotFound();
+            var userId = await _userService.RegisterUser(model);
+            var user = await _userProvider.GetUser(userId);
 
-
-            if (model == null)
-                    return BadRequest(ModelState);
-
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
-
-
-                if (!_userRepository.RegisterUser(model))
-                {
-                    ModelState.AddModelError("", "Something went wrong...");
-                    return StatusCode(500, ModelState);
-                }
-
-                return Ok("Successfully created");
-        }
-
-        [HttpGet("{userId}/user-member-boards", Name = nameof(GetUserMemberBoards))]
-        public ActionResult<BoardModel> GetUserMemberBoards(int userId) 
-        {
-            return Ok(_boardMemberRepository.GetUserMemberBoards(userId));//mapping
+            return Ok(user);
         }
 
         [HttpGet("{userId}/user-boards", Name = nameof(GetUserBoards))]
-        public ActionResult<BoardModel> GetUserBoards(int userId)
+        public async Task<ActionResult<BoardModel>> GetUserBoards(int userId)
         {
-            return Ok(_userRepository.GetUserBoards(userId));//mapping
+            var userBoards = await _userProvider.GetUserBoards(userId);
+            return Ok(userBoards);
         }
-        //[HttpGet("{userId}/boards", Name = nameof(GetCurrentUserMemberBoards))]
-        //public ActionResult<BoardModel> GetCurrentUserMemberBoards()
-        //{
-        //    return Ok(_boardMemberRepository.GetCurrentUserMemberBoards());//mapping
-        //}
     }
 }
 

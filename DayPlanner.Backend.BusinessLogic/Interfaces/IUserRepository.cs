@@ -6,8 +6,8 @@ namespace DayPlanner.Backend.BusinessLogic.Interfaces
 {
     public interface IUserRepository
     {
-        ICollection<User> GetAllUsers();
-        User GetUser(int userId);
+        //ICollection<User> GetAllUsers();
+        //User GetUser(int userId);
 
         bool RegisterUser(CreateUserModel model);
 

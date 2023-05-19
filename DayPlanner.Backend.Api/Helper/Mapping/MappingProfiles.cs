@@ -11,7 +11,7 @@ namespace DayPlanner.Backend.Api.Helper.Mapping
     {
         public MappingProfiles()
         {
-            CreateMap<Board, BoardModel>();
+            
             CreateMap<BoardModel, Board>();
             CreateMap<TaskItem, TaskItemModel>();
             CreateMap<AddTaskItemToBoardModel, TaskItem>();
@@ -19,8 +19,12 @@ namespace DayPlanner.Backend.Api.Helper.Mapping
             CreateMap<CreateBoardModel, Board>();
             CreateMap<EditTaskItemModel, TaskItem>();
 
-            CreateMap<User, UserModel>();
+            
             CreateMap<CreateUserModel, User>();
+
+
+            CreateMap<User, UserModel>();
+            CreateMap<Board, BoardModel>();
         }
     }
 }

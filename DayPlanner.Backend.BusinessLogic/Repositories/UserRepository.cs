@@ -18,21 +18,21 @@ namespace DayPlanner.Backend.BusinessLogic.Repositories
             _userContextService = userContextService;
         }
 
-        public ICollection<User> GetAllUsers()
-        {
-            return _context.Users
-                //.Include(x => x.Avatar)
-                .ToList();
-        }
+        //public ICollection<User> GetAllUsers()
+        //{
+        //    return _context.Users
+        //        //.Include(x => x.Avatar)
+        //        .ToList();
+        //}
 
-        public User GetUser(int userId)
-        {
-            var user = _context.Users
-               //.Include(x => x.Avatar)
-               .FirstOrDefault(x => x.Id == userId);
+        //public User GetUser(int userId)
+        //{
+        //    var user = _context.Users
+        //       //.Include(x => x.Avatar)
+        //       .FirstOrDefault(x => x.Id == userId);
 
-            return user!;
-        }
+        //    return user!;
+        //}
 
         public bool RegisterUser(CreateUserModel model)
         {
