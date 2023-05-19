@@ -52,6 +52,13 @@ namespace DayPlanner.Backend.BusinessLogic.Repositories
             return Save();
         }
 
+        public ICollection<Board> GetUserBoards(int userId)
+        {
+            var query = _context.Boards
+                .Where(x => x.CreatorId == userId);
+            return query.ToList();
+        }
+
         public User GetCurrentUser() 
         {
             var currentUserId = _userContextService.GetCurrentUserId();

@@ -13,6 +13,8 @@ namespace DayPlanner.Backend.BusinessLogic.Interfaces
 
         bool UserIsRegistered(string email);
 
+        ICollection<Board> GetUserBoards(int userId);
+
         bool UserExists(int userId);
 
         User GetCurrentUser();

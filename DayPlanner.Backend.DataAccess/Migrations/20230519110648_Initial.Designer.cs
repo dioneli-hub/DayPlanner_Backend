@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DayPlanner.Backend.DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230508133826_Initial")]
+    [Migration("20230519110648_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace DayPlanner.Backend.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("DayPlanner.Backend.DataAccess.Entities.Board", b =>
+            modelBuilder.Entity("DayPlanner.Backend.Domain.Board", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -50,7 +50,7 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.ToTable("Boards", (string)null);
                 });
 
-            modelBuilder.Entity("DayPlanner.Backend.DataAccess.Entities.BoardMember", b =>
+            modelBuilder.Entity("DayPlanner.Backend.Domain.BoardMember", b =>
                 {
                     b.Property<int>("BoardId")
                         .HasColumnType("int");
@@ -65,7 +65,7 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.ToTable("BoardMembers", (string)null);
                 });
 
-            modelBuilder.Entity("DayPlanner.Backend.DataAccess.Entities.TaskItem", b =>
+            modelBuilder.Entity("DayPlanner.Backend.Domain.TaskItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -98,7 +98,7 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.ToTable("TaskItems", (string)null);
                 });
 
-            modelBuilder.Entity("DayPlanner.Backend.DataAccess.Entities.User", b =>
+            modelBuilder.Entity("DayPlanner.Backend.Domain.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -139,9 +139,9 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("DayPlanner.Backend.DataAccess.Entities.Board", b =>
+            modelBuilder.Entity("DayPlanner.Backend.Domain.Board", b =>
                 {
-                    b.HasOne("DayPlanner.Backend.DataAccess.Entities.User", "Creator")
+                    b.HasOne("DayPlanner.Backend.Domain.User", "Creator")
                         .WithMany("Boards")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -150,15 +150,15 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.Navigation("Creator");
                 });
 
-            modelBuilder.Entity("DayPlanner.Backend.DataAccess.Entities.BoardMember", b =>
+            modelBuilder.Entity("DayPlanner.Backend.Domain.BoardMember", b =>
                 {
-                    b.HasOne("DayPlanner.Backend.DataAccess.Entities.Board", "Board")
+                    b.HasOne("DayPlanner.Backend.Domain.Board", "Board")
                         .WithMany("BoardMemberships")
                         .HasForeignKey("BoardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DayPlanner.Backend.DataAccess.Entities.User", "Member")
+                    b.HasOne("DayPlanner.Backend.Domain.User", "Member")
                         .WithMany("Memberships")
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -169,15 +169,15 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.Navigation("Member");
                 });
 
-            modelBuilder.Entity("DayPlanner.Backend.DataAccess.Entities.TaskItem", b =>
+            modelBuilder.Entity("DayPlanner.Backend.Domain.TaskItem", b =>
                 {
-                    b.HasOne("DayPlanner.Backend.DataAccess.Entities.Board", "Board")
+                    b.HasOne("DayPlanner.Backend.Domain.Board", "Board")
                         .WithMany("Tasks")
                         .HasForeignKey("BoardId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("DayPlanner.Backend.DataAccess.Entities.User", "Creator")
+                    b.HasOne("DayPlanner.Backend.Domain.User", "Creator")
                         .WithMany("Tasks")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -188,14 +188,14 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.Navigation("Creator");
                 });
 
-            modelBuilder.Entity("DayPlanner.Backend.DataAccess.Entities.User", b =>
+            modelBuilder.Entity("DayPlanner.Backend.Domain.User", b =>
                 {
-                    b.HasOne("DayPlanner.Backend.DataAccess.Entities.Board", null)
+                    b.HasOne("DayPlanner.Backend.Domain.Board", null)
                         .WithMany("BoardMembers")
                         .HasForeignKey("BoardId");
                 });
 
-            modelBuilder.Entity("DayPlanner.Backend.DataAccess.Entities.Board", b =>
+            modelBuilder.Entity("DayPlanner.Backend.Domain.Board", b =>
                 {
                     b.Navigation("BoardMembers");
 
@@ -204,7 +204,7 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.Navigation("Tasks");
                 });
 
-            modelBuilder.Entity("DayPlanner.Backend.DataAccess.Entities.User", b =>
+            modelBuilder.Entity("DayPlanner.Backend.Domain.User", b =>
                 {
                     b.Navigation("Boards");
 

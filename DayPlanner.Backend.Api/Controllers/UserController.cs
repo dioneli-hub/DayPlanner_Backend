@@ -77,12 +77,17 @@ namespace DayPlanner.Backend.Api.Controllers
                 return Ok("Successfully created");
         }
 
-        [HttpGet("{userId}/boards", Name = nameof(GetUserMemberBoards))]
+        [HttpGet("{userId}/user-member-boards", Name = nameof(GetUserMemberBoards))]
         public ActionResult<BoardModel> GetUserMemberBoards(int userId) 
         {
             return Ok(_boardMemberRepository.GetUserMemberBoards(userId));//mapping
         }
 
+        [HttpGet("{userId}/user-boards", Name = nameof(GetUserBoards))]
+        public ActionResult<BoardModel> GetUserBoards(int userId)
+        {
+            return Ok(_userRepository.GetUserBoards(userId));//mapping
+        }
         //[HttpGet("{userId}/boards", Name = nameof(GetCurrentUserMemberBoards))]
         //public ActionResult<BoardModel> GetCurrentUserMemberBoards()
         //{

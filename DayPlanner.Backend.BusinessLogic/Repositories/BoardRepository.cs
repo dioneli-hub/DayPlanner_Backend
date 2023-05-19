@@ -64,8 +64,7 @@ namespace DayPlanner.Backend.BusinessLogic.Repositories
 
         public bool AddTask(int boardId, TaskItem taskMap)
         {
-            
-            taskMap.BoardId = boardId;
+            // update access so that only board members ??or task creator could create
             taskMap.CreatedAt = DateTime.Now;
             taskMap.Board = GetBoard(boardId);
             taskMap.CreatorId = _userContextService.GetCurrentUserId(); ;
@@ -83,7 +82,7 @@ namespace DayPlanner.Backend.BusinessLogic.Repositories
                 throw new ApplicationException("Task not found.");
             }
 
-            if (task.BoardId != boardId)
+            if (task.BoardId != boardId) // update access so that only board members ??or task creator could delete
             {
                 throw new ApplicationException("Access denied");
             }
