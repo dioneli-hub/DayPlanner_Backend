@@ -16,8 +16,10 @@ namespace DayPlanner.Backend.Api.Controllers
         private readonly ITaskItemProvider _taskItemProvider;
         private readonly ITaskItemService _taskItemService;
 
-        public TaskItemController(ITaskItemProvider taskItemProvider,
-            ITaskItemService taskItemService)
+        public TaskItemController(
+            ITaskItemProvider taskItemProvider,
+            ITaskItemService taskItemService
+            )
         {
             _taskItemService = taskItemService;
             _taskItemProvider = taskItemProvider;
@@ -31,22 +33,13 @@ namespace DayPlanner.Backend.Api.Controllers
         }
 
 
-        //[HttpGet("{taskItemId}")]
-        //[ProducesResponseType(400)]
-        //[ProducesResponseType(200)]
-        //[ProducesResponseType(404)]
-        //public IActionResult GetTask(int taskItemId)
-        //{
-        //    if (!_taskItemRepository.TaskItemExists(taskItemId))
-        //        return NotFound();
+        [HttpGet("{taskItemId}", Name = nameof(GetTask))]
+        public async Task<ActionResult<TaskItemModel>> GetTask(int taskId)
+        {
+            var task = await _taskItemProvider.GetTask(taskItemId);
 
-        //    var taskItem = _mapper.Map<TaskItemModel>(_taskItemRepository.GetTaskItem(taskItemId));
-
-        //    if (!ModelState.IsValid)
-        //        return BadRequest(ModelState);
-
-        //    return Ok(taskItem);
-        //}
+            return Ok(task);
+        }
 
 
         [HttpGet("todaystasks", Name = nameof(GetTodaysTasks))]

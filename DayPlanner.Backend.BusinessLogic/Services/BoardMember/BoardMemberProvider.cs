@@ -12,8 +12,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
-        //private readonly IUserContextService _userContextService;
-        public BoardMemberProvider(DataContext context, IMapper mapper) //IUserContextService userContextService
+        public BoardMemberProvider(DataContext context, IMapper mapper) 
         {
             _context = context;
             _mapper = mapper;
