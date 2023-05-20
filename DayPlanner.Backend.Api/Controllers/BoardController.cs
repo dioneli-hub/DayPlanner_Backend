@@ -4,7 +4,6 @@ using DayPlanner.Backend.Domain;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using DayPlanner.Backend.ApiModels.Board;
 using DayPlanner.Backend.ApiModels.TaskItem;
 using DayPlanner.Backend.ApiModels;
 
@@ -116,33 +115,6 @@ namespace DayPlanner.Backend.Api.Controllers
         //    return Ok();
         //}
 
-        //[HttpGet]
-        //[Route("{boardId}/members")]
-        //public ActionResult<List<BoardMember>> GetBoardMembers(
-        //    [FromRoute] int boardId)
-        //{
-
-        //    return Ok(_boardMemberRepository.GetBoardMembers(boardId));
-        //}
-
-        //[HttpPost]
-        //[Route("{boardId}/members")]
-        //public ActionResult AddBoardMember(
-        //    [FromBody] int userId, //later will probably pass by email
-        //    [FromRoute] int boardId)
-        //{
-        //    _boardMemberRepository.AddBoardMember(userId, boardId); //pass whole user as argument
-        //    return Ok("Success");
-        //}
-
-        //[HttpDelete]
-        //[Route("{boardId}/members")]
-        //public ActionResult DeleteBoardMember(
-        //    [FromBody] int userId, //later will probably pass by email
-        //    [FromRoute] int boardId)
-        //{
-        //    _boardMemberRepository.DeleteBoardMember(userId, boardId); //pass whole user as argument
-        //    return Ok("Success");
-        //}
+        
     }
 }

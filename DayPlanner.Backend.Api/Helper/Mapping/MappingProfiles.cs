@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using DayPlanner.Backend.ApiModels.Board;
 using DayPlanner.Backend.ApiModels.TaskItem;
 using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.Domain;
-using DayPlanner.Backend.ApiModels.User;
+using DayPlanner.Backend.ApiModels.BoardMember;
 
 namespace DayPlanner.Backend.Api.Helper.Mapping
 {
@@ -26,6 +25,7 @@ namespace DayPlanner.Backend.Api.Helper.Mapping
             CreateMap<User, UserModel>();
             CreateMap<Board, BoardModel>();
             CreateMap<TaskItem, TaskItemModel>();
+            CreateMap<BoardMember, BoardMemberModel>();
         }
     }
 }

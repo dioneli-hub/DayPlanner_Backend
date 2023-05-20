@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DayPlanner.Backend.ApiModels.Board;
+using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.ApiModels.TaskItem;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.BusinessLogic.Interfaces.Context;

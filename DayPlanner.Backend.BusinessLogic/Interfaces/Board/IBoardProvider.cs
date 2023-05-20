@@ -1,4 +1,4 @@
-﻿using DayPlanner.Backend.ApiModels.Board;
+﻿using DayPlanner.Backend.ApiModels;
 
 namespace DayPlanner.Backend.BusinessLogic.Interfaces
 {
@@ -6,5 +6,6 @@ namespace DayPlanner.Backend.BusinessLogic.Interfaces
     {
         Task<List<BoardModel>> GetBoards();
         Task<BoardModel> GetBoard(int boardId);
+        
     }
 }

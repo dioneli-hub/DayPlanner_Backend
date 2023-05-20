@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using DayPlanner.Backend.ApiModels.Board;
 using DayPlanner.Backend.ApiModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using DayPlanner.Backend.BusinessLogic.Interfaces.BoardMember;
+using DayPlanner.Backend.ApiModels.BoardMember;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
@@ -33,6 +33,35 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok(boards);
         }
 
+        [HttpGet]
+        [Route("{boardId}/members", Name = nameof(GetBoardMembers))]
+        public async Task<ActionResult<List<BoardMemberModel>>> GetBoardMembers(
+            [FromRoute] int boardId)
+        {
+            var boardMembers = await _boardMemberProvider.GetBoardMembers(boardId);
+            return Ok(boardMembers);
+        }
+
+        [HttpPost]
+        [Route("{boardId}/add-board-member-by-email", Name = nameof(AddBoardMemberByEmail))]
+        public async Task<ActionResult> AddBoardMemberByEmail(
+            [FromRoute] int boardId,
+            [FromBody] string userEmail 
+            )
+        {
+            await _boardMemberService.AddBoardMemberByEmail(boardId, userEmail);
+            return Ok();
+        }
+
+        //[HttpDelete]
+        //[Route("{boardId}/members")]
+        //public ActionResult DeleteBoardMember(
+        //    [FromBody] int userId, //later will probably pass by email
+        //    [FromRoute] int boardId)
+        //{
+        //    _boardMemberRepository.DeleteBoardMember(userId, boardId); //pass whole user as argument
+        //    return Ok("Success");
+        //}
 
     }
 }

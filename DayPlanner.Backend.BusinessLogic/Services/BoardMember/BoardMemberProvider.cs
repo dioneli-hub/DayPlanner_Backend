@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
-using DayPlanner.Backend.ApiModels.Board;
+using DayPlanner.Backend.ApiModels;
+using DayPlanner.Backend.ApiModels.BoardMember;
 using DayPlanner.Backend.BusinessLogic.Interfaces.BoardMember;
 using DayPlanner.Backend.DataAccess;
+using DayPlanner.Backend.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace DayPlanner.Backend.BusinessLogic.Services
@@ -16,6 +18,29 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             _context = context;
             _mapper = mapper;
         }
+
+        public async Task<BoardMemberModel> GetBoardMember(int boardId, int boardMemberId)
+        {
+            var boardMember = await _context.BoardMembers
+                .Where(m => m.BoardId == boardId && m.MemberId == boardMemberId)
+                .FirstOrDefaultAsync();
+
+            var boardMemberModel = _mapper.Map<BoardMemberModel>(boardMember);
+
+            return boardMemberModel;
+        }
+
+        public async Task<List<BoardMemberModel>> GetBoardMembers(int boardId)
+        {
+            var boardMembers = await _context.BoardMembers
+                .Where(m => m.BoardId == boardId)
+                .ToListAsync();
+
+            var boardMemberModels = _mapper.Map<List<BoardMemberModel>>(boardMembers);
+
+            return boardMemberModels;
+        }
+
         public async Task<List<BoardModel>> GetMemberBoards(int userId) {
 
             var boards = await _context.BoardMembers
