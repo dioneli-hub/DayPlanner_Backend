@@ -13,20 +13,17 @@ namespace DayPlanner.Backend.Api.Controllers
     [Authorize]
     public class TaskItemController : Controller
     {
-        private readonly ITaskItemRepository _taskItemRepository;
-        private readonly IMapper _mapper;
         private readonly ITaskItemProvider _taskItemProvider;
         private readonly ITaskItemService _taskItemService;
 
         public TaskItemController(ITaskItemProvider taskItemProvider,
-            ITaskItemService _taskItemService,
-            IMapper mapper)
+            ITaskItemService taskItemService)
         {
+            _taskItemService = taskItemService;
             _taskItemProvider = taskItemProvider;
-            _mapper = mapper;
         }
 
-        [HttpGet (Name = nameof(GetTasks))]
+        [HttpGet(Name = nameof(GetTasks))]
         public async Task<ActionResult<List<TaskItemModel>>> GetTasks()
         {
             var tasks = await _taskItemProvider.GetTasks();
@@ -52,7 +49,7 @@ namespace DayPlanner.Backend.Api.Controllers
         //}
 
 
-        [HttpGet("todaystasks", Name =nameof(GetTodaysTasks))] 
+        [HttpGet("todaystasks", Name = nameof(GetTodaysTasks))]
         public async Task<ActionResult<List<TaskItemModel>>> GetTodaysTasks()
         {
             var todaysTasks = await _taskItemProvider.GetTodaysTasks();
@@ -91,31 +88,11 @@ namespace DayPlanner.Backend.Api.Controllers
         //    return NoContent();
         //}
 
-        //[HttpDelete("{taskId}")]
-        //[ProducesResponseType(400)]
-        //[ProducesResponseType(204)]
-        //[ProducesResponseType(404)]
-        //public IActionResult DeleteTask(int taskId)
-        //{
-        //    if (!_taskItemRepository.TaskItemExists(taskId))
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var taskToDelete = _taskItemRepository.GetTaskItem(taskId);
-
-        //    if (!ModelState.IsValid)
-        //        return BadRequest(ModelState);
-
-        //    if (!_taskItemRepository.DeleteTaskItem(taskToDelete))
-        //    {
-        //        ModelState.AddModelError("", "Something went wrong during deleting process...");
-        //    }
-
-        //    return NoContent();
-        //}
-
-
-
+        [HttpDelete("{taskId}", Name =nameof(DeleteTask))]
+        public async Task<ActionResult> DeleteTask(int taskId)
+        {
+            await _taskItemService.DeleteTask(taskId);
+            return Ok("Task successfully deleted.");
+        }
     }
 }

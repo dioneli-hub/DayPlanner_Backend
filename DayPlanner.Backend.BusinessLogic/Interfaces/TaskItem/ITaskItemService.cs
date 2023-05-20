@@ -8,5 +8,6 @@ namespace DayPlanner.Backend.BusinessLogic.Interfaces
 {
     public interface ITaskItemService
     {
+        Task DeleteTask(int taskId);
     }
 }
