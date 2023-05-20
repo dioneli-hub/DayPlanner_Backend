@@ -22,7 +22,7 @@ namespace DayPlanner.Backend.BusinessLogic
             services.AddScoped<IBoardProvider, BoardProvider>();
             services.AddScoped<IBoardService, BoardService>();
             services.AddScoped<ITaskItemProvider, TaskItemProvider>();
-            //services.AddScoped<ITaskItemService, TaskItemService>();
+            services.AddScoped<ITaskItemService, TaskItemService>();
             services.AddScoped<IBoardMemberProvider, BoardMemberProvider>();
             services.AddScoped<IBoardMemberService, BoardMemberService>();
 

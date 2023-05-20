@@ -23,7 +23,8 @@ namespace DayPlanner.Backend.BusinessLogic.Services
         public async Task<List<BoardModel>> GetBoards()
         {
             var boards = await _context.Boards
-            .OrderBy(t => t.Id)
+                .Include(x => x.Creator)
+                .OrderBy(t => t.Id)
                 .ToListAsync();
 
             var boardModels = _mapper.Map<List<BoardModel>>(boards);
@@ -33,6 +34,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
         public async Task<BoardModel> GetBoard(int boardId)
         {
             var board = await _context.Boards
+                .Include(x => x.Creator)
                 .Where(b => b.Id == boardId)
                 .FirstOrDefaultAsync();
 

@@ -9,6 +9,7 @@
         public DateTimeOffset CreatedAt { get; set; }
 
         public int CreatorId { get; set; }
+        public UserModel Creator { get; set; }
 
     }
 }

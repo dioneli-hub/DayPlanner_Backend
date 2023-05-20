@@ -100,7 +100,7 @@ namespace DayPlanner.Backend.Api.Controllers
             [FromRoute] int boardId)
         {
             var taskId = await _boardService.AddTaskToBoard(boardId, addTaskItemToBoardModel);
-            var task = await _taskItemProvider.GetTaskItem(taskId);
+            var task = await _taskItemProvider.GetTask(taskId);
             
             return Ok(task);
         }

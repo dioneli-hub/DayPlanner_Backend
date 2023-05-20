@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using DayPlanner.Backend.Domain;
 using DayPlanner.Backend.ApiModels.TaskItem;
+using DayPlanner.Backend.BusinessLogic.Services;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
@@ -14,122 +15,107 @@ namespace DayPlanner.Backend.Api.Controllers
     {
         private readonly ITaskItemRepository _taskItemRepository;
         private readonly IMapper _mapper;
+        private readonly ITaskItemProvider _taskItemProvider;
+        private readonly ITaskItemService _taskItemService;
 
-        public TaskItemController(ITaskItemRepository taskRepository, IMapper mapper)
+        public TaskItemController(ITaskItemProvider taskItemProvider,
+            ITaskItemService _taskItemService,
+            IMapper mapper)
         {
-            _taskItemRepository = taskRepository;
+            _taskItemProvider = taskItemProvider;
             _mapper = mapper;
         }
 
-        [HttpGet]
-        //[ProducesResponseType(200, Type = typeof(IEnumerable<Task>))]
-        public IActionResult GetTasks()
+        [HttpGet (Name = nameof(GetTasks))]
+        public async Task<ActionResult<List<TaskItemModel>>> GetTasks()
         {
-            var tasks = _mapper.Map<List<TaskItemModel>>(_taskItemRepository.GetTasks());
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            else
-            {
-                return Ok(tasks);
-            }
+            var tasks = await _taskItemProvider.GetTasks();
+            return Ok(tasks);
         }
 
 
-        [HttpGet("{taskItemId}")]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
-        public IActionResult GetTask(int taskItemId)
+        //[HttpGet("{taskItemId}")]
+        //[ProducesResponseType(400)]
+        //[ProducesResponseType(200)]
+        //[ProducesResponseType(404)]
+        //public IActionResult GetTask(int taskItemId)
+        //{
+        //    if (!_taskItemRepository.TaskItemExists(taskItemId))
+        //        return NotFound();
+
+        //    var taskItem = _mapper.Map<TaskItemModel>(_taskItemRepository.GetTaskItem(taskItemId));
+
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(ModelState);
+
+        //    return Ok(taskItem);
+        //}
+
+
+        [HttpGet("todaystasks", Name =nameof(GetTodaysTasks))] 
+        public async Task<ActionResult<List<TaskItemModel>>> GetTodaysTasks()
         {
-            if (!_taskItemRepository.TaskItemExists(taskItemId))
-                return NotFound();
-
-            var taskItem = _mapper.Map<TaskItemModel>(_taskItemRepository.GetTaskItem(taskItemId));
-
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            return Ok(taskItem);
+            var todaysTasks = await _taskItemProvider.GetTodaysTasks();
+            return Ok(todaysTasks);
         }
 
+        //[HttpPut("{taskId}")]
+        //[ProducesResponseType(400)]
+        //[ProducesResponseType(204)]
+        //[ProducesResponseType(404)]
+        //public IActionResult UpdateTask(
+        //   [FromRoute] int taskId,
+        //   [FromBody] EditTaskItemModel updatedTask)
+        //{
+        //    if (updatedTask == null)
+        //        return BadRequest(ModelState);
 
-        [HttpGet("todaystasks")] //"api/[controller]/todaystasks"
-        [ProducesResponseType(400)]
-        [ProducesResponseType(200)]
-        public IActionResult GetTodaysTasks()
-        {
-            var todaysTasks = _mapper.Map<List<TaskItemModel>>(_taskItemRepository.GetTodaysTasks()); 
+        //    if (taskId != updatedTask.Id)
+        //        return BadRequest(ModelState); 
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            else
-            {
-                return Ok(todaysTasks);
-            }
-        }
+        //    if (!_taskItemRepository.TaskItemExists(taskId))
+        //        return NotFound();
 
-        [HttpPut("{taskId}")]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(404)]
-        public IActionResult UpdateTask(
-           [FromRoute] int taskId,
-           [FromBody] EditTaskItemModel updatedTask)
-        {
-            if (updatedTask == null)
-                return BadRequest(ModelState);
+        //    if (!ModelState.IsValid)
+        //        return BadRequest();
 
-            if (taskId != updatedTask.Id)
-                return BadRequest(ModelState); 
+        //    var taskMap = _mapper.Map<TaskItem>(updatedTask);
 
-            if (!_taskItemRepository.TaskItemExists(taskId))
-                return NotFound();
 
-            if (!ModelState.IsValid)
-                return BadRequest();
+        //    if (!_taskItemRepository.UpdateTask(taskMap))
+        //    {
+        //        ModelState.AddModelError("", "Something went wrong during updating...");
+        //        return StatusCode(500, ModelState);
+        //    }
 
-            var taskMap = _mapper.Map<TaskItem>(updatedTask);
-            
+        //    return NoContent();
+        //}
 
-            if (!_taskItemRepository.UpdateTask(taskMap))
-            {
-                ModelState.AddModelError("", "Something went wrong during updating...");
-                return StatusCode(500, ModelState);
-            }
+        //[HttpDelete("{taskId}")]
+        //[ProducesResponseType(400)]
+        //[ProducesResponseType(204)]
+        //[ProducesResponseType(404)]
+        //public IActionResult DeleteTask(int taskId)
+        //{
+        //    if (!_taskItemRepository.TaskItemExists(taskId))
+        //    {
+        //        return NotFound();
+        //    }
 
-            return NoContent();
-        }
+        //    var taskToDelete = _taskItemRepository.GetTaskItem(taskId);
 
-        [HttpDelete("{taskId}")]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(404)]
-        public IActionResult DeleteTask(int taskId)
-        {
-            if (!_taskItemRepository.TaskItemExists(taskId))
-            {
-                return NotFound();
-            }
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(ModelState);
 
-            var taskToDelete = _taskItemRepository.GetTaskItem(taskId);
+        //    if (!_taskItemRepository.DeleteTaskItem(taskToDelete))
+        //    {
+        //        ModelState.AddModelError("", "Something went wrong during deleting process...");
+        //    }
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+        //    return NoContent();
+        //}
 
-            if (!_taskItemRepository.DeleteTaskItem(taskToDelete))
-            {
-                ModelState.AddModelError("", "Something went wrong during deleting process...");
-            }
 
-            return NoContent();
-        }
-
-        
 
     }
 }
