@@ -16,15 +16,13 @@ namespace DayPlanner.Backend.Api.Controllers
     {
         private readonly IBoardProvider _boardProvider;
         private readonly IBoardService _boardService;
-        private readonly IMapper _mapper;
         private readonly ITaskItemProvider _taskItemProvider;
 
-        public BoardController(IMapper mapper,
+        public BoardController(
             IBoardProvider boardProvider, 
             IBoardService boardService,
             ITaskItemProvider taskItemProvider)
         {
-            _mapper = mapper;
             _boardProvider = boardProvider;
             _boardService = boardService;
             _taskItemProvider = taskItemProvider;
@@ -61,37 +59,20 @@ namespace DayPlanner.Backend.Api.Controllers
         public async Task<ActionResult> DeleteBoard(int boardId)
         {
             await _boardService.DeleteBoard(boardId);
-
             return Ok();
         }
 
-        //[HttpPut("{boardId}", Name = nameof(UpdateBoard))]
+        [HttpPut("{boardId}", Name = nameof(UpdateBoard))]
 
-        //public IActionResult UpdateBoard(int boardId,
-        //    [FromBody] BoardModel updatedBoard)
-        //{
-        //    if (updatedBoard == null)
-        //        return BadRequest(ModelState);
+        public async Task<ActionResult<BoardModel>> UpdateBoard(
+            [FromRoute] int boardId,
+            [FromBody] EditBoardModel editedBoardModel)
+        {
+            await _boardService.UpdateBoard(boardId, editedBoardModel);
+            var updatedBoard = await _boardProvider.GetBoard(boardId);
 
-        //    if (boardId != updatedBoard.Id)
-        //        return BadRequest(ModelState);
-
-        //    if (!_boardRepository.BoardExists(boardId))
-        //        return NotFound();
-
-        //    if (!ModelState.IsValid)
-        //        return BadRequest();
-
-        //    var boardMap = _mapper.Map<Board>(updatedBoard);
-
-        //    if (!_boardRepository.UpdateBoard(boardMap))
-        //    {
-        //        ModelState.AddModelError("", "Something went wrong during updating...");
-        //        return StatusCode(500, ModelState);
-        //    }
-
-        //    return NoContent();
-        //}
+            return Ok(updatedBoard);
+        }
 
         [HttpPost]
         [Route("{boardId}/tasks")]
@@ -101,20 +82,8 @@ namespace DayPlanner.Backend.Api.Controllers
         {
             var taskId = await _boardService.AddTaskToBoard(boardId, addTaskItemToBoardModel);
             var task = await _taskItemProvider.GetTask(taskId);
-            
+
             return Ok(task);
         }
-
-        //[HttpDelete]
-        //[Route("{boardId}/tasks/{taskId}")]
-        //public ActionResult RemoveTaskFromBoard(
-        //    [FromRoute] int boardId,
-        //    [FromRoute] int taskId)
-        //{
-        //    _boardRepository.RemoveTask(boardId, taskId);
-        //    return Ok();
-        //}
-
-        
     }
 }

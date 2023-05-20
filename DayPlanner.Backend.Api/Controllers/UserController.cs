@@ -11,18 +11,14 @@ namespace DayPlanner.Backend.Api.Controllers
     [Authorize]
     public class UserController : Controller
     {
-        private readonly IBoardMemberRepository _boardMemberRepository;
-        private readonly IMapper _mapper;
         private readonly IUserProvider _userProvider;
         private readonly IUserService _userService;
 
-        public UserController(IMapper mapper,
-            IBoardMemberRepository boardMemberRepository,  
+        public UserController(
             IUserProvider userProvider, 
-            IUserService userService)
+            IUserService userService
+            )
         {
-            _boardMemberRepository = boardMemberRepository;
-            _mapper = mapper;
             _userProvider = userProvider;
             _userService = userService;
         }
@@ -34,11 +30,10 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok(users);
         }
 
-        [HttpGet("{userId}", Name = nameof(GetUser))] // To change more
+        [HttpGet("{userId}", Name = nameof(GetUser))] 
         public async Task<ActionResult<UserModel>> GetUser(int userId)
         {
             var user = await _userProvider.GetUser(userId);
-
             return Ok(user);
         }
 

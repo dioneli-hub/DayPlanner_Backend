@@ -10,9 +10,9 @@ namespace DayPlanner.Backend.BusinessLogic.Services
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
-        //private readonly IUserContextService _userContextService;
         public UserProvider(DataContext context,
-            IMapper mapper) //IUserContextService userContextService
+            IMapper mapper
+            ) 
         {
             _context = context;
             _mapper = mapper;
@@ -42,6 +42,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
         public async Task<List<BoardModel>> GetUserBoards(int userId)
         {
             var boards = await _context.Boards
+                .Include(x => x.Creator)
                 .Where(x => x.CreatorId == userId)
                 .ToListAsync();
 

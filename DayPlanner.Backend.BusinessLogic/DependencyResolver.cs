@@ -11,11 +11,10 @@ namespace DayPlanner.Backend.BusinessLogic
     {
         public static IServiceCollection AddBusinessLogicDependencies(this IServiceCollection services)
         {
-            services.AddScoped<ITaskItemRepository, TaskItemRepository>();
-            services.AddScoped<IBoardRepository, BoardRepository>();
+            //services.AddScoped<ITaskItemRepository, TaskItemRepository>();
+            //services.AddScoped<IBoardRepository, BoardRepository>();
             //services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAuthRepository, AuthRepository>();
-            services.AddScoped<IBoardMemberRepository, BoardMemberRepository>();
 
             services.AddScoped<IUserProvider, UserProvider>();
             services.AddScoped<IUserService, UserService>();

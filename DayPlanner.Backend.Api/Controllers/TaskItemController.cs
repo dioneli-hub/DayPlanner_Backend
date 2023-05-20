@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using DayPlanner.Backend.Domain;
 using DayPlanner.Backend.ApiModels.TaskItem;
 using DayPlanner.Backend.BusinessLogic.Services;
+using DayPlanner.Backend.ApiModels;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
@@ -36,7 +37,7 @@ namespace DayPlanner.Backend.Api.Controllers
         [HttpGet("{taskItemId}", Name = nameof(GetTask))]
         public async Task<ActionResult<TaskItemModel>> GetTask(int taskId)
         {
-            var task = await _taskItemProvider.GetTask(taskItemId);
+            var task = await _taskItemProvider.GetTask(taskId);
 
             return Ok(task);
         }
@@ -49,37 +50,16 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok(todaysTasks);
         }
 
-        //[HttpPut("{taskId}")]
-        //[ProducesResponseType(400)]
-        //[ProducesResponseType(204)]
-        //[ProducesResponseType(404)]
-        //public IActionResult UpdateTask(
-        //   [FromRoute] int taskId,
-        //   [FromBody] EditTaskItemModel updatedTask)
-        //{
-        //    if (updatedTask == null)
-        //        return BadRequest(ModelState);
+        [HttpPut("{taskId}" , Name =nameof(UpdateTask))]
+        public async Task<ActionResult<TaskItemModel>> UpdateTask(
+           [FromRoute] int taskId,
+           [FromBody] EditTaskItemModel editedTaskModel)
+        {
+            await _taskItemService.UpdateTask(taskId, editedTaskModel);
+            var updatedTask = await _taskItemProvider.GetTask(taskId);
 
-        //    if (taskId != updatedTask.Id)
-        //        return BadRequest(ModelState); 
-
-        //    if (!_taskItemRepository.TaskItemExists(taskId))
-        //        return NotFound();
-
-        //    if (!ModelState.IsValid)
-        //        return BadRequest();
-
-        //    var taskMap = _mapper.Map<TaskItem>(updatedTask);
-
-
-        //    if (!_taskItemRepository.UpdateTask(taskMap))
-        //    {
-        //        ModelState.AddModelError("", "Something went wrong during updating...");
-        //        return StatusCode(500, ModelState);
-        //    }
-
-        //    return NoContent();
-        //}
+            return Ok(updatedTask);
+        }
 
         [HttpDelete("{taskId}", Name =nameof(DeleteTask))]
         public async Task<ActionResult> DeleteTask(int taskId)

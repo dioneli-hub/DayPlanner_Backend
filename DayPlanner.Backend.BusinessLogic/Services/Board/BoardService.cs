@@ -3,6 +3,7 @@ using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.ApiModels.TaskItem;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
+using DayPlanner.Backend.BusinessLogic.Repositories;
 using DayPlanner.Backend.DataAccess;
 using DayPlanner.Backend.Domain;
 using Microsoft.EntityFrameworkCore;
@@ -14,20 +15,20 @@ namespace DayPlanner.Backend.BusinessLogic.Services
     {
         private readonly DataContext _context;
         private readonly IUserContextService _userContextService;
-        public BoardService(DataContext context, 
-            IUserContextService userContextService) 
+        public BoardService(DataContext context,
+            IUserContextService userContextService)
         {
             _context = context;
             _userContextService = userContextService;
         }
 
-       
+
 
         public async Task<int> CreateBoard(CreateBoardModel createBoardModel)
         {
             var currentUserId = _userContextService.GetCurrentUserId();
             var creator = await _context.Users.FindAsync(currentUserId);
-                
+
 
             var board = new Board
             {
@@ -97,6 +98,32 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             await _context.SaveChangesAsync();
 
             return task.Id;
+        }
+
+        public async Task UpdateBoard(int boardId, EditBoardModel editedBoardModel)
+        {
+            if (editedBoardModel == null)
+            {
+                throw new ApplicationException("No data to update entered.");
+            }
+
+            var currentUserId = _userContextService.GetCurrentUserId();
+            var board = await _context.Boards.FirstOrDefaultAsync(x => x.Id == boardId);
+
+            if (board == null)
+            {
+                throw new ApplicationException("Board not found.");
+            }
+
+            if (board.CreatorId != currentUserId)
+            {
+                throw new ApplicationException("Access denied: only board owner can edit board.");
+            }
+
+            board.Name = editedBoardModel.Name;
+
+            _context.Update(board);
+            await _context.SaveChangesAsync();
         }
     }
 }

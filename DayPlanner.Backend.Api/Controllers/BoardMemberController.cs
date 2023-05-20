@@ -16,13 +16,13 @@ namespace DayPlanner.Backend.Api.Controllers
         private readonly IBoardMemberProvider _boardMemberProvider;
         private readonly IBoardMemberService _boardMemberService;
 
-        public BoardMemberController(IMapper mapper, 
+        public BoardMemberController(
             IBoardMemberService boardMemberService, 
-            IBoardMemberProvider boardMemberProvider)
+            IBoardMemberProvider boardMemberProvider
+            )
         {
             _boardMemberProvider = boardMemberProvider;
             _boardMemberService = boardMemberService;
-            _mapper = mapper;
         }
 
         [HttpGet("users/{userId}/get-user-boards", Name = nameof(GetMemberBoards))]
@@ -34,7 +34,7 @@ namespace DayPlanner.Backend.Api.Controllers
         }
 
         [HttpGet]
-        [Route("boards/{boardId}/members", Name = nameof(GetBoardMembers))]
+        [Route("boards/{boardId}/memberships", Name = nameof(GetBoardMembers))]
         public async Task<ActionResult<List<BoardMemberModel>>> GetBoardMembers(
             [FromRoute] int boardId)
         {
