@@ -56,7 +56,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
         public async Task DeleteBoardMember(int boardId, int userId)
         {
             var currentUserId = _userContextService.GetCurrentUserId();
-            var board = await _context.Boards.FirstOrDefaultAsync(x => x.Id == boardId);
+            var board = await _context.Boards.FindAsync(boardId);
 
             if (board == null)
             {

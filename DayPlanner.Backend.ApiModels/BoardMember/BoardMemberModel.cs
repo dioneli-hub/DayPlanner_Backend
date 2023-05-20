@@ -1,5 +1,4 @@
 ﻿
-using DayPlanner.Backend.Domain;
 
 namespace DayPlanner.Backend.ApiModels.BoardMember
 {
@@ -7,7 +6,7 @@ namespace DayPlanner.Backend.ApiModels.BoardMember
     {
         public int BoardId { get; set; }
         public int MemberId { get; set; }
-        public Board Board { get; set; }
-        public User Member { get; set; }
+        public BoardModel Board { get; set; }
+        public UserModel Member { get; set; }
     }
 }

@@ -25,7 +25,7 @@ namespace DayPlanner.Backend.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{userId}/member-boards", Name = nameof(GetMemberBoards))]
+        [HttpGet("users/{userId}/get-user-boards", Name = nameof(GetMemberBoards))]
         public async Task<ActionResult<BoardModel>> GetMemberBoards(int userId)
         {
             var boards = await _boardMemberProvider.GetMemberBoards(userId);
@@ -34,7 +34,7 @@ namespace DayPlanner.Backend.Api.Controllers
         }
 
         [HttpGet]
-        [Route("{boardId}/members", Name = nameof(GetBoardMembers))]
+        [Route("boards/{boardId}/members", Name = nameof(GetBoardMembers))]
         public async Task<ActionResult<List<BoardMemberModel>>> GetBoardMembers(
             [FromRoute] int boardId)
         {
@@ -43,25 +43,26 @@ namespace DayPlanner.Backend.Api.Controllers
         }
 
         [HttpPost]
-        [Route("{boardId}/add-board-member-by-email", Name = nameof(AddBoardMemberByEmail))]
+        [Route("boards/{boardId}/add-board-member-by-email", Name = nameof(AddBoardMemberByEmail))]
         public async Task<ActionResult> AddBoardMemberByEmail(
             [FromRoute] int boardId,
             [FromBody] string userEmail 
             )
         {
             await _boardMemberService.AddBoardMemberByEmail(boardId, userEmail);
-            return Ok();
+            return Ok("User successfully added to the board as member.");
         }
 
-        //[HttpDelete]
-        //[Route("{boardId}/members")]
-        //public ActionResult DeleteBoardMember(
-        //    [FromBody] int userId, //later will probably pass by email
-        //    [FromRoute] int boardId)
-        //{
-        //    _boardMemberRepository.DeleteBoardMember(userId, boardId); //pass whole user as argument
-        //    return Ok("Success");
-        //}
+        [HttpDelete]
+        [Route("boards/{boardId}/delete-member/{userId}", Name = nameof(DeleteBoardMember))]
+        public async Task<ActionResult> DeleteBoardMember(
+            [FromRoute] int boardId,
+            [FromRoute] int userId
+            )
+        {
+            await _boardMemberService.DeleteBoardMember(boardId, userId); 
+            return Ok("Board member successfully deleted.");
+        }
 
     }
 }

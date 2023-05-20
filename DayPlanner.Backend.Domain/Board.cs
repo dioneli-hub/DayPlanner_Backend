@@ -12,9 +12,9 @@
 
         public User Creator { get; set; }
 
-        public ICollection<TaskItem>? Tasks { get; set; }
-        public ICollection<BoardMember>? BoardMemberships { get; set; }
-        public ICollection<User>? BoardMembers { get; set; }
+        public ICollection<TaskItem> Tasks { get; set; }
+        public ICollection<BoardMember> BoardMemberships { get; set; }
+        public ICollection<User> BoardMembers { get; set; }
 
     }
 }
