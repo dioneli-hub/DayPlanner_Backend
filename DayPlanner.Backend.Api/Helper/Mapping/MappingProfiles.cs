@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using DayPlanner.Backend.ApiModels.Board;
 using DayPlanner.Backend.ApiModels.TaskItem;
-using DayPlanner.Backend.ApiModels;    
+using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.Domain;
-
+using DayPlanner.Backend.ApiModels.User;
 
 namespace DayPlanner.Backend.Api.Helper.Mapping
 {

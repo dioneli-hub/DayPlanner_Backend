@@ -1,5 +1,4 @@
-﻿using DayPlanner.Backend.ApiModels;
-
+﻿using DayPlanner.Backend.ApiModels.User;
 
 namespace DayPlanner.Backend.BusinessLogic.Interfaces
 {

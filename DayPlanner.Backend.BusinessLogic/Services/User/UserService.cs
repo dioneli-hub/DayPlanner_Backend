@@ -1,9 +1,9 @@
-﻿using DayPlanner.Backend.ApiModels;
-using DayPlanner.Backend.DataAccess;
+﻿using DayPlanner.Backend.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using DayPlanner.Backend.BusinessLogic.Managers;
 using DayPlanner.Backend.Domain;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
+using DayPlanner.Backend.ApiModels.User;
 
 namespace DayPlanner.Backend.BusinessLogic.Services
 {

@@ -1,4 +1,5 @@
 ﻿using DayPlanner.Backend.ApiModels.Board;
+using DayPlanner.Backend.ApiModels.User;
 using DayPlanner.Backend.Domain;
 
 namespace DayPlanner.Backend.ApiModels.TaskItem

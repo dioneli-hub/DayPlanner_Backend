@@ -4,6 +4,7 @@ using DayPlanner.Backend.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using DayPlanner.Backend.ApiModels.Board;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
+using DayPlanner.Backend.ApiModels.User;
 
 namespace DayPlanner.Backend.BusinessLogic.Services
 {

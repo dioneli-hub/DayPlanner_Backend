@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using DayPlanner.Backend.ApiModels.Board;
 using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
+using DayPlanner.Backend.ApiModels.User;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
