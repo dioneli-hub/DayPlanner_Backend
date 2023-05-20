@@ -5,9 +5,9 @@
         public int Id { get; set; }
         public string Text { get; set; }
 
-        public DateTime DueDate { get; set; }
+        public DateTimeOffset DueDate { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
 
         public int CreatorId { get; set; }
 

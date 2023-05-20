@@ -6,8 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using DayPlanner.Backend.ApiModels.Board;
 using DayPlanner.Backend.ApiModels.TaskItem;
-using DayPlanner.Backend.BusinessLogic.Services;
-using DayPlanner.Backend.ApiModels.User;
+using DayPlanner.Backend.ApiModels;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
@@ -19,14 +18,17 @@ namespace DayPlanner.Backend.Api.Controllers
         private readonly IBoardProvider _boardProvider;
         private readonly IBoardService _boardService;
         private readonly IMapper _mapper;
+        private readonly ITaskItemProvider _taskItemProvider;
 
         public BoardController(IMapper mapper,
             IBoardProvider boardProvider, 
-            IBoardService boardService)
+            IBoardService boardService,
+            ITaskItemProvider taskItemProvider)
         {
             _mapper = mapper;
             _boardProvider = boardProvider;
             _boardService = boardService;
+            _taskItemProvider = taskItemProvider;
             
         }
 
@@ -65,8 +67,8 @@ namespace DayPlanner.Backend.Api.Controllers
         }
 
         //[HttpPut("{boardId}", Name = nameof(UpdateBoard))]
-        
-        //public IActionResult UpdateBoard(int boardId, 
+
+        //public IActionResult UpdateBoard(int boardId,
         //    [FromBody] BoardModel updatedBoard)
         //{
         //    if (updatedBoard == null)
@@ -92,37 +94,17 @@ namespace DayPlanner.Backend.Api.Controllers
         //    return NoContent();
         //}
 
-        //[HttpPost]
-        //[Route("{boardId}/tasks")]
-        //[ProducesResponseType(400)]
-        //[ProducesResponseType(200)]
-        //public ActionResult<TaskItemModel> AddTaskToBoard(
-        //    [FromBody] AddTaskItemToBoardModel taskCreate,
-        //    [FromRoute] int boardId)
-        //{
-        //    if (taskCreate == null)
-        //        return BadRequest(ModelState);
-
-        //    if (!ModelState.IsValid)
-        //        return BadRequest(ModelState);
-
-        //    var taskMap = _mapper.Map<TaskItem>(taskCreate);
-
+        [HttpPost]
+        [Route("{boardId}/tasks")]
+        public async Task<ActionResult<TaskItemModel>> AddTaskToBoard(
+            [FromBody] AddTaskItemToBoardModel addTaskItemToBoardModel,
+            [FromRoute] int boardId)
+        {
+            var taskId = await _boardService.AddTaskToBoard(boardId, addTaskItemToBoardModel);
+            var task = await _taskItemProvider.GetTaskItem(taskId);
             
-        //    if (!_boardRepository.AddTask(boardId, taskMap))
-        //    {
-        //        ModelState.AddModelError("", "Something went wrong...");
-        //        return StatusCode(500, ModelState);
-        //    }
-
-        //    // var taskModel = _mapper.Map<TaskItemModel>(taskCreate); should be some method to return the created model
-
-        //    //add mapping and return TaskItem Model
-
-        //    //var task = _boardRepository.AddTask(boardId, taskCreate.Text, taskCreate.DueDate);
-        //    //var task = _taskItemRepository.Get(taskId);
-        //    return Ok("Successfully created"); 
-        //}
+            return Ok(task);
+        }
 
         //[HttpDelete]
         //[Route("{boardId}/tasks/{taskId}")]
@@ -139,7 +121,7 @@ namespace DayPlanner.Backend.Api.Controllers
         //public ActionResult<List<BoardMember>> GetBoardMembers(
         //    [FromRoute] int boardId)
         //{
-            
+
         //    return Ok(_boardMemberRepository.GetBoardMembers(boardId));
         //}
 

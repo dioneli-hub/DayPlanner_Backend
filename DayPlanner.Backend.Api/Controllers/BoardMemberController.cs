@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using DayPlanner.Backend.ApiModels.Board;
-using DayPlanner.Backend.ApiModels.User;
+using DayPlanner.Backend.ApiModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using DayPlanner.Backend.BusinessLogic.Interfaces.BoardMember;

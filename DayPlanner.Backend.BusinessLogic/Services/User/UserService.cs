@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using DayPlanner.Backend.ApiModels.User;
+﻿using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using DayPlanner.Backend.BusinessLogic.Managers;
@@ -11,12 +10,10 @@ namespace DayPlanner.Backend.BusinessLogic.Services
     public class UserService : IUserService
     {
         private readonly DataContext _context;
-        private readonly IMapper _mapper;
         //private readonly IUserContextService _userContextService;
-        public UserService(DataContext context, IMapper mapper) //IUserContextService userContextService
+        public UserService(DataContext context) //IUserContextService userContextService
         {
             _context = context;
-            _mapper = mapper;
         }
         public async Task<int> RegisterUser(CreateUserModel model)
         {

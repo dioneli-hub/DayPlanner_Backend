@@ -1,4 +1,5 @@
 ﻿using DayPlanner.Backend.ApiModels.Board;
+using DayPlanner.Backend.Domain;
 
 namespace DayPlanner.Backend.ApiModels.TaskItem
 {
@@ -7,14 +8,15 @@ namespace DayPlanner.Backend.ApiModels.TaskItem
         public int Id { get; set; }
         public string Text { get; set; }
 
-        public DateTime DueDate { get; set; }
+        public DateTimeOffset DueDate { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
 
         public int BoardId { get; set; }
-        public BoardModel? Board { get; set; }
+        public BoardModel Board { get; set; }
 
         public int CreatorId { get; set; }
+        public UserModel Creator { get; set; } 
 
-    }
+     }
 }

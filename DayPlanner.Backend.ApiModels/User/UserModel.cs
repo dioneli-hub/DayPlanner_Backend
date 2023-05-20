@@ -1,4 +1,4 @@
-﻿namespace DayPlanner.Backend.ApiModels.User
+﻿namespace DayPlanner.Backend.ApiModels
 {
     public class UserModel
     {

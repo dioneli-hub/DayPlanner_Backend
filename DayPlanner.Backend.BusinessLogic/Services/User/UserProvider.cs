@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DayPlanner.Backend.ApiModels.User;
+using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using DayPlanner.Backend.ApiModels.Board;

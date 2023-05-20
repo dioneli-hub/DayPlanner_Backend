@@ -20,6 +20,7 @@ namespace DayPlanner.Backend.BusinessLogic
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IBoardProvider, BoardProvider>();
             services.AddScoped<IBoardService, BoardService>();
+            services.AddScoped<ITaskItemProvider, TaskItemProvider>();
 
             return services;
         }

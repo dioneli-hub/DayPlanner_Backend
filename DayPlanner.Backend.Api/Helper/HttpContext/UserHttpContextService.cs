@@ -9,7 +9,7 @@ namespace DayPlanner.Backend.Api.Helper.HttpContext
         {
             _contextAccessor = contextAccessor;
         }
-        private IIdentity? UserIdentity => _contextAccessor.HttpContext?.User.Identity;
+        private IIdentity UserIdentity => _contextAccessor.HttpContext?.User.Identity;
 
         public int GetCurrentUserId()
         {

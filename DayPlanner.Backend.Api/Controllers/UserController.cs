@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using DayPlanner.Backend.ApiModels.Board;
-using DayPlanner.Backend.ApiModels.User;
+using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
 
 namespace DayPlanner.Backend.Api.Controllers
