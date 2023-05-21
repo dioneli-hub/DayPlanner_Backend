@@ -12,7 +12,6 @@ namespace DayPlanner.Backend.Api.Controllers
     [Authorize]
     public class BoardMemberController : Controller
     {
-        private readonly IMapper _mapper;
         private readonly IBoardMemberProvider _boardMemberProvider;
         private readonly IBoardMemberService _boardMemberService;
 

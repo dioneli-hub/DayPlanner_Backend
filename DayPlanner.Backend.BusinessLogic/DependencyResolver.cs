@@ -1,9 +1,10 @@
-﻿using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
-using DayPlanner.Backend.BusinessLogic.Interfaces;
-using DayPlanner.Backend.BusinessLogic.Repositories;
+﻿using DayPlanner.Backend.BusinessLogic.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using DayPlanner.Backend.BusinessLogic.Services;
 using DayPlanner.Backend.BusinessLogic.Interfaces.BoardMember;
+using DayPlanner.Backend.BusinessLogic.Services.Security;
+using DayPlanner.Backend.BusinessLogic.Interfaces.Security;
+using DayPlanner.Backend.BusinessLogic.Services.Auth;
 
 namespace DayPlanner.Backend.BusinessLogic
 {
@@ -11,11 +12,6 @@ namespace DayPlanner.Backend.BusinessLogic
     {
         public static IServiceCollection AddBusinessLogicDependencies(this IServiceCollection services)
         {
-            //services.AddScoped<ITaskItemRepository, TaskItemRepository>();
-            //services.AddScoped<IBoardRepository, BoardRepository>();
-            //services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IAuthRepository, AuthRepository>();
-
             services.AddScoped<IUserProvider, UserProvider>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IBoardProvider, BoardProvider>();
@@ -24,6 +20,10 @@ namespace DayPlanner.Backend.BusinessLogic
             services.AddScoped<ITaskItemService, TaskItemService>();
             services.AddScoped<IBoardMemberProvider, BoardMemberProvider>();
             services.AddScoped<IBoardMemberService, BoardMemberService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IHashService, HashService>();
+            services.AddScoped<IPasswordVerifier, PasswordVerifier>();
+            services.AddScoped<IJwtService, JwtService>();
 
             return services;
         }

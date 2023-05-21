@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using DayPlanner.Backend.BusinessLogic.Interfaces;
+﻿using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.Api.Managers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,15 +13,15 @@ namespace DayPlanner.Backend.Api.Controllers
     public class AuthController : Controller
     {
 
-        private readonly IAuthRepository _authRepository;
+        private readonly IAuthService _authService;
         private readonly IUserContextService _userContextService;
         private readonly IUserProvider _userProvider;
 
-        public AuthController(IAuthRepository authRepository,
+        public AuthController(IAuthService authService,
             IUserContextService userContextService,
             IUserProvider userProvider)
         {
-            _authRepository = authRepository;
+            _authService = authService;
             _userContextService = userContextService;
             _userProvider = userProvider;
         }
@@ -31,20 +30,17 @@ namespace DayPlanner.Backend.Api.Controllers
         [Authorize]
         public async Task<ActionResult<UserModel>> AuthenticatedUser()
         {
-            var currentUserId = _userContextService.GetCurrentUserId();
-            var user = await _userProvider.GetUser(currentUserId);
-
+            var userId = _userContextService.GetCurrentUserId();
+            var user = await _userProvider.GetUser(userId);
             return Ok(user);
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult<TokenModel> Authenticate(AuthenticateModel model) // make async later
+        public async Task<ActionResult<TokenModel>> Authenticate(AuthenticateModel model)
         {
-            var token = _authRepository.Authenticate(model.Email, model.Password);
+            var token = await _authService.Authenticate(model.Email, model.Password);
             return Ok(token);
         }
-
-        
     }
 }

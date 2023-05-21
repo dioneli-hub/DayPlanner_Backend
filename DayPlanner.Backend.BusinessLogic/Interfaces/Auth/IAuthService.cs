@@ -1,9 +1,10 @@
 ﻿using DayPlanner.Backend.Api.Managers;
 
+
 namespace DayPlanner.Backend.BusinessLogic.Interfaces
 {
-    public interface IAuthRepository
+    public interface IAuthService
     {
-        public TokenModel Authenticate(string email, string password);
+        Task<TokenModel> Authenticate(string email, string password);
     }
 }

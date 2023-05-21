@@ -1,13 +1,10 @@
-﻿using AutoMapper;
-using DayPlanner.Backend.ApiModels;
+﻿using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.ApiModels.TaskItem;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
-using DayPlanner.Backend.BusinessLogic.Repositories;
 using DayPlanner.Backend.DataAccess;
 using DayPlanner.Backend.Domain;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.Design;
 
 namespace DayPlanner.Backend.BusinessLogic.Services
 {

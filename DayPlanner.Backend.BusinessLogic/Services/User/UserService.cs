@@ -1,19 +1,23 @@
 ﻿using DayPlanner.Backend.DataAccess;
 using Microsoft.EntityFrameworkCore;
-using DayPlanner.Backend.BusinessLogic.Managers;
 using DayPlanner.Backend.Domain;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.ApiModels;
+using DayPlanner.Backend.BusinessLogic.Interfaces.Security;
 
 namespace DayPlanner.Backend.BusinessLogic.Services
 {
     public class UserService : IUserService
     {
         private readonly DataContext _context;
-        //private readonly IUserContextService _userContextService;
-        public UserService(DataContext context) //IUserContextService userContextService
+        private readonly IHashService _hashService;
+        public UserService(
+            DataContext context,
+            IHashService hashService) 
         {
             _context = context;
+            _hashService = hashService;
+                
         }
         public async Task<int> RegisterUser(CreateUserModel model)
         {
@@ -23,7 +27,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 throw new ApplicationException("User with the email provided already exists.");
             }
 
-            var hashModel = HashManager.Generate(model.Password); // change for Hash service later
+            var hashModel = _hashService.Generate(model.Password); 
 
             var user = new User
             {

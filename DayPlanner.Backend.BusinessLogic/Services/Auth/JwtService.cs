@@ -1,14 +1,17 @@
 ﻿using DayPlanner.Backend.Api.Managers;
+using DayPlanner.Backend.BusinessLogic.Interfaces;
 using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace DayPlanner.Backend.BusinessLogic.Managers
+namespace DayPlanner.Backend.BusinessLogic.Services.Auth
 {
-    public static class JwtManager
+    public class JwtService : IJwtService
     {
-        public static TokenModel GenerateJwtToken(int userId)
+        public TokenModel GenerateJwtToken(int userId)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var nowUtc = DateTimeOffset.UtcNow;
@@ -24,7 +27,7 @@ namespace DayPlanner.Backend.BusinessLogic.Managers
             };
         }
 
-        public static bool IsValidAuthToken(string token)
+        public bool IsValidAuthToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             try
@@ -50,13 +53,14 @@ namespace DayPlanner.Backend.BusinessLogic.Managers
             }
         }
 
-        private static SecurityTokenDescriptor BuildSecurityTokenDescriptor(int userId, DateTimeOffset nowUtc, DateTimeOffset expires)
+        private SecurityTokenDescriptor BuildSecurityTokenDescriptor(int userId, DateTimeOffset nowUtc, DateTimeOffset expires)
         {
             var key = Encoding.ASCII.GetBytes("GDxN28S3JvTRNqzGULCZvH9kzQ8qrxdB");
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name, userId.ToString()),
             };
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Issuer = "DayPlanner.Issuer",

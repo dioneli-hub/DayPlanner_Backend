@@ -1,15 +1,18 @@
-﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+﻿using DayPlanner.Backend.BusinessLogic.Interfaces.Security;
+using DayPlanner.Backend.BusinessLogic.Models;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
 
-namespace DayPlanner.Backend.BusinessLogic.Managers
+
+namespace DayPlanner.Backend.BusinessLogic.Services.Security
 {
-    public static class HashManager
+    public class HashService : IHashService
     {
         private const int SaltSize = 16;
         private const int IterationsCount = 100;
         private const int KeySizeInBytes = 32;
 
-        public static HashModel Generate(string password)
+        public HashModel Generate(string password)
         {
             var salt = GenerateSalt(SaltSize);
 
@@ -20,7 +23,7 @@ namespace DayPlanner.Backend.BusinessLogic.Managers
             };
         }
 
-        public static byte[] HashPassword(string password, byte[] salt)
+        public byte[] HashPassword(string password, byte[] salt)
         {
             return KeyDerivation.Pbkdf2(password, salt,
                 KeyDerivationPrf.HMACSHA512,

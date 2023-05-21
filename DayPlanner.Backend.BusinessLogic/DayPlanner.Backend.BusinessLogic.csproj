@@ -18,8 +18,4 @@
     <ProjectReference Include="..\DayPlanner.Backend.Domain\DayPlanner.Backend.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\Auth\" />
-  </ItemGroup>
-
 </Project>
