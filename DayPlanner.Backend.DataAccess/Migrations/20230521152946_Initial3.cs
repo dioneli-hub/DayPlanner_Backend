@@ -71,6 +71,7 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DueDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    IsCompleted = table.Column<bool>(type: "bit", nullable: false),
                     CreatorId = table.Column<int>(type: "int", nullable: false),
                     BoardId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -87,6 +88,30 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                         column: x => x.CreatorId,
                         principalTable: "Users",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TaskPerformers",
+                columns: table => new
+                {
+                    TaskId = table.Column<int>(type: "int", nullable: false),
+                    PerformerId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TaskPerformers", x => new { x.TaskId, x.PerformerId });
+                    table.ForeignKey(
+                        name: "FK_TaskPerformers_TaskItems_TaskId",
+                        column: x => x.TaskId,
+                        principalTable: "TaskItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TaskPerformers_Users_PerformerId",
+                        column: x => x.PerformerId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -108,6 +133,11 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                 name: "IX_TaskItems_CreatorId",
                 table: "TaskItems",
                 column: "CreatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TaskPerformers_PerformerId",
+                table: "TaskPerformers",
+                column: "PerformerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_BoardId",
@@ -147,6 +177,9 @@ namespace DayPlanner.Backend.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "BoardMembers");
+
+            migrationBuilder.DropTable(
+                name: "TaskPerformers");
 
             migrationBuilder.DropTable(
                 name: "TaskItems");

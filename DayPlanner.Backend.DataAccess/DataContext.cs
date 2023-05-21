@@ -15,6 +15,7 @@ namespace DayPlanner.Backend.DataAccess
         public DbSet<TaskItem> TaskItems { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<BoardMember> BoardMembers { get; set; }
+        public DbSet<TaskPerformer> TaskPerformers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,6 +25,7 @@ namespace DayPlanner.Backend.DataAccess
             new TaskItemConfiguration().Configure(modelBuilder.Entity<TaskItem>());
             new UserConfiguration().Configure(modelBuilder.Entity<User>());
             new BoardMemberConfiguration().Configure(modelBuilder.Entity<BoardMember>());
+            new TaskPerformerConfiguration().Configure(modelBuilder.Entity<TaskPerformer>());
 
 
 

@@ -85,10 +85,13 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 Text = addTaskItemToBoardModel.Text,
                 DueDate = addTaskItemToBoardModel.DueDate,
                 CreatedAt = DateTimeOffset.UtcNow,
+                IsCompleted = false,
                 CreatorId = currentUserId,
                 Creator = currentUser,
                 BoardId = boardId,
-                Board = board
+                Board = board,
+                PerformerId = null,
+                Performer = null
             };
 
             await _context.TaskItems.AddAsync(task);

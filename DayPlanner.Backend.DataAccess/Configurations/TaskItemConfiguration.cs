@@ -14,6 +14,7 @@ namespace DayPlanner.Backend.DataAccess.Configurations
             builder.Property(x => x.Text).IsRequired();
             builder.Property(x => x.DueDate).IsRequired(); 
             builder.Property(x => x.CreatedAt).IsRequired();
+            builder.Property(x => x.IsCompleted).IsRequired();
 
             builder.HasOne(x => x.Board)
                 .WithMany(x => x.Tasks)

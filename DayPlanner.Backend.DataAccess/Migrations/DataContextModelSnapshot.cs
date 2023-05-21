@@ -82,6 +82,9 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.Property<DateTimeOffset>("DueDate")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -93,6 +96,21 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.HasIndex("CreatorId");
 
                     b.ToTable("TaskItems", (string)null);
+                });
+
+            modelBuilder.Entity("DayPlanner.Backend.Domain.TaskPerformer", b =>
+                {
+                    b.Property<int>("TaskId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PerformerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TaskId", "PerformerId");
+
+                    b.HasIndex("PerformerId");
+
+                    b.ToTable("TaskPerformers", (string)null);
                 });
 
             modelBuilder.Entity("DayPlanner.Backend.Domain.User", b =>
@@ -185,6 +203,25 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.Navigation("Creator");
                 });
 
+            modelBuilder.Entity("DayPlanner.Backend.Domain.TaskPerformer", b =>
+                {
+                    b.HasOne("DayPlanner.Backend.Domain.User", "Performer")
+                        .WithMany("TaskAssignments")
+                        .HasForeignKey("PerformerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DayPlanner.Backend.Domain.TaskItem", "Task")
+                        .WithMany()
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Performer");
+
+                    b.Navigation("Task");
+                });
+
             modelBuilder.Entity("DayPlanner.Backend.Domain.User", b =>
                 {
                     b.HasOne("DayPlanner.Backend.Domain.Board", null)
@@ -206,6 +243,8 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.Navigation("Boards");
 
                     b.Navigation("Memberships");
+
+                    b.Navigation("TaskAssignments");
 
                     b.Navigation("Tasks");
                 });
