@@ -19,6 +19,27 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             _userContextService = userContextService;
         }
 
+        public async Task CompleteTask(int taskId)
+        {
+            var currentUserId = _userContextService.GetCurrentUserId();
+            var task = await _context.TaskItems.FirstOrDefaultAsync(x => x.Id == taskId);
+
+            if (task == null)
+            {
+                throw new ApplicationException("Task not found.");
+            }
+
+            if (task.CreatorId != currentUserId && task.PerformerId != currentUserId)
+            {
+                throw new ApplicationException("Access denied: only task creator or task performer can complete task.");
+            }
+
+            task.IsCompleted = true;
+
+            _context.Update(task);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task DeleteTask(int taskId)
         {
             var currentUserId = _userContextService.GetCurrentUserId();
@@ -37,6 +58,28 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             _context.TaskItems.Remove(task);
             await _context.SaveChangesAsync();
         }
+
+        public async Task MarkTaskAsToDo(int taskId)
+        {
+            var currentUserId = _userContextService.GetCurrentUserId();
+            var task = await _context.TaskItems.FirstOrDefaultAsync(x => x.Id == taskId);
+
+            if (task == null)
+            {
+                throw new ApplicationException("Task not found.");
+            }
+
+            if (task.CreatorId != currentUserId && task.PerformerId != currentUserId)
+            {
+                throw new ApplicationException("Access denied: only task creator or task performer can complete task.");
+            }
+
+            task.IsCompleted = false;
+
+            _context.Update(task);
+            await _context.SaveChangesAsync();
+        }
+    
 
         public async Task UpdateTask(int taskId, EditTaskItemModel editedTaskModel)
         {

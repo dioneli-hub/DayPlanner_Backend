@@ -14,8 +14,8 @@ namespace DayPlanner.Backend.ApiModels.TaskItem
         public BoardModel Board { get; set; }
         public int CreatorId { get; set; }
         public UserModel Creator { get; set; }
-        public int? PerformerId { get; set; }
-        public User? Performer { get; set; }
+        public int PerformerId { get; set; }
+        public UserModel Performer { get; set; }
 
     }
 }

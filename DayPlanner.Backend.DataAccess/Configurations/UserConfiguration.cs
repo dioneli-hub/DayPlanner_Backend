@@ -22,6 +22,7 @@ namespace DayPlanner.Backend.DataAccess.Configurations
             //    .WithMany()
             //    .HasForeignKey(x => x.AvatarFileId);
 
+
             builder.ToTable("Users");
         }
 
