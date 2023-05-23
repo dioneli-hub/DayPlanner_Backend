@@ -76,7 +76,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
         public async Task<List<TaskItemModel>> GetUsersTasks(int userId)
         {
-            var toDoTasks = await _context.TaskItems
+            var tasks = await _context.TaskItems
                 .Include(x => x.Board)
                 .Include(x => x.Performer)
                 .Include(x => x.Creator)
@@ -84,9 +84,9 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 .OrderBy(t => t.Id)
                 .ToListAsync();
 
-            var toDoTaskModels = _mapper.Map<List<TaskItemModel>>(toDoTasks);
+            var taskModels = _mapper.Map<List<TaskItemModel>>(tasks);
 
-            return toDoTaskModels;
+            return taskModels;
         }
 
         public async Task<List<TaskItemModel>> GetUsersTodaysTasks(int userId)
