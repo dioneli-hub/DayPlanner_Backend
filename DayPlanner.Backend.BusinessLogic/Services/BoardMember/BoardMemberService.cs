@@ -17,7 +17,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             _context = context;
             _userContextService = userContextService;
         }
-        public async Task AddBoardMemberByEmail(int boardId, string userEmail)
+        public async Task<int> AddBoardMemberByEmail(int boardId, string userEmail)
         {
             var currentUserId = _userContextService.GetCurrentUserId();
             var board = await _context.Boards.FindAsync(boardId);
@@ -51,6 +51,9 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             await _context.BoardMembers.AddAsync(boardMember);
             await _context.SaveChangesAsync();
+
+
+            return boardMember.MemberId;
         }
 
         public async Task DeleteBoardMember(int boardId, int userId)

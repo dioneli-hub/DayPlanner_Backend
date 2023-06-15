@@ -44,7 +44,10 @@ namespace DayPlanner.Backend.BusinessLogic.Services
         public async Task DeleteBoard(int boardId)
         {
             var currentUserId = _userContextService.GetCurrentUserId();
-            var board = await _context.Boards.FirstOrDefaultAsync(x => x.Id == boardId);
+            var board = await _context.Boards
+                .Include(x => x.Tasks)
+                .Include(x=> x.BoardMemberships)
+                .FirstOrDefaultAsync(x => x.Id == boardId);
 
             if (board == null)
             {
@@ -56,7 +59,10 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 throw new ApplicationException("Access denied.");
             }
 
+            _context.BoardMembers.RemoveRange(board.BoardMemberships);
+            _context.TaskItems.RemoveRange(board.Tasks);
             _context.Boards.Remove(board);
+
             await _context.SaveChangesAsync();
         }
 

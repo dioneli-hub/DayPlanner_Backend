@@ -31,6 +31,8 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             return boardMemberModel;
         }
 
+
+        /*
         public async Task<List<BoardMemberModel>> GetBoardMembers(int boardId)
         {
             var boardMembers = await _context.BoardMembers
@@ -42,6 +44,20 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             var boardMemberModels = _mapper.Map<List<BoardMemberModel>>(boardMembers);
 
             return boardMemberModels;
+        }
+        */
+
+        public async Task<List<UserModel>> GetBoardMembers(int boardId)
+        {
+            var members = await _context.BoardMembers
+                .Include(x => x.Member)
+                .Where(m => m.BoardId == boardId)
+                .Select(x=>x.Member)
+                .ToListAsync();
+
+            var memberModels = _mapper.Map<List<UserModel>>(members);
+
+            return memberModels;
         }
 
         public async Task<List<BoardModel>> GetMemberBoards(int userId) {

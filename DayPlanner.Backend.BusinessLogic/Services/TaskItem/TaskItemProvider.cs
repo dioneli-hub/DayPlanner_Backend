@@ -2,6 +2,7 @@
 using DayPlanner.Backend.ApiModels.TaskItem;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.DataAccess;
+using DayPlanner.Backend.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace DayPlanner.Backend.BusinessLogic.Services
@@ -120,6 +121,22 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             var toDoTaskModels = _mapper.Map<List<TaskItemModel>>(toDoTasks);
 
             return toDoTaskModels;
+        }
+
+        public async Task<List<TaskItemModel>> GetBoardTasks(int boardId)
+        {
+            var tasks = await _context.TaskItems
+                .Include(x => x.Board)
+                .Include(x => x.Performer)
+                .Include(x => x.Creator)
+                .Where(t => t.BoardId == boardId)
+                .OrderByDescending(t => t.Id)
+                .ToListAsync();
+
+            var taskModels = _mapper.Map<List<TaskItemModel>>(tasks);
+
+            return taskModels;
+
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using DayPlanner.Backend.ApiModels.TaskItem;
+using DayPlanner.Backend.BusinessLogic.Services;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
@@ -29,6 +30,13 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok(tasks);
         }
 
+        [HttpGet("{boardId}/get-board-tasks", Name = nameof(GetBoardTasks))]
+        public async Task<ActionResult<List<TaskItemModel>>> GetBoardTasks(int boardId)
+        {
+            var tasks = await _taskItemProvider.GetBoardTasks(boardId);
+
+            return Ok(tasks);
+        }
 
         [HttpGet("{taskItemId}", Name = nameof(GetTask))]
         public async Task<ActionResult<TaskItemModel>> GetTask(int taskId)
@@ -63,7 +71,7 @@ namespace DayPlanner.Backend.Api.Controllers
         public async Task<ActionResult> DeleteTask(int taskId)
         {
             await _taskItemService.DeleteTask(taskId);
-            return Ok("Task successfully deleted.");
+            return Ok(); //"Task successfully deleted."
         }
 
 

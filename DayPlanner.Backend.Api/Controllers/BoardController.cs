@@ -45,6 +45,9 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok(board);
         }
 
+
+        
+
         [HttpPost (Name = nameof(CreateBoard))]
         public async Task<ActionResult<BoardModel>> CreateBoard([FromBody] CreateBoardModel createBoardModel)
         {

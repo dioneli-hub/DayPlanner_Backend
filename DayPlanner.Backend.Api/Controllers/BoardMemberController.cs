@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using DayPlanner.Backend.BusinessLogic.Interfaces.BoardMember;
 using DayPlanner.Backend.ApiModels.BoardMember;
+using DayPlanner.Backend.BusinessLogic.Interfaces;
+using DayPlanner.Backend.BusinessLogic.Services;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
@@ -14,12 +16,15 @@ namespace DayPlanner.Backend.Api.Controllers
     {
         private readonly IBoardMemberProvider _boardMemberProvider;
         private readonly IBoardMemberService _boardMemberService;
+        private readonly IUserProvider _userProvider;
 
         public BoardMemberController(
-            IBoardMemberService boardMemberService, 
-            IBoardMemberProvider boardMemberProvider
+            IBoardMemberService boardMemberService,
+            IBoardMemberProvider boardMemberProvider,
+            IUserProvider userProvider
             )
         {
+            _userProvider = userProvider;
             _boardMemberProvider = boardMemberProvider;
             _boardMemberService = boardMemberService;
         }
@@ -32,6 +37,7 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok(boards);
         }
 
+        /*
         [HttpGet]
         [Route("boards/{boardId}/memberships", Name = nameof(GetBoardMembers))]
         public async Task<ActionResult<List<BoardMemberModel>>> GetBoardMembers(
@@ -40,16 +46,27 @@ namespace DayPlanner.Backend.Api.Controllers
             var boardMembers = await _boardMemberProvider.GetBoardMembers(boardId);
             return Ok(boardMembers);
         }
+        */
+
+        [HttpGet]
+        [Route("boards/{boardId}/get-members", Name = nameof(GetBoardMembers))]
+        public async Task<ActionResult<List<UserModel>>> GetBoardMembers(
+            [FromRoute] int boardId)
+        {
+            var boardMembers = await _boardMemberProvider.GetBoardMembers(boardId);
+            return Ok(boardMembers);
+        }
 
         [HttpPost]
-        [Route("boards/{boardId}/add-board-member-by-email", Name = nameof(AddBoardMemberByEmail))]
-        public async Task<ActionResult> AddBoardMemberByEmail(
+        [Route("boards/{boardId}/add-board-member-by-email/{userEmail}", Name = nameof(AddBoardMemberByEmail))]
+        public async Task<ActionResult<UserModel>> AddBoardMemberByEmail(
             [FromRoute] int boardId,
-            [FromBody] string userEmail 
+            [FromRoute] string userEmail 
             )
         {
-            await _boardMemberService.AddBoardMemberByEmail(boardId, userEmail);
-            return Ok("User successfully added to the board as member.");
+            var userId = await _boardMemberService.AddBoardMemberByEmail(boardId, userEmail);
+            var user = await _userProvider.GetUser(userId);
+            return Ok(user);
         }
 
         [HttpDelete]
@@ -60,7 +77,7 @@ namespace DayPlanner.Backend.Api.Controllers
             )
         {
             await _boardMemberService.DeleteBoardMember(boardId, userId); 
-            return Ok("Board member successfully deleted.");
+            return Ok(); //"Board member successfully deleted."
         }
 
     }

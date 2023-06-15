@@ -12,5 +12,7 @@ namespace DayPlanner.Backend.BusinessLogic.Interfaces
         Task<List<TaskItemModel>> GetUsersTodaysTasks(int userId);
         Task<List<TaskItemModel>> GetUsersCompletedTasks(int userId);
         Task<List<TaskItemModel>> GetUsersToDoTasks(int userId);
+
+        Task<List<TaskItemModel>> GetBoardTasks(int boardId);
     }
 }
