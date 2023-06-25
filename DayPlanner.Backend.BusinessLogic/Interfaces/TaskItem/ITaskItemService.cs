@@ -1,4 +1,5 @@
 ﻿using DayPlanner.Backend.ApiModels.TaskItem;
+using System.Threading.Tasks;
 
 
 namespace DayPlanner.Backend.BusinessLogic.Interfaces
@@ -9,5 +10,7 @@ namespace DayPlanner.Backend.BusinessLogic.Interfaces
         Task UpdateTask(int taskId, EditTaskItemModel editTaskItemModel);
         Task CompleteTask(int taskId);
         Task MarkTaskAsToDo(int taskId);
+        Task AssignTaskPerformer(int taskId, int performerId);
+        Task RemoveTaskPerformer(int taskId);
     }
 }

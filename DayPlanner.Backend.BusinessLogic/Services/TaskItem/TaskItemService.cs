@@ -124,5 +124,42 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             _context.Update(task);
             await _context.SaveChangesAsync();
         }
+
+        public async Task AssignTaskPerformer(int taskId, int performerId)
+        {
+            var task = await _context.TaskItems
+                .Where(x => x.Id == taskId)
+                .FirstOrDefaultAsync();
+
+            var isPerformerBoardMember = await _context.BoardMembers
+                                            .AnyAsync(x => x.BoardId == task.BoardId && x.MemberId == performerId);
+
+            if (task != null && isPerformerBoardMember)
+            {
+                task.PerformerId = performerId;
+                task.Performer = await _context.Users
+                    .Where(x => x.Id == performerId)
+                    .FirstOrDefaultAsync();
+
+                _context.Update(task);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task RemoveTaskPerformer(int taskId)
+        {
+            var task = await _context.TaskItems
+                .Where(x => x.Id == taskId)
+                .FirstOrDefaultAsync();
+
+            if (task != null)
+            {
+                task.PerformerId = null;
+                task.Performer = null;
+
+                _context.Update(task);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

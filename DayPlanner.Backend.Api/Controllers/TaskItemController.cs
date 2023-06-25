@@ -122,5 +122,25 @@ namespace DayPlanner.Backend.Api.Controllers
             await _taskItemService.MarkTaskAsToDo(taskId);
             return Ok("Task marked as ToDo.");
         }
+
+        [HttpPost]
+        [Route("{taskId}/assign-performer/{performerId}")]
+        public async Task<ActionResult<TaskItemModel>> AssignTaskPerformer(
+            [FromRoute] int taskId, int performerId)
+        {
+            await _taskItemService.AssignTaskPerformer(taskId, performerId);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("{taskId}/remove-performer")]
+        public async Task<ActionResult<TaskItemModel>> RemoveTaskPerformer(
+            [FromRoute] int taskId)
+        {
+            await _taskItemService.RemoveTaskPerformer(taskId);
+
+            return Ok();
+        }
     }
 }

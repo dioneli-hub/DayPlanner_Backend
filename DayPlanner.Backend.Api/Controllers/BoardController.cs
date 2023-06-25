@@ -88,5 +88,17 @@ namespace DayPlanner.Backend.Api.Controllers
 
             return Ok(task);
         }
+
+        [HttpPost]
+        [Route("{boardId}/tasks/{taskId}/assign-performer")]
+        public async Task<ActionResult<TaskItemModel>> AssignTaskPerformer(
+            [FromRoute] int boardId, int taskId)
+        {
+
+            var taskId = await _boardService.AssignTaskPerformer(boardId, taskId);
+            var task = await _taskItemProvider.GetTask(taskId);
+
+            return Ok(task);
+        }
     }
 }
