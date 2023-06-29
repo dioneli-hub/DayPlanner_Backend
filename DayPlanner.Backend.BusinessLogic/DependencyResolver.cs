@@ -3,8 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using DayPlanner.Backend.BusinessLogic.Services;
 using DayPlanner.Backend.BusinessLogic.Interfaces.BoardMember;
 using DayPlanner.Backend.BusinessLogic.Services.Security;
-using DayPlanner.Backend.BusinessLogic.Interfaces.Security;
 using DayPlanner.Backend.BusinessLogic.Services.Auth;
+using DayPlanner.Backend.BusinessLogic.Services.Validation;
 
 namespace DayPlanner.Backend.BusinessLogic
 {
@@ -24,6 +24,7 @@ namespace DayPlanner.Backend.BusinessLogic
             services.AddScoped<IHashService, HashService>();
             services.AddScoped<IPasswordVerifier, PasswordVerifier>();
             services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<IValidationService, ValidationService>();
 
             return services;
         }

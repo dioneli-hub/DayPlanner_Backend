@@ -108,11 +108,11 @@ namespace DayPlanner.Backend.Api.Controllers
         }
 
         [HttpPost("{taskId}/complete-task", Name = nameof(CompleteTask))]
-        public async Task<ActionResult<List<TaskItemModel>>> CompleteTask(
+        public async Task<ActionResult> CompleteTask(
             [FromRoute] int taskId)
         {
             await _taskItemService.CompleteTask(taskId);
-            return Ok("Task completed.");
+            return Ok("Task completed."); 
         }
 
         [HttpPost("{taskId}/mark-task-as-todo", Name = nameof(MarkTaskAsToDo))]
@@ -120,7 +120,7 @@ namespace DayPlanner.Backend.Api.Controllers
             [FromRoute] int taskId)
         {
             await _taskItemService.MarkTaskAsToDo(taskId);
-            return Ok("Task marked as ToDo.");
+            return Ok("Task marked as ToDo."); 
         }
 
         [HttpPost]

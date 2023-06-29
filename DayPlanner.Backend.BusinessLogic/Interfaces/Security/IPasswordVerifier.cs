@@ -1,6 +1,6 @@
 ﻿
 
-namespace DayPlanner.Backend.BusinessLogic.Interfaces.Security
+namespace DayPlanner.Backend.BusinessLogic.Interfaces
 {
     public interface IPasswordVerifier
     {

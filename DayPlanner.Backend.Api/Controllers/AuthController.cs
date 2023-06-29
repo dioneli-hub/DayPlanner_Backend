@@ -39,8 +39,8 @@ namespace DayPlanner.Backend.Api.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<TokenModel>> Authenticate(AuthenticateModel model)
         {
-            var token = await _authService.Authenticate(model.Email, model.Password);
-            return Ok(token);
+            var tokenResponse = await _authService.Authenticate(model.Email, model.Password);
+            return Ok(tokenResponse);
         }
     }
 }

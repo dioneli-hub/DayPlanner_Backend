@@ -1,6 +1,6 @@
 ﻿using DayPlanner.Backend.BusinessLogic.Models;
 
-namespace DayPlanner.Backend.BusinessLogic.Interfaces.Security
+namespace DayPlanner.Backend.BusinessLogic.Interfaces
 {
     public interface IHashService
     {

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
+using DayPlanner.Backend.Domain;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
@@ -39,12 +40,14 @@ namespace DayPlanner.Backend.Api.Controllers
 
         [HttpPost(Name = nameof(RegisterUser))]
         [AllowAnonymous]
-        public async Task<ActionResult<UserModel>> RegisterUser([FromBody] CreateUserModel model)
+        public async Task<ActionResult<ServiceResponse<UserModel>>> RegisterUser([FromBody] CreateUserModel model)
         {
-            var userId = await _userService.RegisterUser(model);
-            var user = await _userProvider.GetUser(userId);
+            var userResponse = await _userService.RegisterUser(model);
+            Console.WriteLine("!!!!!!!!!!!!!!!!!!!!!!!");
+            Console.WriteLine(userResponse.IsSuccess);
+            //var user = await _userProvider.GetUser(userId);
 
-            return Ok(user);
+            return Ok(userResponse);
         }
 
         [HttpGet("{userId}/user-boards", Name = nameof(GetUserBoards))]

@@ -7,5 +7,6 @@ namespace DayPlanner.Backend.Domain
             public int MemberId { get; set; }
             public Board Board { get; set; }
             public User Member { get; set; }
+
     }
 }

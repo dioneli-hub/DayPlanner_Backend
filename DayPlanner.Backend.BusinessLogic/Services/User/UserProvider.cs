@@ -28,6 +28,11 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             return userModel!;
         }
 
+        public async Task<bool> UserExists(string email)
+        {
+            return await _context.Users.AnyAsync(x => x.Email == email);
+        }
+
         public async Task<List<UserModel>> GetAllUsers()
         {
             var users = await _context.Users

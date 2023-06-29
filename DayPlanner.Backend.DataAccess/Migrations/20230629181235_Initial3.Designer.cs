@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DayPlanner.Backend.DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230521193224_Initial3")]
+    [Migration("20230629181235_Initial3")]
     partial class Initial3
     {
         /// <inheritdoc />

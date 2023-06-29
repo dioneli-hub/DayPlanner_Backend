@@ -7,5 +7,6 @@ namespace DayPlanner.Backend.BusinessLogic.Interfaces
         Task<List<UserModel>> GetAllUsers();
         Task<UserModel> GetUser(int userId);
         Task<List<BoardModel>> GetUserBoards(int userId);
+        Task<bool> UserExists(string email);
     }
 }
