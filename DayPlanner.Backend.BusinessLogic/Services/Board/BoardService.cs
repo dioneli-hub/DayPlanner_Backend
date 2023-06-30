@@ -38,6 +38,17 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             await _context.Boards.AddAsync(board);
             await _context.SaveChangesAsync();
 
+            var membership = new BoardMember
+            {
+                MemberId = board.CreatorId,
+                Member = creator,
+                BoardId = board.Id,
+                Board = board,
+            };
+
+            await _context.BoardMembers.AddAsync(membership);
+            await _context.SaveChangesAsync();
+
             return board.Id;
         }
 

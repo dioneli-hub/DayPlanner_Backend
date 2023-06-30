@@ -50,12 +50,12 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok(userResponse);
         }
 
-        [HttpGet("{userId}/user-boards", Name = nameof(GetUserBoards))]
-        public async Task<ActionResult<BoardModel>> GetUserBoards(int userId)
-        {
-            var userBoards = await _userProvider.GetUserBoards(userId);
-            return Ok(userBoards);
-        }
+        //[HttpGet("{userId}/user-boards", Name = nameof(GetUserBoards))]
+        //public async Task<ActionResult<BoardModel>> GetUserBoards(int userId)
+        //{
+        //    var userBoards = await _userProvider.GetUserBoards(userId);
+        //    return Ok(userBoards);
+        //}
     }
 }
 

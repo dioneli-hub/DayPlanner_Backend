@@ -6,6 +6,7 @@ namespace DayPlanner.Backend.BusinessLogic.Interfaces.BoardMember
 {
     public interface IBoardMemberProvider
     {
+        Task<List<BoardModel>> GetUserBoards(int userId);
         Task<List<BoardModel>> GetMemberBoards(int userId);
         //Task<List<BoardMemberModel>> GetBoardMembers(int boardId);
         Task<List<UserModel>> GetBoardMembers(int boardId);
