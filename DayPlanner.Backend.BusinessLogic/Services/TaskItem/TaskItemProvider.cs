@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DayPlanner.Backend.ApiModels.TaskItem;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
+using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
 using DayPlanner.Backend.DataAccess;
 using DayPlanner.Backend.Domain;
 using Microsoft.EntityFrameworkCore;
@@ -11,11 +12,14 @@ namespace DayPlanner.Backend.BusinessLogic.Services
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
+        private readonly IUserContextService _userContextService;
         public TaskItemProvider(DataContext context,
-            IMapper mapper)
+            IMapper mapper,
+            IUserContextService userContextService)
         {
             _context = context;
             _mapper = mapper;
+            _userContextService = userContextService;
         }
         public async Task<TaskItemModel> GetTask(int taskId)
         {
@@ -108,6 +112,80 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             return todaysTaskModels;
         }
 
+        public async Task<List<TaskItemModel>> GetUserBoardsTasks(int userId)
+        {
+            var currentUserId = _userContextService.GetCurrentUserId();
+
+
+            var tasks = await _context.BoardMembers
+                 .Where(x => x.MemberId == currentUserId)
+                 .Select(x => x.Board)
+                 .SelectMany(x => x.Tasks)
+                 .Include(x => x.Performer)
+                 .Include(x => x.Creator)
+                 .Include(x => x.Board)
+                 .ToListAsync();
+
+            //var news = await _database.Users
+            //    .Where(x => x.Id == currentUserId)
+            //    .SelectMany(x => x.UserFollowsTo.SelectMany(f => f.User.Posts))
+            //    .Union(_database.Posts.Where(x => x.AuthorId == currentUserId))
+            //    .Distinct()
+            //    .Include(x => x.Author)
+            //    .ThenInclude(x => x.Avatar)
+            //    .OrderByDescending(x => x.Id)
+            //    .Select(post => new PostModel
+            //    {
+            //        Id = post.Id,
+            //        Text = post.Text,
+            //        CreatedAt = post.CreatedAt,
+            //        TotalLikes = post.Likes.Count,
+            //        TotalComments = post.Comments.Count,
+            //        Author = _mapper.Map<SimpleUserModel>(post.Author)
+            //    })
+            //    .ToListAsync();
+
+            var taskModels = _mapper.Map<List<TaskItemModel>>(tasks);
+            
+
+            return taskModels != null ? taskModels : new List<TaskItemModel>();
+        }
+
+        public async Task<List<TaskItemModel>> GetUserBoardsTodaysTasks(int userId)
+        {
+            var currentUserId = _userContextService.GetCurrentUserId();
+
+
+            var todaysTasks = await _context.BoardMembers
+                 .Where(x => x.MemberId == currentUserId)
+                 .Select(x => x.Board)
+                 .SelectMany(x => x.Tasks)
+                 .Include(x => x.Performer)
+                 .Include(x => x.Creator)
+                 .Include(x => x.Board)
+                 .Where(t => (t.DueDate >= DateTimeOffset.UtcNow.Date &&
+                         t.DueDate < DateTimeOffset.UtcNow.Date.AddDays(1)))
+                         //&&
+                         //(t.CreatorId == userId || t.PerformerId == userId))
+                 .OrderBy(t => t.Id)
+                 
+                 .ToListAsync();
+
+            //var todaysTasks = await _context.TaskItems
+            //    .Include(x => x.Board)
+            //    .Include(x => x.Performer)
+            //    .Include(x => x.Creator)
+            //    .Where(t => (t.DueDate >= DateTimeOffset.UtcNow.Date &&
+            //             t.DueDate < DateTimeOffset.UtcNow.Date.AddDays(1))
+            //             &&
+            //             (t.CreatorId == userId || t.PerformerId == userId))
+            //    .OrderBy(t => t.Id)
+            //    .ToListAsync();
+
+            var todaysTaskModels = _mapper.Map<List<TaskItemModel>>(todaysTasks);
+
+            return todaysTaskModels;
+        }
         public async Task<List<TaskItemModel>> GetUsersToDoTasks(int userId)
         {
             var toDoTasks = await _context.TaskItems
@@ -125,7 +203,14 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
         public async Task<List<TaskItemModel>> GetBoardTasks(int boardId)
         {
-            var tasks = await _context.TaskItems
+            //var currentUserId = _userContextService.GetCurrentUserId();
+            //var isMember = await _context.BoardMembers
+            //                .Where(x => x.BoardId == boardId && x.MemberId == currentUserId)
+            //                .AnyAsync();
+
+            //if (isMember == true)
+            //{
+                var tasks = await _context.TaskItems
                 .Include(x => x.Board)
                 .Include(x => x.Performer)
                 .Include(x => x.Creator)
@@ -133,9 +218,12 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 .OrderByDescending(t => t.Id)
                 .ToListAsync();
 
-            var taskModels = _mapper.Map<List<TaskItemModel>>(tasks);
+                var taskModels = _mapper.Map<List<TaskItemModel>>(tasks);
 
-            return taskModels;
+                return taskModels;
+            //}
+
+            //return null;
 
         }
     }

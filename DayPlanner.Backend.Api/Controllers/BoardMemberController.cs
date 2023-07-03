@@ -80,6 +80,19 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok(); //"Board member successfully deleted."
         }
 
+        [HttpDelete]
+        [Route("boards/{userId}/leave-board/{boardId}", Name = nameof(LeaveBoard))]
+        public async Task<ActionResult> LeaveBoard(
+            [FromRoute] int userId,
+            [FromRoute] int boardId
+            
+            )
+        {
+            await _boardMemberService.LeaveBoard( userId, boardId);
+            return Ok(); //"Board member successfully deleted."
+        }
+
+
         [HttpGet("{userId}/user-boards", Name = nameof(GetUserBoards))]
         public async Task<ActionResult<BoardModel>> GetUserBoards(int userId)
         {

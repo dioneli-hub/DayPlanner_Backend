@@ -107,6 +107,30 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok(usersTodaysTasks);
         }
 
+        [HttpGet("{userId}/user-boards-tasks", Name = nameof(GetUserBoardsTasks))]
+        public async Task<ActionResult<List<TaskItemModel>>> GetUserBoardsTasks(
+            [FromRoute] int userId)
+        {
+            var usersTasks = await _taskItemProvider.GetUserBoardsTasks(userId);
+            return Ok(usersTasks);
+        }
+
+        //[HttpGet("{userId}/users-todo-tasks", Name = nameof(GetUsersToDoTasks))]
+        //public async Task<ActionResult<List<TaskItemModel>>> GetUsersToDoTasks(
+        //    [FromRoute] int userId)
+        //{
+        //    var usersToDoTasks = await _taskItemProvider.GetUsersToDoTasks(userId);
+        //    return Ok(usersToDoTasks);
+        //}
+
+        [HttpGet("{userId}/user-boards-todays-tasks", Name = nameof(GetUserBoardsTodaysTasks))]
+        public async Task<ActionResult<List<TaskItemModel>>> GetUserBoardsTodaysTasks(
+            [FromRoute] int userId)
+        {
+            var usersTodaysTasks = await _taskItemProvider.GetUserBoardsTodaysTasks(userId);
+            return Ok(usersTodaysTasks);
+        }
+
         [HttpPost("{taskId}/complete-task", Name = nameof(CompleteTask))]
         public async Task<ActionResult> CompleteTask(
             [FromRoute] int taskId)

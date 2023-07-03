@@ -48,10 +48,10 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 throw new ApplicationException("Task not found.");
             }
 
-            if (task.CreatorId != currentUserId)
-            {
-                throw new ApplicationException("Access denied.");
-            }
+            //if (task.CreatorId != currentUserId)
+            //{
+            //    throw new ApplicationException("Access denied.");
+            //}
 
             _context.TaskItems.Remove(task);
             await _context.SaveChangesAsync();

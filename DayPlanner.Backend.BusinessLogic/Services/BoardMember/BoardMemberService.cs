@@ -78,5 +78,33 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             _context.BoardMembers.Remove(boardMember);
             await _context.SaveChangesAsync();
         }
+
+        public async Task LeaveBoard(int userId, int boardId)
+        {
+            var currentUserId = _userContextService.GetCurrentUserId();
+            var board = await _context.Boards.FindAsync(boardId);
+
+            if(userId != currentUserId)
+            {
+                throw new ApplicationException("Cannot leave as another user.");
+            }
+
+            if (board == null)
+            {
+                throw new ApplicationException("Board not found.");
+            }
+
+            var boardMembership = await _context.BoardMembers
+                .Where(m => m.BoardId == boardId && m.MemberId == userId)
+                .FirstOrDefaultAsync();
+
+            if (boardMembership == null)
+            {
+                throw new ApplicationException("Current user is not a member of the board.");
+            }
+
+            _context.BoardMembers.Remove(boardMembership);
+            await _context.SaveChangesAsync();
+        }
     }
 }
