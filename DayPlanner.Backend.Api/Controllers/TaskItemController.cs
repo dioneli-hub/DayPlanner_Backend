@@ -65,6 +65,16 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok(updatedTask);
         }
 
+        [HttpPatch("{taskId}/update-performer/{newPerformerId}", Name = nameof(UpdateTaskPerformer))]
+        public async Task<ActionResult<TaskItemModel>> UpdateTaskPerformer(
+          [FromRoute] int taskId, int newPerformerId)
+        {
+            await _taskItemService.UpdateTaskPerformer( taskId,  newPerformerId);
+            var updatedTask = await _taskItemProvider.GetTask(taskId);
+
+            return Ok(updatedTask);
+        }
+
 
 
         [HttpDelete("{taskId}", Name =nameof(DeleteTask))]

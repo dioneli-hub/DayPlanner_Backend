@@ -107,8 +107,8 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 Creator = currentUser,
                 BoardId = boardId,
                 Board = board,
-                PerformerId = null,
-                Performer = null
+                PerformerId = currentUserId,
+                Performer = currentUser
             };
 
             await _context.TaskItems.AddAsync(task);

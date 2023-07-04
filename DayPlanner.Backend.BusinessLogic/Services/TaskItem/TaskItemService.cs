@@ -1,4 +1,5 @@
-﻿using DayPlanner.Backend.ApiModels.TaskItem;
+﻿using DayPlanner.Backend.ApiModels;
+using DayPlanner.Backend.ApiModels.TaskItem;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
 using DayPlanner.Backend.DataAccess;
@@ -124,6 +125,49 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             _context.Update(task);
             await _context.SaveChangesAsync();
         }
+
+        public async Task UpdateTaskPerformer(int taskId, int newPerformerId)
+        {
+            var currentUserId = _userContextService.GetCurrentUserId();
+            var task = await _context.TaskItems.FirstOrDefaultAsync(x => x.Id == taskId);
+            var newPerformer = await _context.Users.FirstOrDefaultAsync(x => x.Id == newPerformerId);
+
+            if (newPerformer == null)
+            {
+                throw new ApplicationException("No data to update entered.");
+            }
+
+            if (task == null)
+            {
+                throw new ApplicationException("Task not found.");
+            }
+
+            if (task.CreatorId != currentUserId)
+            {
+                throw new ApplicationException("Access denied: only task creator can edit the task.");
+            }
+
+
+            var board = await _context.Boards
+                .Include(x => x.Creator)
+                .Where(x => x.Id == task.BoardId)
+                .FirstOrDefaultAsync();
+
+            var boardHasCurrentMemberNullFlag = await _context.BoardMembers
+                .AnyAsync(x => x.MemberId == currentUserId && x.BoardId == board.Id);
+
+            if (task.Creator.Id != currentUserId && boardHasCurrentMemberNullFlag)
+            {
+                throw new ApplicationException("Access denied: cannot move task to the board if the user is neither its owner nor its member.");
+            }
+
+            task.PerformerId = newPerformerId;
+            task.Performer = newPerformer;
+
+            _context.Update(task);
+            await _context.SaveChangesAsync();
+        }
+
 
         public async Task AssignTaskPerformer(int taskId, int performerId)
         {
