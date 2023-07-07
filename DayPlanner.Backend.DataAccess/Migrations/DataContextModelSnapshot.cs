@@ -85,6 +85,9 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsOverdue")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("PerformerId")
                         .HasColumnType("int");
 

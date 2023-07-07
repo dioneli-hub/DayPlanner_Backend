@@ -74,7 +74,8 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     IsCompleted = table.Column<bool>(type: "bit", nullable: false),
                     CreatorId = table.Column<int>(type: "int", nullable: false),
                     BoardId = table.Column<int>(type: "int", nullable: false),
-                    PerformerId = table.Column<int>(type: "int", nullable: true)
+                    PerformerId = table.Column<int>(type: "int", nullable: true),
+                    IsOverdue = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

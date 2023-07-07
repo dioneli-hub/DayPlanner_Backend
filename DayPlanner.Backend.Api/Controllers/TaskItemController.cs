@@ -75,6 +75,17 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok(updatedTask);
         }
 
+        [HttpPatch("{taskId}/update-overdue", Name = nameof(UpdateTaskOverdue))]
+        public async Task<ActionResult<TaskItemModel>> UpdateTaskOverdue(
+         [FromRoute] int taskId)
+        {
+            await _taskItemService.UpdateTaskOverdue(taskId);
+            var updatedTask = await _taskItemProvider.GetTask(taskId);
+
+            return Ok(updatedTask);
+        }
+
+
 
 
         [HttpDelete("{taskId}", Name =nameof(DeleteTask))]

@@ -4,6 +4,7 @@ using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
 using DayPlanner.Backend.DataAccess;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 
 namespace DayPlanner.Backend.BusinessLogic.Services
 {
@@ -163,6 +164,30 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             task.PerformerId = newPerformerId;
             task.Performer = newPerformer;
+
+            _context.Update(task);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateTaskOverdue(int taskId)
+        {
+            var currentUserId = _userContextService.GetCurrentUserId();
+            var task = await _context.TaskItems.FirstOrDefaultAsync(x => x.Id == taskId);
+           
+
+            if (task == null)
+            {
+                throw new ApplicationException("Task not found.");
+            }
+
+            if (task.CreatorId != currentUserId)
+            {
+                throw new ApplicationException("Access denied: only task creator can edit the task.");
+            }
+
+            task.IsOverdue = (task.DueDate.CompareTo(DateTimeOffset.UtcNow.Date) < 0)
+                && task.IsCompleted == false ?
+                            true : false;
 
             _context.Update(task);
             await _context.SaveChangesAsync();

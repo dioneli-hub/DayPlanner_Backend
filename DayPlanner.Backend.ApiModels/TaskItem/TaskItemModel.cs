@@ -1,7 +1,4 @@
-﻿using DayPlanner.Backend.ApiModels;
-using DayPlanner.Backend.Domain;
-
-namespace DayPlanner.Backend.ApiModels.TaskItem
+﻿namespace DayPlanner.Backend.ApiModels.TaskItem
 {
     public class TaskItemModel
     {
@@ -16,6 +13,8 @@ namespace DayPlanner.Backend.ApiModels.TaskItem
         public UserModel Creator { get; set; }
         public int PerformerId { get; set; }
         public UserModel Performer { get; set; }
+
+        public bool IsOverdue{ get; set; }
 
     }
 }

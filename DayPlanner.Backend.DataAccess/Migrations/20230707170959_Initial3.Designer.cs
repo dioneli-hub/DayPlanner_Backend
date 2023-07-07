@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DayPlanner.Backend.DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230629181235_Initial3")]
+    [Migration("20230707170959_Initial3")]
     partial class Initial3
     {
         /// <inheritdoc />
@@ -86,6 +86,9 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsOverdue")
                         .HasColumnType("bit");
 
                     b.Property<int?>("PerformerId")

@@ -13,5 +13,7 @@
         public Board Board { get; set; }
         public int? PerformerId { get; set; } = null;
         public User? Performer { get; set; } = null;
+        public bool IsOverdue { get; set; } = false;
+
     }
 }
