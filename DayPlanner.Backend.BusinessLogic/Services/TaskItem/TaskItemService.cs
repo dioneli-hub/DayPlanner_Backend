@@ -157,10 +157,10 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             var boardHasCurrentMemberNullFlag = await _context.BoardMembers
                 .AnyAsync(x => x.MemberId == currentUserId && x.BoardId == board.Id);
 
-            if (task.Creator.Id != currentUserId && boardHasCurrentMemberNullFlag)
-            {
-                throw new ApplicationException("Access denied: cannot move task to the board if the user is neither its owner nor its member.");
-            }
+            //if (task.Creator.Id != currentUserId && boardHasCurrentMemberNullFlag)
+            //{
+            //    throw new ApplicationException("Access denied: cannot move task to the board if the user is neither its owner nor its member.");
+            //}
 
             task.PerformerId = newPerformerId;
             task.Performer = newPerformer;
@@ -180,10 +180,10 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 throw new ApplicationException("Task not found.");
             }
 
-            if (task.CreatorId != currentUserId)
-            {
-                throw new ApplicationException("Access denied: only task creator can edit the task.");
-            }
+            //if (task.CreatorId != currentUserId)
+            //{
+            //    throw new ApplicationException("Access denied: only task creator can edit the task.");
+            //}
 
             task.IsOverdue = (task.DueDate.CompareTo(DateTimeOffset.UtcNow.Date) < 0)
                 && task.IsCompleted == false ?

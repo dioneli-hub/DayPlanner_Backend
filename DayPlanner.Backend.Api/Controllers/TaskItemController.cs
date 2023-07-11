@@ -54,7 +54,7 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok(todaysTasks);
         }
 
-        [HttpPut("{taskId}" , Name =nameof(UpdateTask))]
+        [HttpPatch("{taskId}" , Name =nameof(UpdateTask))]
         public async Task<ActionResult<TaskItemModel>> UpdateTask(
            [FromRoute] int taskId,
            [FromBody] EditTaskItemModel editedTaskModel)
