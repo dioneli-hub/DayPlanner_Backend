@@ -1,4 +1,4 @@
-﻿using DayPlanner.Backend.DataAccess.Entities;
+﻿using DayPlanner.Backend.Domain;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +14,7 @@ namespace DayPlanner.Backend.DataAccess.Configurations
             builder.Property(x => x.Text).IsRequired();
             builder.Property(x => x.DueDate).IsRequired(); 
             builder.Property(x => x.CreatedAt).IsRequired();
+            builder.Property(x => x.IsCompleted).IsRequired();
 
             builder.HasOne(x => x.Board)
                 .WithMany(x => x.Tasks)
@@ -25,11 +26,9 @@ namespace DayPlanner.Backend.DataAccess.Configurations
                 .HasForeignKey(x => x.CreatorId)
                 .OnDelete(DeleteBehavior.NoAction); ;
 
-            //performer
-            //builder.HasOne(x => x.Performer)
-            //    .WithMany(x => x.Tasks)
-            //    .HasForeignKey(x => x.PerformerId);
-
+            builder.HasOne(x => x.Performer) //to check if right
+                .WithMany()
+                .HasForeignKey(x => x.PerformerId);
 
             builder.ToTable("TaskItems");
         }

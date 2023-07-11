@@ -1,141 +1,191 @@
-﻿using AutoMapper;
-using DayPlanner.Backend.Api.ApiModels;
-using DayPlanner.Backend.Api.Interfaces;
-using DayPlanner.Backend.DataAccess.Entities;
+﻿using DayPlanner.Backend.BusinessLogic.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using DayPlanner.Backend.ApiModels.TaskItem;
+using DayPlanner.Backend.BusinessLogic.Services;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class TaskItemController : Controller
     {
-        private readonly ITaskItemRepository _taskItemRepository;
-        private readonly IMapper _mapper;
+        private readonly ITaskItemProvider _taskItemProvider;
+        private readonly ITaskItemService _taskItemService;
 
-        public TaskItemController(ITaskItemRepository taskRepository, IMapper mapper)
+        public TaskItemController(
+            ITaskItemProvider taskItemProvider,
+            ITaskItemService taskItemService
+            )
         {
-            _taskItemRepository = taskRepository;
-            _mapper = mapper;
+            _taskItemService = taskItemService;
+            _taskItemProvider = taskItemProvider;
         }
 
-        [HttpGet]
-        //[ProducesResponseType(200, Type = typeof(IEnumerable<Task>))]
-        public IActionResult GetTasks()
+        [HttpGet(Name = nameof(GetTasks))]
+        public async Task<ActionResult<List<TaskItemModel>>> GetTasks()
         {
-            var tasks = _mapper.Map<List<TaskItemModel>>(_taskItemRepository.GetTasks());
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            else
-            {
-                return Ok(tasks);
-            }
+            var tasks = await _taskItemProvider.GetTasks();
+            return Ok(tasks);
         }
 
-
-        [HttpGet("{taskItemId}")]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
-        public IActionResult GetTask(int taskItemId)
+        [HttpGet("{boardId}/get-board-tasks", Name = nameof(GetBoardTasks))]
+        public async Task<ActionResult<List<TaskItemModel>>> GetBoardTasks(int boardId)
         {
-            if (!_taskItemRepository.TaskItemExists(taskItemId))
-                return NotFound();
+            var tasks = await _taskItemProvider.GetBoardTasks(boardId);
 
-            var taskItem = _mapper.Map<TaskItemModel>(_taskItemRepository.GetTaskItem(taskItemId));
+            return Ok(tasks);
+        }
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+        [HttpGet("{taskItemId}", Name = nameof(GetTask))]
+        public async Task<ActionResult<TaskItemModel>> GetTask(int taskId)
+        {
+            var task = await _taskItemProvider.GetTask(taskId);
 
-            return Ok(taskItem);
+            return Ok(task);
         }
 
 
-        [HttpGet("todaystasks")] //"api/[controller]/todaystasks"
-        [ProducesResponseType(400)]
-        [ProducesResponseType(200)]
-        public IActionResult GetTodaysTasks()
+        [HttpGet("todaystasks", Name = nameof(GetTodaysTasks))]
+        public async Task<ActionResult<List<TaskItemModel>>> GetTodaysTasks()
         {
-            var todaysTasks = _mapper.Map<List<TaskItemModel>>(_taskItemRepository.GetTodaysTasks()); 
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            else
-            {
-                return Ok(todaysTasks);
-            }
+            var todaysTasks = await _taskItemProvider.GetTodaysTasks();
+            return Ok(todaysTasks);
         }
 
-        [HttpPut("{taskId}")]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(404)]
-        public IActionResult UpdateTask(
+        [HttpPatch("{taskId}" , Name =nameof(UpdateTask))]
+        public async Task<ActionResult<TaskItemModel>> UpdateTask(
            [FromRoute] int taskId,
-           [FromBody] EditTaskItemModel updatedTask)
+           [FromBody] EditTaskItemModel editedTaskModel)
         {
-            if (updatedTask == null)
-                return BadRequest(ModelState);
+            await _taskItemService.UpdateTask(taskId, editedTaskModel);
+            var updatedTask = await _taskItemProvider.GetTask(taskId);
 
-            if (taskId != updatedTask.Id)
-                return BadRequest(ModelState); 
-
-            if (!_taskItemRepository.TaskItemExists(taskId))
-                return NotFound();
-
-            if (!ModelState.IsValid)
-                return BadRequest();
-
-            var taskMap = _mapper.Map<TaskItem>(updatedTask);
-            
-
-            if (!_taskItemRepository.UpdateTask(taskMap))
-            {
-                ModelState.AddModelError("", "Something went wrong during updating...");
-                return StatusCode(500, ModelState);
-            }
-
-            return NoContent();
+            return Ok(updatedTask);
         }
 
-        [HttpDelete("{taskId}")]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(404)]
-        public IActionResult DeleteTask(int taskId)
+        [HttpPatch("{taskId}/update-performer/{newPerformerId}", Name = nameof(UpdateTaskPerformer))]
+        public async Task<ActionResult<TaskItemModel>> UpdateTaskPerformer(
+          [FromRoute] int taskId, int newPerformerId)
         {
-            if (!_taskItemRepository.TaskItemExists(taskId))
-            {
-                return NotFound();
-            }
+            await _taskItemService.UpdateTaskPerformer( taskId,  newPerformerId);
+            var updatedTask = await _taskItemProvider.GetTask(taskId);
 
-            var taskToDelete = _taskItemRepository.GetTaskItem(taskId);
+            return Ok(updatedTask);
+        }
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+        [HttpPatch("{taskId}/update-overdue", Name = nameof(UpdateTaskOverdue))]
+        public async Task<ActionResult<TaskItemModel>> UpdateTaskOverdue(
+         [FromRoute] int taskId)
+        {
+            await _taskItemService.UpdateTaskOverdue(taskId);
+            var updatedTask = await _taskItemProvider.GetTask(taskId);
 
-            if (!_taskItemRepository.DeleteTaskItem(taskToDelete))
-            {
-                ModelState.AddModelError("", "Something went wrong during deleting process...");
-            }
-
-            return NoContent();
+            return Ok(updatedTask);
         }
 
 
-        // for now hard code
-        public int CurrentUserId
+
+
+        [HttpDelete("{taskId}", Name =nameof(DeleteTask))]
+        public async Task<ActionResult> DeleteTask(int taskId)
         {
-            get
-            {
-                return 1;
-            }
+            await _taskItemService.DeleteTask(taskId);
+            return Ok(); //"Task successfully deleted."
         }
 
+
+        [HttpGet("{userId}/users-completed-tasks", Name = nameof(GetUsersCompletedTasks))]
+        public async Task<ActionResult<List<TaskItemModel>>> GetUsersCompletedTasks(
+            [FromRoute] int userId)
+        {
+            var usersCompletedTasks = await _taskItemProvider.GetUsersCompletedTasks(userId);
+            return Ok(usersCompletedTasks);
+        }
+
+        [HttpGet("{userId}/users-tasks", Name = nameof(GetUsersTasks))]
+        public async Task<ActionResult<List<TaskItemModel>>> GetUsersTasks(
+            [FromRoute] int userId)
+        {
+            var usersTasks = await _taskItemProvider.GetUsersTasks(userId);
+            return Ok(usersTasks);
+        }
+
+        [HttpGet("{userId}/users-todo-tasks", Name = nameof(GetUsersToDoTasks))]
+        public async Task<ActionResult<List<TaskItemModel>>> GetUsersToDoTasks(
+            [FromRoute] int userId)
+        {
+            var usersToDoTasks = await _taskItemProvider.GetUsersToDoTasks(userId);
+            return Ok(usersToDoTasks);
+        }
+
+        [HttpGet("{userId}/users-todays-tasks", Name = nameof(GetUsersTodaysTasks))]
+        public async Task<ActionResult<List<TaskItemModel>>> GetUsersTodaysTasks(
+            [FromRoute] int userId)
+        {
+            var usersTodaysTasks = await _taskItemProvider.GetUsersTodaysTasks(userId);
+            return Ok(usersTodaysTasks);
+        }
+
+        [HttpGet("{userId}/user-boards-tasks", Name = nameof(GetUserBoardsTasks))]
+        public async Task<ActionResult<List<TaskItemModel>>> GetUserBoardsTasks(
+            [FromRoute] int userId)
+        {
+            var usersTasks = await _taskItemProvider.GetUserBoardsTasks(userId);
+            return Ok(usersTasks);
+        }
+
+        //[HttpGet("{userId}/users-todo-tasks", Name = nameof(GetUsersToDoTasks))]
+        //public async Task<ActionResult<List<TaskItemModel>>> GetUsersToDoTasks(
+        //    [FromRoute] int userId)
+        //{
+        //    var usersToDoTasks = await _taskItemProvider.GetUsersToDoTasks(userId);
+        //    return Ok(usersToDoTasks);
+        //}
+
+        [HttpGet("{userId}/user-boards-todays-tasks", Name = nameof(GetUserBoardsTodaysTasks))]
+        public async Task<ActionResult<List<TaskItemModel>>> GetUserBoardsTodaysTasks(
+            [FromRoute] int userId)
+        {
+            var usersTodaysTasks = await _taskItemProvider.GetUserBoardsTodaysTasks(userId);
+            return Ok(usersTodaysTasks);
+        }
+
+        [HttpPost("{taskId}/complete-task", Name = nameof(CompleteTask))]
+        public async Task<ActionResult> CompleteTask(
+            [FromRoute] int taskId)
+        {
+            await _taskItemService.CompleteTask(taskId);
+            return Ok("Task completed."); 
+        }
+
+        [HttpPost("{taskId}/mark-task-as-todo", Name = nameof(MarkTaskAsToDo))]
+        public async Task<ActionResult<List<TaskItemModel>>> MarkTaskAsToDo(
+            [FromRoute] int taskId)
+        {
+            await _taskItemService.MarkTaskAsToDo(taskId);
+            return Ok("Task marked as ToDo."); 
+        }
+
+        [HttpPost]
+        [Route("{taskId}/assign-performer/{performerId}")]
+        public async Task<ActionResult<TaskItemModel>> AssignTaskPerformer(
+            [FromRoute] int taskId, int performerId)
+        {
+            await _taskItemService.AssignTaskPerformer(taskId, performerId);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("{taskId}/remove-performer")]
+        public async Task<ActionResult<TaskItemModel>> RemoveTaskPerformer(
+            [FromRoute] int taskId)
+        {
+            await _taskItemService.RemoveTaskPerformer(taskId);
+
+            return Ok();
+        }
     }
 }

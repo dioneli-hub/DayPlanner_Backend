@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="7.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DayPlanner.Backend.ApiModels\DayPlanner.Backend.ApiModels.csproj" />
+    <ProjectReference Include="..\DayPlanner.Backend.DataAccess\DayPlanner.Backend.DataAccess.csproj" />
+    <ProjectReference Include="..\DayPlanner.Backend.Domain\DayPlanner.Backend.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

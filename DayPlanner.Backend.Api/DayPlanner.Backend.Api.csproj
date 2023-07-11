@@ -8,7 +8,10 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.16" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.16" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.4">
       <PrivateAssets>all</PrivateAssets>
@@ -23,7 +26,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DayPlanner.Backend.ApiModels\DayPlanner.Backend.ApiModels.csproj" />
+    <ProjectReference Include="..\DayPlanner.Backend.BusinessLogic\DayPlanner.Backend.BusinessLogic.csproj" />
     <ProjectReference Include="..\DayPlanner.Backend.DataAccess\DayPlanner.Backend.DataAccess.csproj" />
+    <ProjectReference Include="..\DayPlanner.Backend.Domain\DayPlanner.Backend.Domain.csproj" />
   </ItemGroup>
 
 </Project>

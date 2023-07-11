@@ -1,21 +1,61 @@
 ﻿using AutoMapper;
-using DayPlanner.Backend.Api.Interfaces;
-using DayPlanner.Backend.Api.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using DayPlanner.Backend.ApiModels;
+using DayPlanner.Backend.BusinessLogic.Interfaces;
+using DayPlanner.Backend.Domain;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController
+    [Authorize]
+    public class UserController : Controller
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IMapper _mapper;
+        private readonly IUserProvider _userProvider;
+        private readonly IUserService _userService;
 
-        public UserController(IUserRepository userRepository, IMapper mapper)
+        public UserController(
+            IUserProvider userProvider, 
+            IUserService userService
+            )
         {
-            _userRepository = userRepository;
-            _mapper = mapper;
+            _userProvider = userProvider;
+            _userService = userService;
         }
+
+        [HttpGet(Name = nameof(GetAllUsers))] 
+        public async Task<ActionResult<List<UserModel>>> GetAllUsers()
+        {
+            var users = await _userProvider.GetAllUsers();
+            return Ok(users);
+        }
+
+        [HttpGet("{userId}", Name = nameof(GetUser))] 
+        public async Task<ActionResult<UserModel>> GetUser(int userId)
+        {
+            var user = await _userProvider.GetUser(userId);
+            return Ok(user);
+        }
+
+        [HttpPost(Name = nameof(RegisterUser))]
+        [AllowAnonymous]
+        public async Task<ActionResult<ServiceResponse<UserModel>>> RegisterUser([FromBody] CreateUserModel model)
+        {
+            var userResponse = await _userService.RegisterUser(model);
+            Console.WriteLine("!!!!!!!!!!!!!!!!!!!!!!!");
+            Console.WriteLine(userResponse.IsSuccess);
+            //var user = await _userProvider.GetUser(userId);
+
+            return Ok(userResponse);
+        }
+
+        //[HttpGet("{userId}/user-boards", Name = nameof(GetUserBoards))]
+        //public async Task<ActionResult<BoardModel>> GetUserBoards(int userId)
+        //{
+        //    var userBoards = await _userProvider.GetUserBoards(userId);
+        //    return Ok(userBoards);
+        //}
     }
 }
+
