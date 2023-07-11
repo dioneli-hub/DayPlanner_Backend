@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace DayPlanner.Backend.DataAccess.Migrations
 {
     /// <inheritdoc />
@@ -63,6 +65,26 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Notifications_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TaskItems",
                 columns: table => new
                 {
@@ -97,6 +119,15 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "BoardId", "CreatedAt", "Email", "FirstName", "LastName", "PasswordHash", "SaltHash" },
+                values: new object[,]
+                {
+                    { 1, null, new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "Dioneli@mail.ru1", "Di", "Li", "x/5fpi8JiMGXxM4Re4fzlamU61mQQMGNR50wxtwCaHw=", "mlJyHV/cYHAT2ErFkB8d5w==" },
+                    { 2, null, new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "D1!q2222@ru", "Sam", "McGregor", "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=", "FyQp6hr65+F7jI0btRXMLw==" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_BoardMembers_MemberId",
                 table: "BoardMembers",
@@ -106,6 +137,11 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                 name: "IX_Boards_CreatorId",
                 table: "Boards",
                 column: "CreatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notifications_UserId",
+                table: "Notifications",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TaskItems_BoardId",
@@ -160,6 +196,9 @@ namespace DayPlanner.Backend.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "BoardMembers");
+
+            migrationBuilder.DropTable(
+                name: "Notifications");
 
             migrationBuilder.DropTable(
                 name: "TaskItems");

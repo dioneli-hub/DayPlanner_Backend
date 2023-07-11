@@ -5,6 +5,7 @@ using DayPlanner.Backend.BusinessLogic.Interfaces.BoardMember;
 using DayPlanner.Backend.BusinessLogic.Services.Security;
 using DayPlanner.Backend.BusinessLogic.Services.Auth;
 using DayPlanner.Backend.BusinessLogic.Services.Validation;
+using DayPlanner.Backend.BusinessLogic.Interfaces.Notification;
 
 namespace DayPlanner.Backend.BusinessLogic
 {
@@ -25,6 +26,8 @@ namespace DayPlanner.Backend.BusinessLogic
             services.AddScoped<IPasswordVerifier, PasswordVerifier>();
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IValidationService, ValidationService>();
+            services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<INotificationProvider, NotificationProvider>();
 
             return services;
         }

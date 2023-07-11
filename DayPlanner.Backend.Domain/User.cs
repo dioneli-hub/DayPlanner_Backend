@@ -17,6 +17,7 @@ namespace DayPlanner.Backend.Domain
         public ICollection<TaskItem> Tasks { get; set; }
         //public ICollection<TaskPerformer> TaskAssignments { get; set; }
         public ICollection<BoardMember> Memberships { get; set; }
+        public ICollection<Notification> Notifications { get; set; }
 
 
     }
