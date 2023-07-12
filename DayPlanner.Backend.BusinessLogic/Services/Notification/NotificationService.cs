@@ -48,7 +48,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             if (notification == null)
             {
-                throw new ApplicationException("Board not found.");
+                throw new ApplicationException("Notification not found.");
             }
 
             if (notification.UserId != currentUserId)
@@ -59,6 +59,21 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             
             _context.Notifications.Remove(notification);
 
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteUserNotifications() {
+            var currentUserId = _userContextService.GetCurrentUserId();
+            var notifications = await _context.Notifications
+                .Where(x => x.UserId == currentUserId)
+                .ToListAsync();
+
+            if (notifications == null)
+            {
+                throw new ApplicationException("Not found.");
+            }
+
+            _context.Notifications.RemoveRange(notifications);
             await _context.SaveChangesAsync();
         }
     }

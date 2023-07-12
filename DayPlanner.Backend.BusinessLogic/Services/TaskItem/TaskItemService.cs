@@ -2,6 +2,7 @@
 using DayPlanner.Backend.ApiModels.TaskItem;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
+using DayPlanner.Backend.BusinessLogic.Interfaces.Notification;
 using DayPlanner.Backend.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
@@ -12,11 +13,14 @@ namespace DayPlanner.Backend.BusinessLogic.Services
     {
         private readonly DataContext _context;
         private readonly IUserContextService _userContextService;
+        private readonly INotificationService _notificationService;
         public TaskItemService(DataContext context,
-            IUserContextService userContextService)
+            IUserContextService userContextService,
+            INotificationService notificationService)
         {
             _context = context;
             _userContextService = userContextService;
+            _notificationService = notificationService;
         }
 
         public async Task CompleteTask(int taskId)
@@ -172,7 +176,9 @@ namespace DayPlanner.Backend.BusinessLogic.Services
         public async Task UpdateTaskOverdue(int taskId)
         {
             var currentUserId = _userContextService.GetCurrentUserId();
-            var task = await _context.TaskItems.FirstOrDefaultAsync(x => x.Id == taskId);
+            var task = await _context.TaskItems
+                .Include(x=> x.Board)
+                .FirstOrDefaultAsync(x => x.Id == taskId);
            
 
             if (task == null)
@@ -180,14 +186,21 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 throw new ApplicationException("Task not found.");
             }
 
-            //if (task.CreatorId != currentUserId)
-            //{
-            //    throw new ApplicationException("Access denied: only task creator can edit the task.");
-            //}
-
-            task.IsOverdue = (task.DueDate.CompareTo(DateTimeOffset.UtcNow.Date) < 0)
+            var newOverdue = (task.DueDate.CompareTo(DateTimeOffset.UtcNow.Date) < 0)
                 && task.IsCompleted == false ?
                             true : false;
+
+            if(task.IsOverdue == false && newOverdue == true && (currentUserId == task.PerformerId || currentUserId == task.CreatorId))
+            {
+                var notificationModel = new CreateNotificationModel
+                {
+                    Text = $"Your task \"{task.Text}\" from board \"{task.Board.Name}\" was spotted overdue."
+                };
+
+                await _notificationService.CreateNotification(notificationModel);
+
+            }
+            task.IsOverdue = newOverdue;
 
             _context.Update(task);
             await _context.SaveChangesAsync();

@@ -7,5 +7,6 @@ namespace DayPlanner.Backend.BusinessLogic.Interfaces.Notification
     {
         Task<int> CreateNotification(CreateNotificationModel notificationModel);
         Task DeleteNotification(int notificationId);
+        Task DeleteUserNotifications();
     }
 }

@@ -33,15 +33,15 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok(notifications);
         }
 
-        [HttpPost(Name = nameof(CreateNotification))]
-        public async Task<ActionResult<NotificationModel>> CreateNotification(
-            [FromBody] CreateNotificationModel notificationModel)
-        {
-            var notificationId = await _notificationService.CreateNotification(notificationModel);
-            var notification = await _notificationProvider.GetNotification(notificationId);
+        //[HttpPost(Name = nameof(CreateNotification))]
+        //public async Task<ActionResult<NotificationModel>> CreateNotification(
+        //    [FromBody] CreateNotificationModel notificationModel)
+        //{
+        //    var notificationId = await _notificationService.CreateNotification(notificationModel);
+        //    var notification = await _notificationProvider.GetNotification(notificationId);
 
-            return Ok(notification);
-        }
+        //    return Ok(notification);
+        //}
 
 
 
@@ -51,6 +51,14 @@ namespace DayPlanner.Backend.Api.Controllers
             [FromRoute] int notificationId)
         {
             await _notificationService.DeleteNotification(notificationId);
+            return Ok();
+        }
+
+        [HttpDelete(Name = nameof(DeleteUserNotifications))]
+
+        public async Task<ActionResult> DeleteUserNotifications()
+        {
+            await _notificationService.DeleteUserNotifications();
             return Ok();
         }
     }
