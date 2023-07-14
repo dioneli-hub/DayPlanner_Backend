@@ -41,6 +41,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             var notifications = await _context.Notifications
                 .Include(x => x.User)
                 .Where(b => b.UserId == currentUserId)
+                .OrderByDescending(x => x.CreatedAt)
                 .ToListAsync();
 
             var notificationModels = _mapper.Map<List<NotificationModel>>(notifications);

@@ -127,6 +127,17 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             _context.BoardMembers.Remove(boardMembership);
             await _context.SaveChangesAsync();
+
+            var currentUser = await _context.Users
+                                .Where(x=> x.Id == currentUserId)
+                                .FirstOrDefaultAsync();
+
+            var notificationModel = new CreateNotificationModel
+            {
+                Text = $"{currentUser?.FirstName} {currentUser?.LastName} left board \"{board.Name}\".",
+                UserId = board.CreatorId
+            };
+            await _notificationService.CreateNotification(notificationModel);
         }
     }
 }
