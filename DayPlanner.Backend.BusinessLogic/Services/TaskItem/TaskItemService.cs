@@ -4,6 +4,7 @@ using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
 using DayPlanner.Backend.BusinessLogic.Interfaces.Notification;
 using DayPlanner.Backend.DataAccess;
+using DayPlanner.Backend.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 
@@ -171,6 +172,13 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             _context.Update(task);
             await _context.SaveChangesAsync();
+
+            var notificationModel = new CreateNotificationModel
+            {
+                Text = $"You were assigned performer of task \"{task.Text}\" at board \"{task.Board.Name}\".",
+                UserId = newPerformerId
+            };
+            await _notificationService.CreateNotification(notificationModel);
         }
 
         public async Task UpdateTaskOverdue(int taskId)
@@ -194,7 +202,8 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             {
                 var notificationModel = new CreateNotificationModel
                 {
-                    Text = $"Your task \"{task.Text}\" from board \"{task.Board.Name}\" was spotted overdue."
+                    Text = $"Your task \"{task.Text}\" from board \"{task.Board.Name}\" was spotted overdue.",
+                    UserId = currentUserId
                 };
 
                 await _notificationService.CreateNotification(notificationModel);
@@ -225,7 +234,15 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
                 _context.Update(task);
                 await _context.SaveChangesAsync();
+
+                var notificationModel = new CreateNotificationModel
+                {
+                    Text = $"You were assigned performer of task \"{task.Text}\" at board \"{task.Board.Name}\".",
+                    UserId = performerId
+                };
+                await _notificationService.CreateNotification(notificationModel);
             }
+            
         }
 
         public async Task RemoveTaskPerformer(int taskId)

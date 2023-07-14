@@ -22,15 +22,15 @@ namespace DayPlanner.Backend.BusinessLogic.Services
         }
         public async Task<int> CreateNotification(CreateNotificationModel notificationModel)
         {
-            var currentUserId = _userContextService.GetCurrentUserId();
-            var currentUser = await _context.Users.FindAsync(currentUserId);
+            //////var currentUserId = _userContextService.GetCurrentUserId();
+            var user = await _context.Users.FindAsync(notificationModel.UserId);
 
 
             var notification = new Notification
             {
                 Text = notificationModel.Text,
-                UserId = currentUserId,
-                User = currentUser,
+                UserId = notificationModel.UserId,
+                User = user,
                 CreatedAt = DateTimeOffset.UtcNow
             };
 
@@ -39,6 +39,22 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             return notification.Id;
         }
+        //public async Task<int> CreateNotification(CreateNotificationModel notificationModel, int userId)
+        //{
+        //    var user = await _context.Users.FindAsync(userId);
+        //    var notification = new Notification
+        //    {
+        //        Text = notificationModel.Text,
+        //        UserId = userId,
+        //        User = user,
+        //        CreatedAt = DateTimeOffset.UtcNow
+        //    };
+
+        //    await _context.Notifications.AddAsync(notification);
+        //    await _context.SaveChangesAsync();
+
+        //    return notification.Id;
+        //}
 
         public async Task DeleteNotification(int notificationId)
         {

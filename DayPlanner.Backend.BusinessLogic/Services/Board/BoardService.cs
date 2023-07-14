@@ -46,7 +46,8 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             var notificationModel = new CreateNotificationModel
             {
-                Text = $"You created board \"{board.Name}\"."
+                Text = $"You created board \"{board.Name}\".",
+                UserId = currentUserId
             };
             await _notificationService.CreateNotification(notificationModel);
 
@@ -85,7 +86,8 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             var notificationModel = new CreateNotificationModel
             {
-                Text = $"You deleted board \"{board.Name}\"."
+                Text = $"You deleted board \"{board.Name}\".",
+                UserId = currentUserId
             };
             await _notificationService.CreateNotification(notificationModel);
 
