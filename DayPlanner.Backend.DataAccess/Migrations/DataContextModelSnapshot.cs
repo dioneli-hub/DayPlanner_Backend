@@ -62,6 +62,31 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.ToTable("BoardMembers", (string)null);
                 });
 
+            modelBuilder.Entity("DayPlanner.Backend.Domain.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications", (string)null);
+                });
+
             modelBuilder.Entity("DayPlanner.Backend.Domain.TaskItem", b =>
                 {
                     b.Property<int>("Id")
@@ -145,6 +170,28 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.HasIndex("BoardId");
 
                     b.ToTable("Users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            Email = "Dioneli@mail.ru1",
+                            FirstName = "Di",
+                            LastName = "Li",
+                            PasswordHash = "x/5fpi8JiMGXxM4Re4fzlamU61mQQMGNR50wxtwCaHw=",
+                            SaltHash = "mlJyHV/cYHAT2ErFkB8d5w=="
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            Email = "D1!q2222@ru",
+                            FirstName = "Sam",
+                            LastName = "McGregor",
+                            PasswordHash = "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=",
+                            SaltHash = "FyQp6hr65+F7jI0btRXMLw=="
+                        });
                 });
 
             modelBuilder.Entity("DayPlanner.Backend.Domain.Board", b =>
@@ -175,6 +222,17 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.Navigation("Board");
 
                     b.Navigation("Member");
+                });
+
+            modelBuilder.Entity("DayPlanner.Backend.Domain.Notification", b =>
+                {
+                    b.HasOne("DayPlanner.Backend.Domain.User", "User")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DayPlanner.Backend.Domain.TaskItem", b =>
@@ -223,6 +281,8 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.Navigation("Boards");
 
                     b.Navigation("Memberships");
+
+                    b.Navigation("Notifications");
 
                     b.Navigation("Tasks");
                 });

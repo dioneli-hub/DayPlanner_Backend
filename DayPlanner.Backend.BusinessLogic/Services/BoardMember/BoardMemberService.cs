@@ -1,6 +1,7 @@
 ﻿using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.BusinessLogic.Interfaces.BoardMember;
 using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
+using DayPlanner.Backend.BusinessLogic.Interfaces.Notification;
 using DayPlanner.Backend.DataAccess;
 using DayPlanner.Backend.Domain;
 using Microsoft.EntityFrameworkCore;
@@ -11,15 +12,19 @@ namespace DayPlanner.Backend.BusinessLogic.Services
     {
         private readonly DataContext _context;
         private readonly IUserContextService _userContextService;
+        private readonly INotificationService _notificationService;
         public BoardMemberService(DataContext context,
-            IUserContextService userContextService) 
+            IUserContextService userContextService,
+            INotificationService notificationService) 
         {
             _context = context;
             _userContextService = userContextService;
+            _notificationService = notificationService;
         }
         public async Task<int> AddBoardMemberByEmail(int boardId, string userEmail)
         {
             var currentUserId = _userContextService.GetCurrentUserId();
+            
             var board = await _context.Boards.FindAsync(boardId);
 
             if (board == null)
@@ -51,7 +56,17 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             await _context.BoardMembers.AddAsync(boardMember);
             await _context.SaveChangesAsync();
+            
+            var currentUser = await _context.Users
+                .Where(x => x.Id == currentUserId)
+                .FirstOrDefaultAsync();
 
+            var notificationModel = new CreateNotificationModel
+            {
+                Text = $"{currentUser?.FirstName} {currentUser?.LastName} added you to board \"{board.Name}\".",
+                UserId = userToAdd.Id
+            };
+            await _notificationService.CreateNotification(notificationModel);
 
             return boardMember.MemberId;
         }
@@ -77,6 +92,13 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             _context.BoardMembers.Remove(boardMember);
             await _context.SaveChangesAsync();
+
+            var notificationModel = new CreateNotificationModel
+            {
+                Text = $"You were deleted from board \"{board.Name}\".",
+                UserId = userId
+            };
+            await _notificationService.CreateNotification(notificationModel);
         }
 
         public async Task LeaveBoard(int userId, int boardId)
@@ -105,6 +127,17 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             _context.BoardMembers.Remove(boardMembership);
             await _context.SaveChangesAsync();
+
+            var currentUser = await _context.Users
+                                .Where(x=> x.Id == currentUserId)
+                                .FirstOrDefaultAsync();
+
+            var notificationModel = new CreateNotificationModel
+            {
+                Text = $"{currentUser?.FirstName} {currentUser?.LastName} left board \"{board.Name}\".",
+                UserId = board.CreatorId
+            };
+            await _notificationService.CreateNotification(notificationModel);
         }
     }
 }

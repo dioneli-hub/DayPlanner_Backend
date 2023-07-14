@@ -15,6 +15,7 @@ namespace DayPlanner.Backend.DataAccess
         public DbSet<TaskItem> TaskItems { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<BoardMember> BoardMembers { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,6 +25,7 @@ namespace DayPlanner.Backend.DataAccess
             new TaskItemConfiguration().Configure(modelBuilder.Entity<TaskItem>());
             new UserConfiguration().Configure(modelBuilder.Entity<User>());
             new BoardMemberConfiguration().Configure(modelBuilder.Entity<BoardMember>());
+            new NotificationConfiguration().Configure(modelBuilder.Entity<Notification>());
 
 
 
@@ -37,6 +39,30 @@ namespace DayPlanner.Backend.DataAccess
             //        CreatedAt = new DateTime(2020, 05, 09, 9, 15, 0),
             //        CreatorId = 1
             //    });
+
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = 1,
+                    FirstName = "Di",
+                    LastName = "Li",
+                    Email = "Dioneli@mail.ru1",
+                    CreatedAt = new DateTime(2020, 05, 09, 9, 15, 0),
+                    PasswordHash = "x/5fpi8JiMGXxM4Re4fzlamU61mQQMGNR50wxtwCaHw=",
+                    SaltHash = "mlJyHV/cYHAT2ErFkB8d5w=="
+                });
+
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = 2,
+                    FirstName = "Sam",
+                    LastName = "McGregor",
+                    Email = "D1!q2222@ru",
+                    CreatedAt = new DateTime(2020, 05, 09, 9, 15, 0),
+                    PasswordHash = "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=",
+                    SaltHash = "FyQp6hr65+F7jI0btRXMLw=="
+                });
         }
     }
 }

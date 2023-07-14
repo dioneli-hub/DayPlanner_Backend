@@ -2,20 +2,25 @@
 using DayPlanner.Backend.ApiModels.TaskItem;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
+using DayPlanner.Backend.BusinessLogic.Interfaces.Notification;
 using DayPlanner.Backend.DataAccess;
 using DayPlanner.Backend.Domain;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace DayPlanner.Backend.BusinessLogic.Services
 {
     public class BoardService : IBoardService
     {
         private readonly DataContext _context;
+        private readonly INotificationService _notificationService;
         private readonly IUserContextService _userContextService;
         public BoardService(DataContext context,
+            INotificationService notificationService,
             IUserContextService userContextService)
         {
             _context = context;
+            _notificationService = notificationService;
             _userContextService = userContextService;
         }
 
@@ -38,6 +43,14 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             await _context.Boards.AddAsync(board);
             await _context.SaveChangesAsync();
 
+
+            var notificationModel = new CreateNotificationModel
+            {
+                Text = $"You created board \"{board.Name}\".",
+                UserId = currentUserId
+            };
+            await _notificationService.CreateNotification(notificationModel);
+
             var membership = new BoardMember
             {
                 MemberId = board.CreatorId,
@@ -45,6 +58,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 BoardId = board.Id,
                 Board = board,
             };
+
 
             await _context.BoardMembers.AddAsync(membership);
             await _context.SaveChangesAsync();
@@ -69,6 +83,13 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             {
                 throw new ApplicationException("Access denied.");
             }
+
+            var notificationModel = new CreateNotificationModel
+            {
+                Text = $"You deleted board \"{board.Name}\".",
+                UserId = currentUserId
+            };
+            await _notificationService.CreateNotification(notificationModel);
 
             _context.BoardMembers.RemoveRange(board.BoardMemberships);
             _context.TaskItems.RemoveRange(board.Tasks);
