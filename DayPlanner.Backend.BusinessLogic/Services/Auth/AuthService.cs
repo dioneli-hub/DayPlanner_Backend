@@ -37,7 +37,16 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                     Data = null
                 };
             }
-            else if (!await _passwordVerifier.Verify(user.Id, password))
+            if(user.VerifiedAt == null)
+            {
+                return new ServiceResponse<TokenModel>()
+                {
+                    IsSuccess = false,
+                    Message = "User email not verified. Please, check your mailbox for verification message.",
+                    Data = null,
+                };
+            }
+            if (!await _passwordVerifier.Verify(user.Id, password))
             {
                 return new ServiceResponse<TokenModel>()
                 {

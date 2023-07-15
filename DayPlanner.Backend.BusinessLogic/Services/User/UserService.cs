@@ -115,5 +115,18 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 Data = await _userProvider.GetUser(user.Id)
             };
         }
+
+        public async Task Verify(string verificationToken)
+        {
+            var user =  _context.Users
+                .FirstOrDefault(x => x.VerificationToken == verificationToken);
+
+            if (user == null)
+            {
+                throw new ApplicationException("Could not verify unexisting user.");
+            }
+            user.VerifiedAt = DateTimeOffset.UtcNow;
+            await _context.SaveChangesAsync();
+        }
     }
 }

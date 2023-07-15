@@ -6,5 +6,6 @@ namespace DayPlanner.Backend.BusinessLogic.Interfaces
     public interface IUserService
     {
         Task<ServiceResponse<UserModel>> RegisterUser(CreateUserModel model);
+        Task Verify(string verificationToken);
     }
 }

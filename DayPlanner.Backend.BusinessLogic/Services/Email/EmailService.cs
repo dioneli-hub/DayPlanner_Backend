@@ -4,14 +4,15 @@ using DayPlanner.Backend.DataAccess;
 using MailKit.Net.Smtp;
 using Microsoft.EntityFrameworkCore;
 using MimeKit;
+using System.Diagnostics;
+using static System.Net.WebRequestMethods;
 
 namespace DayPlanner.Backend.BusinessLogic.Services
 {
     public class EmailService : IEmailService
     {
-        string FromEmail { get; set; } = "round.world@bk.ru";
-        string FromEmailPswd { get; set; } = "thisiscreatedforus";
-
+        //add sender email info as well as api address of the endpoint to verify to appsettings json
+       
         private readonly DataContext _context;
 
         public EmailService(DataContext context) {
@@ -30,9 +31,16 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 email.Subject = "DayPlanner Email Verification";
                 email.Body = new TextPart(MimeKit.Text.TextFormat.Html)
                 {
-                    Text = $"<h1>{user.VerificationToken}</h1>",
-                    //Text = "<h1>Hi</h1>",
-                };
+                    Text = $"<h1>Hey, {user.FirstName} {user.LastName}! Here is your verification token. Copy it and paste at the website in order to activate your account.</h1>"+
+                    "<h2> Please, do not share this token with anyone.</h2>" +
+                    $"{user.VerificationToken}",
+                    //Text = "<h1>Hi</h1>",   https://localhost:7231/api/User/verify?verificationToken={user.VerificationToken}
+                    //Text = $"<form method=\"POST\" action=\"https://localhost:7231/api/User/verify?verificationToken={user.VerificationToken}\">" +
+                    //"<input type=\"submit\" value=\"Verify\">" +
+                    //$"</form>",
+
+                    //Text = "<a href='https://localhost:7231/api/User/verify?verificationToken=" + user.VerificationToken + "'>Click</a>"
+            };
 
                 using var smtp = new SmtpClient();
                 smtp.Connect("smtp.outlook.com", 587, MailKit.Security.SecureSocketOptions.StartTls);

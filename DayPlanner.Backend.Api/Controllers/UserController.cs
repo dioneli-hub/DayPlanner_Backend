@@ -17,7 +17,7 @@ namespace DayPlanner.Backend.Api.Controllers
         private readonly IEmailService _emailService;
 
         public UserController(
-            IUserProvider userProvider, 
+            IUserProvider userProvider,
             IUserService userService,
             IEmailService emailService
             )
@@ -27,14 +27,14 @@ namespace DayPlanner.Backend.Api.Controllers
             _emailService = emailService;
         }
 
-        [HttpGet(Name = nameof(GetAllUsers))] 
+        [HttpGet(Name = nameof(GetAllUsers))]
         public async Task<ActionResult<List<UserModel>>> GetAllUsers()
         {
             var users = await _userProvider.GetAllUsers();
             return Ok(users);
         }
 
-        [HttpGet("{userId}", Name = nameof(GetUser))] 
+        [HttpGet("{userId}", Name = nameof(GetUser))]
         public async Task<ActionResult<UserModel>> GetUser(int userId)
         {
             var user = await _userProvider.GetUser(userId);
@@ -46,9 +46,18 @@ namespace DayPlanner.Backend.Api.Controllers
         public async Task<ActionResult<ServiceResponse<UserModel>>> RegisterUser([FromBody] CreateUserModel model)
         {
             var userResponse = await _userService.RegisterUser(model);
-            //var user = await _userProvider.GetUser(userId);
 
             return Ok(userResponse);
+        }
+
+        [HttpPatch("verify", Name = nameof(Verify))]
+        [AllowAnonymous]
+        public async Task<ActionResult> Verify([FromBody]VerificationTokenModel verificationToken)
+        {
+            
+            await _userService.Verify(verificationToken.Token);
+
+            return Ok("User successfully verified."); 
         }
 
         //[HttpGet("{userId}/user-boards", Name = nameof(GetUserBoards))]
@@ -57,6 +66,11 @@ namespace DayPlanner.Backend.Api.Controllers
         //    var userBoards = await _userProvider.GetUserBoards(userId);
         //    return Ok(userBoards);
         //}
+    }
+
+    public class VerificationTokenModel
+    {
+        public string Token { get; set; }
     }
 }
 
