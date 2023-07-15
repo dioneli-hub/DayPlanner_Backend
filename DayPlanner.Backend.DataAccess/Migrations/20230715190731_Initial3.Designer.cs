@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DayPlanner.Backend.DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230711114429_Initial3")]
+    [Migration("20230715190731_Initial3")]
     partial class Initial3
     {
         /// <inheritdoc />
@@ -167,6 +167,12 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.Property<string>("SaltHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VerificationToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("VerifiedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 

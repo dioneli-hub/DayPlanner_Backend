@@ -11,17 +11,21 @@ namespace DayPlanner.Backend.BusinessLogic.Services
         private readonly IHashService _hashService;
         private readonly IUserProvider _userProvider;
         private readonly IValidationService _validationService;
+        private readonly IEmailService _emailService;
         public UserService(
             DataContext context,
             IHashService hashService,
             IUserProvider userProvider,
-            IValidationService validationService) 
+            IValidationService validationService,
+            IEmailService emailService) 
         {
             _context = context;
             _hashService = hashService;
             _userProvider = userProvider;
             _validationService = validationService;
-                
+            _emailService = emailService;
+
+
         }
         //public async Task<int> RegisterUser(CreateUserModel model)
         //{
@@ -95,16 +99,19 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 Email = model.Email,
                 PasswordHash = Convert.ToBase64String(hashModel.Hash),
                 SaltHash = Convert.ToBase64String(hashModel.Salt),
-                CreatedAt = DateTimeOffset.UtcNow
+                CreatedAt = DateTimeOffset.UtcNow,
+                VerificationToken = _hashService.GenerateRandomToken(64)
             };
 
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
 
+            await _emailService.SendVerificationEmail(user.Id);
+
             return new ServiceResponse<UserModel>()
             {
                 IsSuccess = true,
-                Message = "User successfully registered.",
+                Message = "User successfully registered. Email verification is needed. Please, check your mailbox to confirm your email address.",
                 Data = await _userProvider.GetUser(user.Id)
             };
         }

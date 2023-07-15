@@ -31,13 +31,22 @@ namespace DayPlanner.Backend.BusinessLogic.Services.Security
                 KeySizeInBytes);
         }
 
-        private static byte[] GenerateSalt(int saltSize)
+        private byte[] GenerateSalt(int saltSize)
         {
             var salt = new byte[saltSize];
             using var rng = RandomNumberGenerator.Create();
             rng.GetBytes(salt);
 
             return salt;
+        }
+
+        public string GenerateRandomToken(int size)
+        {
+            var token = new byte[size];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(token);
+
+            return Convert.ToBase64String(token);
         }
     }
 }

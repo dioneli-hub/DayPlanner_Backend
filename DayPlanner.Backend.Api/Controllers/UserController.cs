@@ -14,14 +14,17 @@ namespace DayPlanner.Backend.Api.Controllers
     {
         private readonly IUserProvider _userProvider;
         private readonly IUserService _userService;
+        private readonly IEmailService _emailService;
 
         public UserController(
             IUserProvider userProvider, 
-            IUserService userService
+            IUserService userService,
+            IEmailService emailService
             )
         {
             _userProvider = userProvider;
             _userService = userService;
+            _emailService = emailService;
         }
 
         [HttpGet(Name = nameof(GetAllUsers))] 
@@ -43,8 +46,6 @@ namespace DayPlanner.Backend.Api.Controllers
         public async Task<ActionResult<ServiceResponse<UserModel>>> RegisterUser([FromBody] CreateUserModel model)
         {
             var userResponse = await _userService.RegisterUser(model);
-            Console.WriteLine("!!!!!!!!!!!!!!!!!!!!!!!");
-            Console.WriteLine(userResponse.IsSuccess);
             //var user = await _userProvider.GetUser(userId);
 
             return Ok(userResponse);

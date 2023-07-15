@@ -2,7 +2,7 @@
 using DayPlanner.Backend.ApiModels.BoardMember;
 
 
-namespace DayPlanner.Backend.BusinessLogic.Interfaces.BoardMember
+namespace DayPlanner.Backend.BusinessLogic.Interfaces
 {
     public interface IBoardMemberProvider
     {

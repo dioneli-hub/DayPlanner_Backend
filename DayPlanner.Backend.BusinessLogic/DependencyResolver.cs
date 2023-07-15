@@ -28,6 +28,8 @@ namespace DayPlanner.Backend.BusinessLogic
             services.AddScoped<IValidationService, ValidationService>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<INotificationProvider, NotificationProvider>();
+            services.AddScoped<IEmailService, EmailService>();
+
 
             return services;
         }

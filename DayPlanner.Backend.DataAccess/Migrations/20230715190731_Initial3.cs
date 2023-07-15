@@ -52,6 +52,8 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SaltHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VerificationToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    VerifiedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     BoardId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -121,11 +123,11 @@ namespace DayPlanner.Backend.DataAccess.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "BoardId", "CreatedAt", "Email", "FirstName", "LastName", "PasswordHash", "SaltHash" },
+                columns: new[] { "Id", "BoardId", "CreatedAt", "Email", "FirstName", "LastName", "PasswordHash", "SaltHash", "VerificationToken", "VerifiedAt" },
                 values: new object[,]
                 {
-                    { 1, null, new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "Dioneli@mail.ru1", "Di", "Li", "x/5fpi8JiMGXxM4Re4fzlamU61mQQMGNR50wxtwCaHw=", "mlJyHV/cYHAT2ErFkB8d5w==" },
-                    { 2, null, new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "D1!q2222@ru", "Sam", "McGregor", "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=", "FyQp6hr65+F7jI0btRXMLw==" }
+                    { 1, null, new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "Dioneli@mail.ru1", "Di", "Li", "x/5fpi8JiMGXxM4Re4fzlamU61mQQMGNR50wxtwCaHw=", "mlJyHV/cYHAT2ErFkB8d5w==", null, null },
+                    { 2, null, new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "D1!q2222@ru", "Sam", "McGregor", "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=", "FyQp6hr65+F7jI0btRXMLw==", null, null }
                 });
 
             migrationBuilder.CreateIndex(

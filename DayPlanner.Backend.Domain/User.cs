@@ -11,6 +11,12 @@ namespace DayPlanner.Backend.Domain
         public string PasswordHash { get; set; }
         public string SaltHash { get; set; }
 
+        public string? VerificationToken { get; set; }
+        public DateTimeOffset? VerifiedAt { get; set; }
+
+        //public string? PasswordResetToken { get; set; }
+        //public DateTimeOffset? PasswordResetTokenExpiresAt { get; set; }
+
         //public int? AvatarFileId { get; set; }
         //public ApplicationFile Avatar { get; set; }
         public ICollection<Board> Boards { get; set; }
