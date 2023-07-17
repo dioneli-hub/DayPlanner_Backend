@@ -161,6 +161,12 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ResetPasswordToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("ResetPasswrodTokenExpiresAt")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("SaltHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -186,7 +192,9 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                             FirstName = "Di",
                             LastName = "Li",
                             PasswordHash = "x/5fpi8JiMGXxM4Re4fzlamU61mQQMGNR50wxtwCaHw=",
-                            SaltHash = "mlJyHV/cYHAT2ErFkB8d5w=="
+                            SaltHash = "mlJyHV/cYHAT2ErFkB8d5w==",
+                            VerificationToken = "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==",
+                            VerifiedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0))
                         },
                         new
                         {
@@ -196,7 +204,9 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                             FirstName = "Sam",
                             LastName = "McGregor",
                             PasswordHash = "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=",
-                            SaltHash = "FyQp6hr65+F7jI0btRXMLw=="
+                            SaltHash = "FyQp6hr65+F7jI0btRXMLw==",
+                            VerificationToken = "OCGOOxNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==",
+                            VerifiedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0))
                         });
                 });
 

@@ -42,6 +42,9 @@ namespace DayPlanner.Backend.BusinessLogic.Services.Security
 
         public string GenerateRandomToken(int size)
         {
+
+            //check if the created token already exists in the database, if so, run the method again
+            // the probability is small, but just in case????
             var token = new byte[size];
             using var rng = RandomNumberGenerator.Create();
             rng.GetBytes(token);

@@ -14,6 +14,9 @@ namespace DayPlanner.Backend.Domain
         public string? VerificationToken { get; set; }
         public DateTimeOffset? VerifiedAt { get; set; }
 
+        public string? ResetPasswordToken { get; set; }
+        public DateTimeOffset? ResetPasswrodTokenExpiresAt { get; set; }
+
         //public string? PasswordResetToken { get; set; }
         //public DateTimeOffset? PasswordResetTokenExpiresAt { get; set; }
 

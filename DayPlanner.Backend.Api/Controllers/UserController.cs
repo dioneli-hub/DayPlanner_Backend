@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.Domain;
+using DayPlanner.Backend.ApiModels.User;
+using System.Linq.Expressions;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
@@ -58,6 +60,24 @@ namespace DayPlanner.Backend.Api.Controllers
             await _userService.Verify(verificationToken.Token);
 
             return Ok("User successfully verified."); 
+        }
+
+        [HttpPatch("forgot-password", Name = nameof(ForgotPassword))]
+        [AllowAnonymous]
+        public async Task<ActionResult<ServiceResponse<bool>>> ForgotPassword([FromBody] ForgotPasswordModel user)
+        {
+            var response = await _userService.ForgotPassword(user.Email);
+            return Ok(response);
+        }
+
+        [HttpPatch("reset-password", Name = nameof(ResetPassword))]
+        [AllowAnonymous]
+        public async Task<ActionResult<ServiceResponse<bool>>> ResetPassword([FromBody] ResetPasswordModel model)
+        {
+
+            var response = await _userService.ResetPassword(model);
+
+            return Ok(response);
         }
 
         //[HttpGet("{userId}/user-boards", Name = nameof(GetUserBoards))]
