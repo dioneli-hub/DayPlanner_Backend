@@ -29,14 +29,6 @@ namespace DayPlanner.Backend.Api.Controllers
             
         }
 
-        [HttpGet(Name = nameof(GetBoards))]
-        public async Task<ActionResult<List<BoardModel>>> GetBoards()
-        {
-            var boards = await _boardProvider.GetBoards();
-
-            return Ok(boards);
-        }
-
         [HttpGet("{boardId}", Name = nameof(GetBoard))]
         public async Task<ActionResult<BoardModel>> GetBoard(int boardId)
         {
@@ -44,8 +36,6 @@ namespace DayPlanner.Backend.Api.Controllers
             
             return Ok(board);
         }
-
-
         
 
         [HttpPost (Name = nameof(CreateBoard))]
@@ -67,16 +57,7 @@ namespace DayPlanner.Backend.Api.Controllers
 
         [HttpPut("{boardId}", Name = nameof(UpdateBoard))]
 
-        public async Task<ActionResult<BoardModel>> UpdateBoard(
-            [FromRoute] int boardId,
-            [FromBody] EditBoardModel editedBoardModel)
-        {
-            await _boardService.UpdateBoard(boardId, editedBoardModel);
-            var updatedBoard = await _boardProvider.GetBoard(boardId);
-
-            return Ok(updatedBoard);
-        }
-
+        
         [HttpPost]
         [Route("{boardId}/tasks")]
         public async Task<ActionResult<TaskItemModel>> AddTaskToBoard(
@@ -89,6 +70,24 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok(task);
         }
 
-        
+        // TESTING NOT NEEDED
+        public async Task<ActionResult<BoardModel>> UpdateBoard(
+            [FromRoute] int boardId,
+            [FromBody] EditBoardModel editedBoardModel)
+        {
+            await _boardService.UpdateBoard(boardId, editedBoardModel);
+            var updatedBoard = await _boardProvider.GetBoard(boardId);
+
+            return Ok(updatedBoard);
+        }
+
+        [HttpGet(Name = nameof(GetBoards))]
+        public async Task<ActionResult<List<BoardModel>>> GetBoards()
+        {
+            var boards = await _boardProvider.GetBoards();
+
+            return Ok(boards);
+        }
+
     }
 }

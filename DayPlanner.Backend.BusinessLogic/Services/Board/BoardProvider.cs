@@ -29,6 +29,8 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             return boardModels;
         }
+
+        // TESTED
         public async Task<BoardModel> GetBoard(int boardId)
         {
             var board = await _context.Boards
