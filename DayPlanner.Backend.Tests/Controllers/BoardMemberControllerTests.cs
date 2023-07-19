@@ -98,13 +98,6 @@ namespace DayPlanner.Backend.Tests.Controllers
             result.Should().BeOfType(typeof(OkResult));
         }
 
-        //[HttpGet("{userId}/user-boards", Name = nameof(GetUserBoards))]
-        //public async Task<ActionResult<BoardModel>> GetUserBoards(int userId)
-        //{
-        //    var userBoards = await _boardMemberProvider.GetUserBoards(userId);
-        //    return Ok(userBoards);
-        //}\
-
         [Fact]
         public async void BoardMemberController_GetUserBoards_ReturnOkAndBoardModelList()
         {
