@@ -59,19 +59,19 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             return memberModels;
         }
 
-        public async Task<List<BoardModel>> GetMemberBoards(int userId) {
+        //public async Task<List<BoardModel>> GetMemberBoards(int userId) {
 
-            var boards = await _context.BoardMembers
-                .Include(x => x.Board.Creator)
-                .Where(x => x.MemberId == userId)
-                .Select(x => x.Board)
+        //    var boards = await _context.BoardMembers
+        //        .Include(x => x.Board.Creator)
+        //        .Where(x => x.MemberId == userId)
+        //        .Select(x => x.Board)
                 
-                .ToListAsync();
+        //        .ToListAsync();
 
-            var boardModels = _mapper.Map<List<BoardModel>>(boards);
+        //    var boardModels = _mapper.Map<List<BoardModel>>(boards);
 
-            return boardModels;
-        }
+        //    return boardModels;
+        //}
 
         //public async Task<List<BoardModel>> GetUserBoards(int userId)
         //{

@@ -42,8 +42,8 @@ namespace DayPlanner.Backend.Tests.Controllers
             result.Should().NotBeNull();
             result.Should().BeOfType(typeof(ActionResult<UserModel>));
         }
-        //var tokenResponse = await _authService.Authenticate(model.Email, model.Password);
-        //    return Ok(tokenResponse);
+     
+
         [Fact]
         public async void AuthController_Authenticated_ReturnOkAndTokenResponse()
         {
@@ -62,8 +62,6 @@ namespace DayPlanner.Backend.Tests.Controllers
             result.Should().NotBeNull();
             result.Should().BeOfType(typeof(ActionResult<Domain.ServiceResponse<TokenModel>>));
         }
-
-
 
     }
 }

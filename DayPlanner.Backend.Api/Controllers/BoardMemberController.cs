@@ -29,25 +29,6 @@ namespace DayPlanner.Backend.Api.Controllers
             _boardMemberService = boardMemberService;
         }
 
-        [HttpGet("users/{userId}/get-user-boards", Name = nameof(GetMemberBoards))]
-        public async Task<ActionResult<BoardModel>> GetMemberBoards(int userId)
-        {
-            var boards = await _boardMemberProvider.GetMemberBoards(userId);
-
-            return Ok(boards);
-        }
-
-        /*
-        [HttpGet]
-        [Route("boards/{boardId}/memberships", Name = nameof(GetBoardMembers))]
-        public async Task<ActionResult<List<BoardMemberModel>>> GetBoardMembers(
-            [FromRoute] int boardId)
-        {
-            var boardMembers = await _boardMemberProvider.GetBoardMembers(boardId);
-            return Ok(boardMembers);
-        }
-        */
-
         [HttpGet]
         [Route("boards/{boardId}/get-members", Name = nameof(GetBoardMembers))]
         public async Task<ActionResult<List<UserModel>>> GetBoardMembers(
@@ -94,11 +75,32 @@ namespace DayPlanner.Backend.Api.Controllers
 
 
         [HttpGet("{userId}/user-boards", Name = nameof(GetUserBoards))]
-        public async Task<ActionResult<BoardModel>> GetUserBoards(int userId)
+        public async Task<ActionResult<List<BoardModel>>> GetUserBoards(int userId)
         {
             var userBoards = await _boardMemberProvider.GetUserBoards(userId);
             return Ok(userBoards);
         }
+
+
+        /*
+[HttpGet]
+[Route("boards/{boardId}/memberships", Name = nameof(GetBoardMembers))]
+public async Task<ActionResult<List<BoardMemberModel>>> GetBoardMembers(
+    [FromRoute] int boardId)
+{
+    var boardMembers = await _boardMemberProvider.GetBoardMembers(boardId);
+    return Ok(boardMembers);
+}
+*/
+
+
+        //[HttpGet("users/{userId}/get-user-boards", Name = nameof(GetMemberBoards))]
+        //public async Task<ActionResult<List<BoardModel>>> GetMemberBoards(int userId)
+        //{
+        //    var boards = await _boardMemberProvider.GetMemberBoards(userId);
+
+        //    return Ok(boards);
+        //}
 
     }
 }
