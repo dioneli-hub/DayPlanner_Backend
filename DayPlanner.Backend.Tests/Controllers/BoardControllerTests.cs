@@ -2,13 +2,10 @@
 using DayPlanner.Backend.Api.Controllers;
 using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.ApiModels.TaskItem;
-using DayPlanner.Backend.BusinessLogic.Models;
-using DayPlanner.Backend.DataAccess;
 using DayPlanner.Backend.Domain;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel;
+
 
 namespace DayPlanner.Backend.Tests.Controllers
 {
