@@ -1,9 +1,14 @@
 ﻿
 using DayPlanner.Backend.Api.Controllers;
 using DayPlanner.Backend.ApiModels;
+using DayPlanner.Backend.ApiModels.TaskItem;
+using DayPlanner.Backend.BusinessLogic.Models;
+using DayPlanner.Backend.DataAccess;
 using DayPlanner.Backend.Domain;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 
 namespace DayPlanner.Backend.Tests.Controllers
 {
@@ -12,6 +17,8 @@ namespace DayPlanner.Backend.Tests.Controllers
         private readonly IBoardProvider _boardProvider;
         private readonly IBoardService _boardService;
         private readonly ITaskItemProvider _taskItemProvider;
+
+      
         public BoardControllerTests()
         {
             _boardProvider = A.Fake<IBoardProvider>();
@@ -56,9 +63,47 @@ namespace DayPlanner.Backend.Tests.Controllers
             //Assert
             result.Should().NotBeNull();
             result.Should().BeOfType(typeof(ActionResult<BoardModel>));
-
         }
 
+        [Fact]
+        public async void BoardController_DeleteBoard_ReturnOkAndBoardModel()
+        {
+            //Arrange
+
+            int boardId = 1;
+            A.CallTo(() => _boardService.DeleteBoard(boardId)).GetType().Should().NotBeNull();
+            var controller = new BoardController(_boardProvider, _boardService, _taskItemProvider);
+
+            //Act
+            var result = await controller.DeleteBoard(boardId);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Should().BeOfType(typeof(OkResult));
+        }
+
+        [Fact]
+        public async void BoardController_AddTaskToBoard_ReturnOkAndBoardModel()
+        {
+            //Arrange
+            var boardId = 1;
+            var taskId = 1;
+            var addTaskModel = A.Fake<AddTaskItemToBoardModel>();
+            var taskModel = A.Fake<TaskItemModel>();
+           
+            A.CallTo(() => _boardService.AddTaskToBoard(boardId, addTaskModel)).Returns(taskId);
+            A.CallTo(() => _taskItemProvider.GetTask(taskId)).Returns(taskModel);
+
+            var controller = new BoardController(_boardProvider, _boardService, _taskItemProvider);
+
+            //Act
+            var result = await controller.AddTaskToBoard(addTaskModel, boardId);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Should().BeOfType(typeof(ActionResult<TaskItemModel>));
+
+        }
 
     }
 }
