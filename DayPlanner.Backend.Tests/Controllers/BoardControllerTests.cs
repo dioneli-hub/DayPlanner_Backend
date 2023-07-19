@@ -1,6 +1,7 @@
 ﻿
 using DayPlanner.Backend.Api.Controllers;
 using DayPlanner.Backend.ApiModels;
+using DayPlanner.Backend.Domain;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,6 +35,28 @@ namespace DayPlanner.Backend.Tests.Controllers
             result.Should().NotBeNull();
             result.Should().BeOfType(typeof(ActionResult<BoardModel>));
             
+        }
+
+        [Fact]
+        public async void BoardController_CreateBoard_ReturnOkAndBoardModel()
+        {
+            //Arrange
+            var createBoardModel = A.Fake<CreateBoardModel>();
+            var board = A.Fake<Board>();
+            var boardModel = A.Fake<BoardModel>();
+
+            A.CallTo(() =>_boardService.CreateBoard(createBoardModel)).Returns(board.Id);
+            A.CallTo(() => _boardProvider.GetBoard(board.Id)).Returns(boardModel);
+
+            var controller = new BoardController(_boardProvider, _boardService, _taskItemProvider);
+
+            //Act
+            var result = await controller.CreateBoard(createBoardModel);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Should().BeOfType(typeof(ActionResult<BoardModel>));
+
         }
 
 
