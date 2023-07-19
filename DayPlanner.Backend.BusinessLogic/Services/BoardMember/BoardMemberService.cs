@@ -1,7 +1,7 @@
 ﻿using DayPlanner.Backend.ApiModels;
+using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.BusinessLogic.Interfaces.BoardMember;
 using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
-using DayPlanner.Backend.BusinessLogic.Interfaces.Notification;
 using DayPlanner.Backend.DataAccess;
 using DayPlanner.Backend.Domain;
 using Microsoft.EntityFrameworkCore;

@@ -5,7 +5,6 @@ using DayPlanner.Backend.BusinessLogic.Interfaces.BoardMember;
 using DayPlanner.Backend.BusinessLogic.Services.Security;
 using DayPlanner.Backend.BusinessLogic.Services.Auth;
 using DayPlanner.Backend.BusinessLogic.Services.Validation;
-using DayPlanner.Backend.BusinessLogic.Interfaces.Notification;
 
 namespace DayPlanner.Backend.BusinessLogic
 {

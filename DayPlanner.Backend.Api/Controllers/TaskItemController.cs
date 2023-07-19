@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using DayPlanner.Backend.ApiModels.TaskItem;
-using DayPlanner.Backend.BusinessLogic.Services;
 
 namespace DayPlanner.Backend.Api.Controllers
 {

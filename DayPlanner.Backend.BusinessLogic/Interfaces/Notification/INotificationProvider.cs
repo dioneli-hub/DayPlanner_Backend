@@ -1,7 +1,7 @@
 ﻿
 using DayPlanner.Backend.ApiModels;
 
-namespace DayPlanner.Backend.BusinessLogic.Interfaces.Notification
+namespace DayPlanner.Backend.BusinessLogic.Interfaces
 {
     public interface INotificationProvider
     {
