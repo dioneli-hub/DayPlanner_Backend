@@ -6,6 +6,8 @@ using DayPlanner.Backend.BusinessLogic.Interfaces.BoardMember;
 using DayPlanner.Backend.ApiModels.BoardMember;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.BusinessLogic.Services;
+using DayPlanner.Backend.ApiModels.User;
+using DayPlanner.Backend.Domain;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
@@ -45,9 +47,20 @@ namespace DayPlanner.Backend.Api.Controllers
             [FromRoute] string userEmail 
             )
         {
-            var userId = await _boardMemberService.AddBoardMemberByEmail(boardId, userEmail);
+            var userIdResponse = await _boardMemberService.AddBoardMemberByEmail(boardId, userEmail);
+            var userId = userIdResponse.Data;
+
             var user = await _userProvider.GetUser(userId);
-            return Ok(user);
+
+            var response = new ServiceResponse<UserModel>
+            {
+                IsSuccess = userIdResponse.IsSuccess,
+                Message = userIdResponse.Message,
+                Data = user
+            };
+
+            return Ok(response);
+
         }
 
         [HttpDelete]
@@ -65,9 +78,7 @@ namespace DayPlanner.Backend.Api.Controllers
         [Route("boards/{userId}/leave-board/{boardId}", Name = nameof(LeaveBoard))]
         public async Task<ActionResult> LeaveBoard(
             [FromRoute] int userId,
-            [FromRoute] int boardId
-            
-            )
+            [FromRoute] int boardId)
         {
             await _boardMemberService.LeaveBoard( userId, boardId);
             return Ok(); //"Board member successfully deleted."
@@ -80,6 +91,26 @@ namespace DayPlanner.Backend.Api.Controllers
             var userBoards = await _boardMemberProvider.GetUserBoards(userId);
             return Ok(userBoards);
         }
+
+
+        //[HttpGet("search", Name = nameof(SearchUser))]
+        //public async Task<ActionResult<UserModel>> SearchUser([FromBody] SearchUserModel model)
+        //{
+
+        //    var user = await _userProvider.SearchUser(model);
+
+        //    return Ok(user);
+        //}
+
+        [HttpGet("get-suggested-search-users/{emailSearched}", Name = nameof(GetSuggestedSearchEmails))]
+        public async Task<ActionResult<List<UserModel>>> GetSuggestedSearchEmails([FromRoute] string emailSearched)
+        {
+
+            var emails = await _boardMemberProvider.GetSuggestedSearchEmails(emailSearched);
+
+            return Ok(emails);
+        }
+
 
 
         /*

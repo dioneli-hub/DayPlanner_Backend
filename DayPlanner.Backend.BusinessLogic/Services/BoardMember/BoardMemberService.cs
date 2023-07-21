@@ -21,7 +21,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             _userContextService = userContextService;
             _notificationService = notificationService;
         }
-        public async Task<int> AddBoardMemberByEmail(int boardId, string userEmail)
+        public async Task<ServiceResponse<int>> AddBoardMemberByEmail(int boardId, string userEmail)
         {
             var currentUserId = _userContextService.GetCurrentUserId();
             
@@ -29,12 +29,22 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             if (board == null)
             {
-                throw new ApplicationException("Board not found.");
+                return new ServiceResponse<int>
+                {
+                    IsSuccess = false,
+                    Message = "Board not found.",
+                    Data = 0
+                };
             }
 
             if (board.CreatorId != currentUserId)
             {
-                throw new ApplicationException("Access denied: only board owner can add new board members.");
+                return new ServiceResponse<int>
+                {
+                    IsSuccess = false,
+                    Message = "Access denied: only board owner can add new board members.",
+                    Data = 0
+                };
             }
 
             var userToAdd = await _context.Users
@@ -43,7 +53,23 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             if (userToAdd == null)
             {
-                throw new ApplicationException("Error: the potential board member with such email not found.");
+                return new ServiceResponse<int>
+                {
+                    IsSuccess = false,
+                    Message = "User with such email not found.",
+                    Data = 0
+                };
+            }
+
+            var hasAnyMemberByEmail = await _context.BoardMembers.Where(x => (x.Member.Email == userEmail) && (x.BoardId == boardId)).AnyAsync();
+            if (hasAnyMemberByEmail)
+            {
+                return new ServiceResponse<int>
+                {
+                    IsSuccess = false,
+                    Message = "This user is already a member of this board.",
+                    Data = 0
+                };
             }
 
             var boardMember = new BoardMember
@@ -68,7 +94,12 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             };
             await _notificationService.CreateNotification(notificationModel);
 
-            return boardMember.MemberId;
+            return new ServiceResponse<int>
+            {
+                IsSuccess = true,
+                Message = "Member successfully added.",
+                Data = boardMember.MemberId
+            };
         }
 
         public async Task DeleteBoardMember(int boardId, int userId)

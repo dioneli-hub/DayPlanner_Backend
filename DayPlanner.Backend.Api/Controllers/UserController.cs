@@ -80,6 +80,7 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok(response);
         }
 
+
         //[HttpGet("{userId}/user-boards", Name = nameof(GetUserBoards))]
         //public async Task<ActionResult<BoardModel>> GetUserBoards(int userId)
         //{

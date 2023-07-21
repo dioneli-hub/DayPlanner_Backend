@@ -11,5 +11,6 @@ namespace DayPlanner.Backend.BusinessLogic.Interfaces
         //Task<List<BoardMemberModel>> GetBoardMembers(int boardId);
         Task<List<UserModel>> GetBoardMembers(int boardId);
         Task<BoardMemberModel> GetBoardMember(int boardId, int boardMemberId);
+        Task<List<string>> GetSuggestedSearchEmails(string emailSerached);
     }
 }

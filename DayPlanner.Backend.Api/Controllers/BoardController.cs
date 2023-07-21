@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using DayPlanner.Backend.BusinessLogic.Interfaces;
-using DayPlanner.Backend.Domain;
-
+﻿using DayPlanner.Backend.BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using DayPlanner.Backend.ApiModels.TaskItem;
@@ -55,7 +52,6 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok();
         }
 
-        [HttpPut("{boardId}", Name = nameof(UpdateBoard))]
 
         
         [HttpPost]
@@ -71,23 +67,25 @@ namespace DayPlanner.Backend.Api.Controllers
         }
 
         // TESTING NOT NEEDED
-        public async Task<ActionResult<BoardModel>> UpdateBoard(
-            [FromRoute] int boardId,
-            [FromBody] EditBoardModel editedBoardModel)
-        {
-            await _boardService.UpdateBoard(boardId, editedBoardModel);
-            var updatedBoard = await _boardProvider.GetBoard(boardId);
 
-            return Ok(updatedBoard);
-        }
+        //[HttpPut("{boardId}", Name = nameof(UpdateBoard))]
+        //public async Task<ActionResult<BoardModel>> UpdateBoard(
+        //    [FromRoute] int boardId,
+        //    [FromBody] EditBoardModel editedBoardModel)
+        //{
+        //    await _boardService.UpdateBoard(boardId, editedBoardModel);
+        //    var updatedBoard = await _boardProvider.GetBoard(boardId);
 
-        [HttpGet(Name = nameof(GetBoards))]
-        public async Task<ActionResult<List<BoardModel>>> GetBoards()
-        {
-            var boards = await _boardProvider.GetBoards();
+        //    return Ok(updatedBoard);
+        //}
 
-            return Ok(boards);
-        }
+        //[HttpGet(Name = nameof(GetBoards))]
+        //public async Task<ActionResult<List<BoardModel>>> GetBoards()
+        //{
+        //    var boards = await _boardProvider.GetBoards();
+
+        //    return Ok(boards);
+        //}
 
     }
 }

@@ -30,6 +30,30 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             return boardMemberModel;
         }
 
+        public async Task<List<UserModel>> GetBoardMembers(int boardId)
+        {
+            var members = await _context.BoardMembers
+                .Include(x => x.Member)
+                .Where(m => m.BoardId == boardId)
+                .Select(x=>x.Member)
+                .ToListAsync();
+
+            var memberModels = _mapper.Map<List<UserModel>>(members);
+
+            return memberModels;
+        }
+
+        public async Task<List<string>> GetSuggestedSearchEmails(string emailSerached)
+        {
+            var emails =  await _context.Users
+                .Where( x => x.Email.ToLower().Contains(emailSerached.ToLower()))
+                .Select(x => x.Email)
+                .ToListAsync();
+
+           
+            return emails;
+        }
+
 
         /*
         public async Task<List<BoardMemberModel>> GetBoardMembers(int boardId)
@@ -46,26 +70,13 @@ namespace DayPlanner.Backend.BusinessLogic.Services
         }
         */
 
-        public async Task<List<UserModel>> GetBoardMembers(int boardId)
-        {
-            var members = await _context.BoardMembers
-                .Include(x => x.Member)
-                .Where(m => m.BoardId == boardId)
-                .Select(x=>x.Member)
-                .ToListAsync();
-
-            var memberModels = _mapper.Map<List<UserModel>>(members);
-
-            return memberModels;
-        }
-
         //public async Task<List<BoardModel>> GetMemberBoards(int userId) {
 
         //    var boards = await _context.BoardMembers
         //        .Include(x => x.Board.Creator)
         //        .Where(x => x.MemberId == userId)
         //        .Select(x => x.Board)
-                
+
         //        .ToListAsync();
 
         //    var boardModels = _mapper.Map<List<BoardModel>>(boards);
