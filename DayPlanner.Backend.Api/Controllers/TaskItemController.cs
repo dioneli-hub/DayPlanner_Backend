@@ -127,13 +127,7 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok(usersTodaysTasks);
         }
 
-        [HttpGet("{userId}/user-boards-tasks", Name = nameof(GetUserBoardsTasks))]
-        public async Task<ActionResult<List<TaskItemModel>>> GetUserBoardsTasks(
-            [FromRoute] int userId)
-        {
-            var usersTasks = await _taskItemProvider.GetUserBoardsTasks(userId);
-            return Ok(usersTasks);
-        }
+
 
         //[HttpGet("{userId}/users-todo-tasks", Name = nameof(GetUsersToDoTasks))]
         //public async Task<ActionResult<List<TaskItemModel>>> GetUsersToDoTasks(
@@ -142,6 +136,13 @@ namespace DayPlanner.Backend.Api.Controllers
         //    var usersToDoTasks = await _taskItemProvider.GetUsersToDoTasks(userId);
         //    return Ok(usersToDoTasks);
         //}
+        [HttpGet("{userId}/user-boards-tasks", Name = nameof(GetUserBoardsTasks))]
+        public async Task<ActionResult<List<TaskItemModel>>> GetUserBoardsTasks(
+           [FromRoute] int userId)
+        {
+            var usersTasks = await _taskItemProvider.GetUserBoardsTasks(userId);
+            return Ok(usersTasks);
+        }
 
         [HttpGet("{userId}/user-boards-todays-tasks", Name = nameof(GetUserBoardsTodaysTasks))]
         public async Task<ActionResult<List<TaskItemModel>>> GetUserBoardsTodaysTasks(
