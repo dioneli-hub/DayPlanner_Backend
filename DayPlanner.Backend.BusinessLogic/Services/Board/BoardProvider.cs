@@ -36,7 +36,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             var board = await _context.Boards
                 .Include(x => x.Creator)
                 .Where(b => b.Id == boardId)
-                .FirstOrDefaultAsync();
+                .SingleOrDefaultAsync();
 
             var boardModel = _mapper.Map<BoardModel>(board);
 

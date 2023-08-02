@@ -21,11 +21,17 @@ namespace DayPlanner.Backend.BusinessLogic.Services
         {
             var user = await _context.Users
             //.Include(x => x.Avatar)
-               .FirstOrDefaultAsync(x => x.Id == userId);
+               .SingleOrDefaultAsync(x => x.Id == userId);
 
-            var userModel =_mapper.Map<UserModel>(user);
+            //if (user == null)
+            //{
+            //    throw new ApplicationException("User not found.");
+            //}
+            var userModel = _mapper.Map<UserModel>(user);
 
-            return userModel!;
+            return userModel;
+
+
         }
 
         public async Task<bool> UserExists(string email)

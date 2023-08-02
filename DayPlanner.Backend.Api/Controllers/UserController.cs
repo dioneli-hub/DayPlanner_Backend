@@ -6,6 +6,7 @@ using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.Domain;
 using DayPlanner.Backend.ApiModels.User;
 using System.Linq.Expressions;
+using System.Net;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
@@ -57,7 +58,7 @@ namespace DayPlanner.Backend.Api.Controllers
         public async Task<ActionResult> Verify([FromBody]VerificationTokenModel verificationToken)
         {
             
-            await _userService.Verify(verificationToken.Token);
+            await _userService.Verify(WebUtility.UrlDecode(verificationToken.Token));
 
             return Ok("User successfully verified."); 
         }
