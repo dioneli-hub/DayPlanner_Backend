@@ -47,7 +47,7 @@ namespace DayPlanner.Backend.Tests.Controllers
             var userModel = A.Fake<UserModel>();
             var boardModel = A.Fake<BoardModel>();
 
-            A.CallTo(() => _boardMemberService.AddBoardMemberByEmail(boardId, email)).Returns(userId);
+            //A.CallTo(() => _boardMemberService.AddBoardMemberByEmail(boardId, email)).Returns(userId);
             A.CallTo(() => _userProvider.GetUser(userId)).Returns(userModel);
 
             var controller = new BoardMemberController(_boardMemberService, _boardMemberProvider, _userProvider);

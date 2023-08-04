@@ -1,6 +1,6 @@
 ﻿using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
 using System.Security.Principal;
-namespace DayPlanner.Backend.Api.Helper.HttpContext
+namespace DayPlanner.Backend.Api.Helper
 {
     public class UserHttpContextService : IUserContextService
     {
