@@ -14,6 +14,21 @@ namespace DayPlanner.Backend.DataAccess.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "RecurringPatterns",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TaskId = table.Column<int>(type: "int", nullable: false),
+                    RecurringType = table.Column<int>(type: "int", nullable: false),
+                    OccurencesNumber = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecurringPatterns", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BoardMembers",
                 columns: table => new
                 {
@@ -98,10 +113,12 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     DueDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     IsCompleted = table.Column<bool>(type: "bit", nullable: false),
+                    IsRecurring = table.Column<bool>(type: "bit", nullable: false),
                     CreatorId = table.Column<int>(type: "int", nullable: false),
                     BoardId = table.Column<int>(type: "int", nullable: false),
                     PerformerId = table.Column<int>(type: "int", nullable: true),
-                    IsOverdue = table.Column<bool>(type: "bit", nullable: false)
+                    IsOverdue = table.Column<bool>(type: "bit", nullable: false),
+                    ParentTaskId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -128,7 +145,7 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                 columns: new[] { "Id", "BoardId", "CreatedAt", "Email", "FirstName", "LastName", "PasswordHash", "ResetPasswordToken", "ResetPasswrodTokenExpiresAt", "SaltHash", "VerificationToken", "VerifiedAt" },
                 values: new object[,]
                 {
-                    { 1, null, new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "Dioneli@mail.ru1", "Di", "Li", "x/5fpi8JiMGXxM4Re4fzlamU61mQQMGNR50wxtwCaHw=", null, null, "mlJyHV/cYHAT2ErFkB8d5w==", "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==", new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)) },
+                    { 1, null, new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "Dioneli@mail.ru1", "Madison", "Walker", "x/5fpi8JiMGXxM4Re4fzlamU61mQQMGNR50wxtwCaHw=", null, null, "mlJyHV/cYHAT2ErFkB8d5w==", "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==", new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)) },
                     { 2, null, new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "D1!q2222@ru", "Sam", "McGregor", "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=", null, null, "FyQp6hr65+F7jI0btRXMLw==", "OCGOOxNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==", new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)) }
                 });
 
@@ -203,6 +220,9 @@ namespace DayPlanner.Backend.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Notifications");
+
+            migrationBuilder.DropTable(
+                name: "RecurringPatterns");
 
             migrationBuilder.DropTable(
                 name: "TaskItems");

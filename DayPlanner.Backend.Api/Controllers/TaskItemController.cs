@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using DayPlanner.Backend.ApiModels.TaskItem;
+using DayPlanner.Backend.ApiModels.Recurrence;
+using DayPlanner.Backend.BusinessLogic.Services.Recurrence;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
@@ -12,14 +14,17 @@ namespace DayPlanner.Backend.Api.Controllers
     {
         private readonly ITaskItemProvider _taskItemProvider;
         private readonly ITaskItemService _taskItemService;
+        private readonly IRecurrenceService _recurrenceService;
 
         public TaskItemController(
             ITaskItemProvider taskItemProvider,
-            ITaskItemService taskItemService
+            ITaskItemService taskItemService,
+            IRecurrenceService recurrenceService
             )
         {
             _taskItemService = taskItemService;
             _taskItemProvider = taskItemProvider;
+            _recurrenceService = recurrenceService;
         }
 
         [HttpGet(Name = nameof(GetTasks))]
@@ -185,6 +190,16 @@ namespace DayPlanner.Backend.Api.Controllers
         {
             await _taskItemService.RemoveTaskPerformer(taskId);
 
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("add-recurrence")]
+
+        public async Task<ActionResult> AddRecurrence([FromBody] RecurringPatternModel patternModel)
+        {
+            var patternId = await _recurrenceService.AddRecurrence( patternModel);
+            await _recurrenceService.GenerateChildTasks(patternId);
             return Ok();
         }
     }

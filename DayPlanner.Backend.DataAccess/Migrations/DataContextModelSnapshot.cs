@@ -87,6 +87,28 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.ToTable("Notifications", (string)null);
                 });
 
+            modelBuilder.Entity("DayPlanner.Backend.Domain.RecurringPattern", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("OccurencesNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecurringType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TaskId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RecurringPatterns", (string)null);
+                });
+
             modelBuilder.Entity("DayPlanner.Backend.Domain.TaskItem", b =>
                 {
                     b.Property<int>("Id")
@@ -112,6 +134,12 @@ namespace DayPlanner.Backend.DataAccess.Migrations
 
                     b.Property<bool>("IsOverdue")
                         .HasColumnType("bit");
+
+                    b.Property<bool>("IsRecurring")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("ParentTaskId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("PerformerId")
                         .HasColumnType("int");
@@ -189,8 +217,8 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                             Id = 1,
                             CreatedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
                             Email = "Dioneli@mail.ru1",
-                            FirstName = "Di",
-                            LastName = "Li",
+                            FirstName = "Madison",
+                            LastName = "Walker",
                             PasswordHash = "x/5fpi8JiMGXxM4Re4fzlamU61mQQMGNR50wxtwCaHw=",
                             SaltHash = "mlJyHV/cYHAT2ErFkB8d5w==",
                             VerificationToken = "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==",

@@ -142,7 +142,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 return new ServiceResponse<bool>()
                 {
                     IsSuccess = false,
-                    Message = "Could not find the user.",
+                    Message = "Could not find the user. Please, make sure the email you entered exists and try again.",
                     Data = true
                 };
             }

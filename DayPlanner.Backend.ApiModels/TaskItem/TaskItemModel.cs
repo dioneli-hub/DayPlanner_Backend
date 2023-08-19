@@ -15,6 +15,8 @@
         public UserModel Performer { get; set; }
 
         public bool IsOverdue{ get; set; }
+        public bool IsRecurring { get; set; }
+        public int ParentTaskId { get; set; }
 
     }
 }

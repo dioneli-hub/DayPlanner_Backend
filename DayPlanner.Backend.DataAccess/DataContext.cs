@@ -1,6 +1,7 @@
 ﻿using DayPlanner.Backend.DataAccess.Configurations;
 using DayPlanner.Backend.Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DayPlanner.Backend.DataAccess
 {
@@ -16,6 +17,7 @@ namespace DayPlanner.Backend.DataAccess
         public DbSet<User> Users { get; set; }
         public DbSet<BoardMember> BoardMembers { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<RecurringPattern> RecurringPatterns { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,6 +28,7 @@ namespace DayPlanner.Backend.DataAccess
             new UserConfiguration().Configure(modelBuilder.Entity<User>());
             new BoardMemberConfiguration().Configure(modelBuilder.Entity<BoardMember>());
             new NotificationConfiguration().Configure(modelBuilder.Entity<Notification>());
+            new RecurringPatternConfiguration().Configure(modelBuilder.Entity<RecurringPattern>());
 
 
 
@@ -44,8 +47,8 @@ namespace DayPlanner.Backend.DataAccess
                 new User
                 {
                     Id = 1,
-                    FirstName = "Di",
-                    LastName = "Li",
+                    FirstName = "Madison",
+                    LastName = "Walker",
                     Email = "Dioneli@mail.ru1",
                     CreatedAt = new DateTime(2020, 05, 09, 9, 15, 0),
                     PasswordHash = "x/5fpi8JiMGXxM4Re4fzlamU61mQQMGNR50wxtwCaHw=",
