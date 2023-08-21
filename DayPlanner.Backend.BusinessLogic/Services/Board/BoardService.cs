@@ -103,6 +103,10 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             var currentUser = await _context.Users
                 .Where(u => u.Id == currentUserId)
                 .FirstOrDefaultAsync();
+
+            if (currentUser == null) {
+                throw new ApplicationException("Error retrieving current user. Make sure you are logged in ang try again.");
+            }
             var board = await _context.Boards.FindAsync(boardId);
 
             var boardHasCurrentMember = await _context.BoardMembers.AnyAsync(x => x.BoardId == boardId && x.MemberId == currentUserId);
@@ -127,9 +131,20 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 Creator = currentUser,
                 BoardId = boardId,
                 Board = board,
-                PerformerId = null, //currentUserId,
-                Performer = null //currentUser
             };
+
+            if (addTaskItemToBoardModel.PerformerId != null)
+            {
+                var performerHasMembership = _context.BoardMembers.Any(m => m.BoardId == boardId && m.MemberId == addTaskItemToBoardModel.PerformerId);
+
+                if (performerHasMembership == false)
+                {
+                    throw new ApplicationException("This performer in not a member of the board.");
+                }
+
+                task.PerformerId = addTaskItemToBoardModel.PerformerId;
+                task.Performer = await _context.Users.Where(u => u.Id == addTaskItemToBoardModel.PerformerId).FirstOrDefaultAsync();
+            } 
 
             await _context.TaskItems.AddAsync(task);
             await _context.SaveChangesAsync();

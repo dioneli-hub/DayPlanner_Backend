@@ -5,6 +5,8 @@
         public string Text { get; set; }
 
         public DateTime DueDate { get; set; }
-        
+
+        public int? PerformerId { get; set; }
+
     }
 }

@@ -169,7 +169,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             task.PerformerId = newPerformerId;
             task.Performer = newPerformer;
 
-            _context.Update(task);
+            _context.TaskItems.Update(task);
             await _context.SaveChangesAsync();
 
             var notificationModel = new CreateNotificationModel
