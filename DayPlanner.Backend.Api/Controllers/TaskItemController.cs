@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using DayPlanner.Backend.ApiModels.TaskItem;
 using DayPlanner.Backend.ApiModels.Recurrence;
 using DayPlanner.Backend.BusinessLogic.Services.Recurrence;
+using DayPlanner.Backend.ApiModels;
+using DayPlanner.Backend.BusinessLogic.Services;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
@@ -200,6 +202,22 @@ namespace DayPlanner.Backend.Api.Controllers
             var patternId = await _recurrenceService.AddRecurrence( patternModel);
             await _recurrenceService.GenerateChildTasks(patternId);
             return Ok();
+        }
+
+        [HttpGet("{boardId}/get-board-tasks/grouped-by-performer", Name = nameof(GetBoardTasksGroupedByPerformer))]
+        public async Task<ActionResult<List<TaskGroup<UserModel>>>> GetBoardTasksGroupedByPerformer(int boardId)
+        {
+            var taskGroups = await _taskItemProvider.GetBoardTasksGroupedByPerformer( boardId);
+
+            return Ok(taskGroups);
+        }
+
+        [HttpGet("{boardId}/get-board-tasks/grouped-by-completed", Name = nameof(GetBoardTasksGroupedByCompleted))]
+        public async Task<ActionResult<List<TaskGroup<bool>>>> GetBoardTasksGroupedByCompleted(int boardId)
+        {
+            var taskGroups = await _taskItemProvider.GetBoardTasksGroupedByCompleted(boardId);
+
+            return Ok(taskGroups);
         }
 
 
