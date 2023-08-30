@@ -11,6 +11,6 @@ namespace DayPlanner.Backend.BusinessLogic.Interfaces
     public interface IRecurrenceService
     {
         Task<int> AddRecurrence(RecurringPatternModel patternModel);
-        Task GenerateChildTasks(int patternId);
+        Task<List<TaskItemModel>> GenerateChildTasks(int patternId);
     }
 }

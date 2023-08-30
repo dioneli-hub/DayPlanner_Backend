@@ -1,4 +1,5 @@
-﻿using DayPlanner.Backend.ApiModels.Recurrence;
+﻿using AutoMapper;
+using DayPlanner.Backend.ApiModels.Recurrence;
 using DayPlanner.Backend.ApiModels.TaskItem;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
@@ -17,9 +18,11 @@ namespace DayPlanner.Backend.BusinessLogic.Services.Recurrence
     public class RecurrenceService : IRecurrenceService
     {
         private readonly DataContext _context;
-        public RecurrenceService(DataContext context)
+        private readonly IMapper _mapper;
+        public RecurrenceService(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<int> AddRecurrence(RecurringPatternModel patternModel)
@@ -64,13 +67,11 @@ namespace DayPlanner.Backend.BusinessLogic.Services.Recurrence
             throw new ApplicationException("Something went wrong during setting recurrence.");
         }
 
-        //public async RecurringPatternModel R(RecurringPatternModel patternModel)
-        //{
 
-        //}
-
-        public async Task GenerateChildTasks(int patternId)
+        public async Task<List<TaskItemModel>> GenerateChildTasks(int patternId)
         {
+            
+
             var pattern = await _context.RecurringPatterns.SingleOrDefaultAsync(x => x.Id == patternId);
 
             if (pattern == null)
@@ -85,9 +86,10 @@ namespace DayPlanner.Backend.BusinessLogic.Services.Recurrence
                 throw new ApplicationException("Parent task with such ID not found");
             }
 
-            //List<TaskItem> childTasks = new List<TaskItem>();
 
             DateTimeOffset currentDueDate = task.DueDate;
+            var tasksList = new List<TaskItem>(); ;
+            var taskModelsList = new List<TaskItemModel>();
 
             for (int i = 0; i < pattern.OccurencesNumber; i++)
             {
@@ -105,26 +107,32 @@ namespace DayPlanner.Backend.BusinessLogic.Services.Recurrence
                         break;
                 }
 
+                
+
                 var childTask = new TaskItem
                 {
                     Text = task.Text,
                     DueDate = currentDueDate,
                     CreatedAt = DateTimeOffset.UtcNow,
                     CreatorId = task.CreatorId,
-                    Creator = task.Creator,
+                    Creator = await _context.Users.Where(x => x.Id == task.CreatorId).FirstOrDefaultAsync(),//task.Creator,
                     BoardId = task.BoardId,
-                    Board = task.Board,
+                    Board = await _context.Boards.Where(x => x.Id == task.BoardId).FirstOrDefaultAsync(),
                     PerformerId = task.PerformerId,
-                    Performer = task.Performer,
+                    Performer = await _context.Users.Where(x => x.Id == task.PerformerId).FirstOrDefaultAsync(),
                     ParentTaskId = task.Id
                 };
 
-                //childTasks.Add(childTask);
-                await _context.TaskItems.AddAsync(childTask);
+                
 
+                await _context.TaskItems.AddAsync(childTask);
+                await _context.SaveChangesAsync();
+                tasksList.Add(childTask);
             }
-            await _context.SaveChangesAsync();
-            //return childTasks;
+
+            taskModelsList = _mapper.Map<List<TaskItemModel>>(tasksList);
+            
+            return taskModelsList;
         }
     }
 

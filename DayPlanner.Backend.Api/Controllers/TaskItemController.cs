@@ -207,11 +207,11 @@ namespace DayPlanner.Backend.Api.Controllers
 
         [HttpPost]
         [Route("add-recurrence")]
-        public async Task<ActionResult> AddRecurrence([FromBody] RecurringPatternModel patternModel)
+        public async Task<ActionResult<List<TaskItemModel>>> AddRecurrence([FromBody] RecurringPatternModel patternModel)
         {
             var patternId = await _recurrenceService.AddRecurrence( patternModel);
-            await _recurrenceService.GenerateChildTasks(patternId);
-            return Ok();
+            var childTasks = await _recurrenceService.GenerateChildTasks(patternId);
+            return Ok(childTasks);
         }
 
         [HttpGet("{boardId}/get-board-tasks/grouped-by-performer", Name = nameof(GetBoardTasksGroupedByPerformer))]
