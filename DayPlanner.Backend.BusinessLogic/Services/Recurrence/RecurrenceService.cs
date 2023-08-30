@@ -29,10 +29,28 @@ namespace DayPlanner.Backend.BusinessLogic.Services.Recurrence
             {
                 task.IsRecurring = true;
 
+                RecurringType recurringType; 
+
+                switch (patternModel.RecurringType.ToLower())
+                {
+                    case "daily":
+                        recurringType = RecurringType.DAILY;
+                        break;
+                    case "weekly":
+                        recurringType = RecurringType.WEEKLY;
+                        break;
+                    case "monthly":
+                        recurringType = RecurringType.MONTHLY;
+                        break;
+                    default:
+                        recurringType = RecurringType.WEEKLY;
+                        break;
+                }
+
                 var pattern = new RecurringPattern
                 {
                     TaskId = patternModel.TaskId,
-                    RecurringType = (RecurringType)patternModel.RecurringType,
+                    RecurringType = recurringType,
                     OccurencesNumber = patternModel.OccurencesNumber
                 };
 

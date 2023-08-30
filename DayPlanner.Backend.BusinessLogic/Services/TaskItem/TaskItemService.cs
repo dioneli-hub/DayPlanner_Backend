@@ -148,19 +148,19 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
 
 
-            if(task.ChangeRecurredChildren == true)
-            {
-                var childTasks = await _context.TaskItems
-                                                 .Where(x => x.ParentTaskId == task.Id)
-                                                 .ToListAsync();
+            //if(task.ChangeRecurredChildren == true)
+            //{
+            //    var childTasks = await _context.TaskItems
+            //                                     .Where(x => x.ParentTaskId == task.Id)
+            //                                     .ToListAsync();
 
-                var timeDifference = editedTaskModel.DueDate - task.DueDate ;
-                foreach ( var childTask in childTasks)
-                {
-                    childTask.DueDate = childTask.DueDate + timeDifference;
-                    _context.Update(childTask);
-                }
-            }
+            //    var timeDifference = editedTaskModel.DueDate - task.DueDate ;
+            //    foreach ( var childTask in childTasks)
+            //    {
+            //        childTask.DueDate = childTask.DueDate + timeDifference;
+            //        _context.Update(childTask);
+            //    }
+            //}
 
             task.Text = editedTaskModel.Text;
             task.DueDate = editedTaskModel.DueDate;
