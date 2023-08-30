@@ -36,10 +36,10 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok(tasks);
         }
 
-        [HttpGet("{boardId}/get-board-tasks", Name = nameof(GetBoardTasks))]
-        public async Task<ActionResult<List<TaskItemModel>>> GetBoardTasks(int boardId)
+        [HttpGet("{boardId}/get-board-tasks/if-my-{ifMyTasks}", Name = nameof(GetBoardTasks))]
+        public async Task<ActionResult<List<TaskItemModel>>> GetBoardTasks(int boardId, bool ifMyTasks)
         {
-            var tasks = await _taskItemProvider.GetBoardTasks(boardId);
+            var tasks = await _taskItemProvider.GetBoardTasks(boardId, ifMyTasks);
 
             return Ok(tasks);
         }
@@ -175,6 +175,16 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok("Task marked as ToDo."); 
         }
 
+        [HttpPost("{taskId}/update-change-recurred-children", Name = nameof(UpdateChangeRecurredChildren))]
+        public async Task<ActionResult<bool>> UpdateChangeRecurredChildren(
+            [FromRoute] int taskId)
+        {
+            var updatedChangeRecurredChildren = await _taskItemService.UpdateChangeRecurredChildren(taskId);
+            return Ok(updatedChangeRecurredChildren);
+        }
+
+        
+
         [HttpPost]
         [Route("{taskId}/assign-performer/{performerId}")]
         public async Task<ActionResult<TaskItemModel>> AssignTaskPerformer(
@@ -212,10 +222,10 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok(taskGroups);
         }
 
-        [HttpGet("{boardId}/get-board-tasks/grouped-by-completed", Name = nameof(GetBoardTasksGroupedByCompleted))]
-        public async Task<ActionResult<List<TaskGroup<bool>>>> GetBoardTasksGroupedByCompleted(int boardId)
+        [HttpGet("{boardId}/get-board-tasks/grouped-by-completed/if-my-{ifMyTasks}", Name = nameof(GetBoardTasksGroupedByCompleted))]
+        public async Task<ActionResult<List<TaskGroup<bool>>>> GetBoardTasksGroupedByCompleted(int boardId, bool ifMyTasks)
         {
-            var taskGroups = await _taskItemProvider.GetBoardTasksGroupedByCompleted(boardId);
+            var taskGroups = await _taskItemProvider.GetBoardTasksGroupedByCompleted(boardId, ifMyTasks);
 
             return Ok(taskGroups);
         }

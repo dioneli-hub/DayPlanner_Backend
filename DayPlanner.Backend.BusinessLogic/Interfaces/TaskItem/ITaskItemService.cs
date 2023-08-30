@@ -13,7 +13,7 @@ namespace DayPlanner.Backend.BusinessLogic.Interfaces
         Task MarkTaskAsToDo(int taskId);
         Task AssignTaskPerformer(int taskId, int performerId);
         Task RemoveTaskPerformer(int taskId);
-
+        Task<bool> UpdateChangeRecurredChildren(int taskId);
         Task UpdateTaskOverdue(int taskId);
     }
 }

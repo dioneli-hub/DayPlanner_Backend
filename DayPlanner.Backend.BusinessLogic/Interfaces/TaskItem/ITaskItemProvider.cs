@@ -18,8 +18,8 @@ namespace DayPlanner.Backend.BusinessLogic.Interfaces
         Task<List<TaskItemModel>> GetUsersCompletedTasks(int userId);
         Task<List<TaskItemModel>> GetUsersToDoTasks(int userId);
 
-        Task<List<TaskItemModel>> GetBoardTasks(int boardId);
+        Task<List<TaskItemModel>> GetBoardTasks(int boardId, bool ifMyTasks);
         Task<List<TaskGroup<UserModel>>> GetBoardTasksGroupedByPerformer(int boardId);
-        Task<List<TaskGroup<bool>>> GetBoardTasksGroupedByCompleted(int boardId);
+        Task<List<TaskGroup<bool>>> GetBoardTasksGroupedByCompleted(int boardId, bool ifMyTasks);
     }
 }

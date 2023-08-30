@@ -6,8 +6,14 @@ using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
 using DayPlanner.Backend.DataAccess;
 using DayPlanner.Backend.Domain;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq.Expressions;
+using System.Linq;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Org.BouncyCastle.Tls;
 
 namespace DayPlanner.Backend.BusinessLogic.Services
 {
@@ -173,53 +179,133 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             return toDoTaskModels;
         }
 
-        public async Task<List<TaskItemModel>> GetBoardTasks(int boardId)
+        public async Task<List<TaskItemModel>> GetBoardTasks(int boardId, bool ifMyTasks)
         {
-            
-                var tasks = await _context.TaskItems
+
+            var query = _context.TaskItems
                 .Include(x => x.Board)
                 .Include(x => x.Performer)
                 .Include(x => x.Creator)
-                .Where(t => t.BoardId == boardId)
+                .Where(t => t.BoardId == boardId);
+
+            if (ifMyTasks == true)
+            {
+                var currentUserId = _userContextService.GetCurrentUserId();
+                query = query.Where(x => x.PerformerId == currentUserId);
+            }
+
+            var tasks = await query
                 .OrderByDescending(t => t.Id)
                 .ToListAsync();
 
-                var taskModels = _mapper.Map<List<TaskItemModel>>(tasks);
+            var taskModels = _mapper.Map<List<TaskItemModel>>(tasks);
 
-                return taskModels;
-
+            return taskModels;
         }
+
+        //public async Task<List<TaskGroup<TKey>>> GetGroupedAndFilteredBoardTasks<TKey>(int boardId, bool myTasks, string groupBy)
+        //{
+
+        //    var query =  _context.TaskItems
+        //       .Include(x => x.Board)
+        //       .Include(x => x.Performer)
+        //       .Include(x => x.Creator)
+        //       .AsQueryable();
+
+        //    if(myTasks == true)
+        //    {
+        //        var currentUserId = _userContextService.GetCurrentUserId();
+        //        query = query.Where(t => t.PerformerId == currentUserId);
+        //    }
+
+        //    var groupType = GetGroupType(groupBy);
+
+
+        //    var taskGroups =await  query
+        //        .GroupBy(GetGroupBySelector<TKey>(groupBy))
+        //       .Select(group => new TaskGroup<TKey>
+        //       {
+        //           GroupKey = _mapper.Map<TKey>(group.Key),
+        //           Tasks = _mapper.Map<List<TaskItemModel>>(group.ToList())
+        //       }).ToListAsync();
+
+
+        //    return taskGroups;
+        //}
+
+
+        //private Type GetGroupType(string groupBy)
+        //{
+        //    switch (groupBy.ToLower())
+        //    {
+        //        case "iscompleted":
+        //            return typeof(bool);
+        //        case "gender":
+        //            return typeof(UserModel);
+
+        //        default:
+        //            return null;
+        //    }
+        //}
+        //private Expression<Func<TaskItem, TKey>> GetGroupBySelector<TKey>(string groupBy)
+        //{
+        //    switch (groupBy.ToLower())
+        //    {
+        //        case "performer":
+        //            return t => (TKey)Convert.ChangeType(t.Performer, typeof(TKey));
+        //        case "iscompleted":
+        //            return t => (TKey)Convert.ChangeType(t.IsCompleted, typeof(TKey));
+        //        default:
+        //            return s => (TKey)Convert.ChangeType(s.Id, typeof(TKey)); 
+        //    }
+        //}
+
+
+
+
+
 
 
         public async Task<List<TaskGroup<UserModel>>> GetBoardTasksGroupedByPerformer(int boardId)
-        {
-            var taskGroups =  await _context.TaskItems
-               .Include(x => x.Board)
-               .Include(x => x.Performer)
-               .Include(x => x.Creator)
-               .Where(t => t.BoardId == boardId)
-               .GroupBy(task => task.Performer)
-               .Select(group => new TaskGroup<UserModel> 
-               {
-                    GroupKey = _mapper.Map <UserModel> (group.Key),
-                    Tasks = _mapper.Map<List<TaskItemModel>>(group.ToList())
-                }).ToListAsync();
-
-
-            return taskGroups;
-        }
-
-        public async Task<List<TaskGroup<bool>>> GetBoardTasksGroupedByCompleted(int boardId)
         {
             var taskGroups = await _context.TaskItems
                .Include(x => x.Board)
                .Include(x => x.Performer)
                .Include(x => x.Creator)
                .Where(t => t.BoardId == boardId)
-               .GroupBy(task => task.IsCompleted)
-               .Select(group => new TaskGroup<bool>
+               .GroupBy(task => task.Performer)
+               .Select(group => new TaskGroup<UserModel>
                {
-                   GroupKey = _mapper.Map<bool>(group.Key),
+                   GroupKey = _mapper.Map<UserModel>(group.Key),
+                   //GroupName = group.FirstOrDefault()?.FirstName
+                   Tasks = _mapper.Map<List<TaskItemModel>>(group.ToList())
+               }).ToListAsync();
+
+
+            return taskGroups;
+        }
+
+
+        public async Task<List<TaskGroup<bool>>> GetBoardTasksGroupedByCompleted(int boardId, bool ifMyTasks)
+        {
+            var query = _context.TaskItems
+               .Include(x => x.Board)
+               .Include(x => x.Performer)
+               .Include(x => x.Creator)
+               .Where(t => t.BoardId == boardId);
+
+            if(ifMyTasks == true)
+            {
+                var currentUserId = _userContextService.GetCurrentUserId();
+                query = query.Where(x => x.PerformerId == currentUserId);
+            }
+
+               var taskGroups = await query
+                .GroupBy(task => task.IsCompleted)
+                .Select(group => new TaskGroup<bool>
+               {
+                   GroupKey = group.Key,
+                   //GroupName = group.Key == true? "Done" : "To Do",
                    Tasks = _mapper.Map<List<TaskItemModel>>(group.ToList())
                }).ToListAsync();
 
@@ -228,10 +314,10 @@ namespace DayPlanner.Backend.BusinessLogic.Services
         }
     }
 
-    public class TaskGroup<T>
+public class TaskGroup<T>
     {
         public T GroupKey { get; set; }
-        public UserModel? Performer { get; set; }   
+        //public string GroupName { get; set; }
         public List<TaskItemModel> Tasks { get; set; }
     }
 }

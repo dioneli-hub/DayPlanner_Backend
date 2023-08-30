@@ -8,6 +8,7 @@
         public DateTimeOffset CreatedAt { get; set; }
         public bool IsCompleted { get; set; } = false;
         public bool IsRecurring { get; set; } = false;
+        public bool ChangeRecurredChildren { get; set; } = false;
         public int CreatorId { get; set; }
         public User Creator { get; set; }
         public int BoardId { get; set; }

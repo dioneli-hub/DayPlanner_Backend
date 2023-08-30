@@ -70,6 +70,46 @@ namespace DayPlanner.Backend.DataAccess
                     VerificationToken = "OCGOOxNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==",
                     VerifiedAt = new DateTime(2020, 05, 09, 9, 15, 0)
                 });
+
+            modelBuilder.Entity<User>().HasData(
+               new User
+               {
+                   Id = 3,
+                   FirstName = "Viktor",
+                   LastName = "Dimashevski",
+                   Email = "vikdim@gmail.com",
+                   CreatedAt = new DateTime(2020, 05, 09, 9, 15, 0),
+                   PasswordHash = "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=",
+                   SaltHash = "FyQp6hr65+F7jI0btRXMLw==",
+                   VerificationToken = "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==",
+                   VerifiedAt = new DateTime(2020, 05, 09, 9, 15, 0)
+               });
+            modelBuilder.Entity<User>().HasData(
+               new User
+               {
+                   Id = 4,
+                   FirstName = "Liam",
+                   LastName = "Wall",
+                   Email = "liamwall@gmail.com",
+                   CreatedAt = new DateTime(2020, 05, 09, 9, 15, 0),
+                   PasswordHash = "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=",
+                   SaltHash = "FyQp6hr65+F7jI0btRXMLw==",
+                   VerificationToken = "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==",
+                   VerifiedAt = new DateTime(2020, 05, 09, 9, 15, 0)
+               });
+            modelBuilder.Entity<User>().HasData(
+               new User
+               {
+                   Id = 5,
+                   FirstName = "Karen",
+                   LastName = "Tailor",
+                   Email = "kktailor@gmail.com",
+                   CreatedAt = new DateTime(2020, 05, 09, 9, 15, 0),
+                   PasswordHash = "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=",
+                   SaltHash = "FyQp6hr65+F7jI0btRXMLw==",
+                   VerificationToken = "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==",
+                   VerifiedAt = new DateTime(2020, 05, 09, 9, 15, 0)
+               });
         }
     }
 }

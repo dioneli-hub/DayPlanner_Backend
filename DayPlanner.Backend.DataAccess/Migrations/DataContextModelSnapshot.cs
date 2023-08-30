@@ -120,6 +120,9 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.Property<int>("BoardId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("ChangeRecurredChildren")
+                        .HasColumnType("bit");
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
 
@@ -234,6 +237,42 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                             PasswordHash = "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=",
                             SaltHash = "FyQp6hr65+F7jI0btRXMLw==",
                             VerificationToken = "OCGOOxNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==",
+                            VerifiedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0))
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            Email = "vikdim@gmail.com",
+                            FirstName = "Viktor",
+                            LastName = "Dimashevski",
+                            PasswordHash = "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=",
+                            SaltHash = "FyQp6hr65+F7jI0btRXMLw==",
+                            VerificationToken = "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==",
+                            VerifiedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0))
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            Email = "liamwall@gmail.com",
+                            FirstName = "Liam",
+                            LastName = "Wall",
+                            PasswordHash = "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=",
+                            SaltHash = "FyQp6hr65+F7jI0btRXMLw==",
+                            VerificationToken = "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==",
+                            VerifiedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0))
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            Email = "kktailor@gmail.com",
+                            FirstName = "Karen",
+                            LastName = "Tailor",
+                            PasswordHash = "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=",
+                            SaltHash = "FyQp6hr65+F7jI0btRXMLw==",
+                            VerificationToken = "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==",
                             VerifiedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0))
                         });
                 });

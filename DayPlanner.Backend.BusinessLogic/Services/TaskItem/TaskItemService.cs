@@ -83,7 +83,30 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             _context.Update(task);
             await _context.SaveChangesAsync();
         }
-    
+
+        public async Task<bool> UpdateChangeRecurredChildren(int taskId)
+        {
+            var currentUserId = _userContextService.GetCurrentUserId();
+            var task = await _context.TaskItems.FirstOrDefaultAsync(x => x.Id == taskId);
+
+            if (task == null)
+            {
+                throw new ApplicationException("Task not found.");
+            }
+
+            if (task.CreatorId != currentUserId)
+            {
+                throw new ApplicationException("Access denied: only task creator can update this information.");
+            }
+
+            task.ChangeRecurredChildren = !task.ChangeRecurredChildren;
+
+            _context.Update(task);
+            await _context.SaveChangesAsync();
+            return task.ChangeRecurredChildren;
+        }
+
+
 
         public async Task UpdateTask(int taskId, EditTaskItemModel editedTaskModel)
         {
@@ -120,6 +143,22 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 if (boardFromModel.Creator.Id != currentUserId && boardHasCurrentMemberNullFlag)
                 {
                     throw new ApplicationException("Access denied: cannot move task to the board if the user is neither its owner nor its member.");
+                }
+            }
+
+
+
+            if(task.ChangeRecurredChildren == true)
+            {
+                var childTasks = await _context.TaskItems
+                                                 .Where(x => x.ParentTaskId == task.Id)
+                                                 .ToListAsync();
+
+                var timeDifference = editedTaskModel.DueDate - task.DueDate ;
+                foreach ( var childTask in childTasks)
+                {
+                    childTask.DueDate = childTask.DueDate + timeDifference;
+                    _context.Update(childTask);
                 }
             }
 

@@ -114,6 +114,7 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     IsCompleted = table.Column<bool>(type: "bit", nullable: false),
                     IsRecurring = table.Column<bool>(type: "bit", nullable: false),
+                    ChangeRecurredChildren = table.Column<bool>(type: "bit", nullable: false),
                     CreatorId = table.Column<int>(type: "int", nullable: false),
                     BoardId = table.Column<int>(type: "int", nullable: false),
                     PerformerId = table.Column<int>(type: "int", nullable: true),
@@ -146,7 +147,10 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                 values: new object[,]
                 {
                     { 1, null, new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "Dioneli@mail.ru1", "Madison", "Walker", "x/5fpi8JiMGXxM4Re4fzlamU61mQQMGNR50wxtwCaHw=", null, null, "mlJyHV/cYHAT2ErFkB8d5w==", "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==", new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)) },
-                    { 2, null, new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "D1!q2222@ru", "Sam", "McGregor", "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=", null, null, "FyQp6hr65+F7jI0btRXMLw==", "OCGOOxNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==", new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)) }
+                    { 2, null, new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "D1!q2222@ru", "Sam", "McGregor", "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=", null, null, "FyQp6hr65+F7jI0btRXMLw==", "OCGOOxNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==", new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)) },
+                    { 3, null, new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "vikdim@gmail.com", "Viktor", "Dimashevski", "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=", null, null, "FyQp6hr65+F7jI0btRXMLw==", "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==", new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)) },
+                    { 4, null, new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "liamwall@gmail.com", "Liam", "Wall", "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=", null, null, "FyQp6hr65+F7jI0btRXMLw==", "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==", new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)) },
+                    { 5, null, new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "kktailor@gmail.com", "Karen", "Tailor", "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=", null, null, "FyQp6hr65+F7jI0btRXMLw==", "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==", new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)) }
                 });
 
             migrationBuilder.CreateIndex(
