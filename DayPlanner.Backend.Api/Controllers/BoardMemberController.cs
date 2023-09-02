@@ -69,8 +69,18 @@ namespace DayPlanner.Backend.Api.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> AcceptInvitation([FromBody] SmallTokenModel invitationToken)
         {
-            //var boardMemberResponse = await _boardMemberService.AcceptInvitation(invitationToken.Token);
-            var boardMemberResponse = await _boardMemberService.AcceptInvitation(WebUtility.UrlDecode(invitationToken.Token));
+            var boardMemberResponse = await _boardMemberService.AcceptInvitation(invitationToken.Token);
+            //var boardMemberResponse = await _boardMemberService.AcceptInvitation(WebUtility.UrlDecode(invitationToken.Token));
+
+            return Ok(boardMemberResponse);
+        }
+
+        [HttpPatch("decline-invitation", Name = nameof(DeclineInvitation))]
+        [AllowAnonymous]
+        public async Task<ActionResult> DeclineInvitation([FromBody] SmallTokenModel invitationToken)
+        {
+            var boardMemberResponse = await _boardMemberService.DeclineInvitation(invitationToken.Token);
+            //var boardMemberResponse = await _boardMemberService.DeclineInvitation(WebUtility.UrlDecode(invitationToken.Token));
 
             return Ok(boardMemberResponse);
         }

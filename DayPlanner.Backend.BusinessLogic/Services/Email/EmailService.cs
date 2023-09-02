@@ -119,14 +119,14 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                     <p>Dear User,</p>
                     <p>{inviter.Email} is inviting you to join board {board.Name} at DayPlanner. In order to accomplish your join process, please, register (if you are still not with us) and click the Join button below:</p>
                     <p>
-                        <a href='http://localhost:4200/join-board?token={Uri.EscapeDataString(invitation.InvitationToken)}' class='button' type='button'>Join</a>
+                        <a href='http://localhost:4200/join-board?token={Uri.EscapeDataString(invitation.InvitationToken)}&decline=false' class='button' type='button'>Join</a>
                     </p>
                     <hr/>
                     <p>Or decline the invitation: </p>
                     <p>
-                        <a href='http://localhost:4200/join-board?decline=true' class='button' type='button'>Decline</a>
+                        <a href='http://localhost:4200/join-board?token={Uri.EscapeDataString(invitation.InvitationToken)}&decline=true' class='button' type='button'>Decline</a>
                     </p>
-                    <p><i>Please, ignore this email if you did not try to register at DayPlanner.</i></p>
+                    <p><i>Please, ignore this email if you did not intend to register at DayPlanner.</i></p>
                 </div>
             </body>
             </html>";

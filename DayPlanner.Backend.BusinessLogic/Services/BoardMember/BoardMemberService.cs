@@ -121,6 +121,26 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 };
             }
 
+            if(invitation.IsDeclined == true)
+            {
+                return new ServiceResponse<BoardMemberModel>
+                {
+                    IsSuccess = false,
+                    Message = "Invitation has already been declined.",
+                    Data = null
+                };
+            }
+
+            if(invitation.IsAcceptedAt != null)
+            {
+                return new ServiceResponse<BoardMemberModel>
+                {
+                    IsSuccess = false,
+                    Message = "This invitation has already been accepted.",
+                    Data = null
+                };
+            }
+
             var invitedUser = await _context.Users
                     .FirstOrDefaultAsync(x => x.Email == invitation.InvitedPersonEmail);
 
@@ -134,24 +154,19 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 };
             }
 
-
-            invitation.IsAcceptedAt = DateTimeOffset.UtcNow;
-
-            _context.BoardMembershipInvitations.Update(invitation);
-            await _context.SaveChangesAsync();
-
             var board = await _context.Boards
-                   .FirstOrDefaultAsync(x => x.Id == invitation.BoardId);
+                .FirstOrDefaultAsync(x => x.Id == invitation.BoardId);
 
             if (board == null)
             {
                 return new ServiceResponse<BoardMemberModel>
                 {
                     IsSuccess = false,
-                    Message = "Sorry... Board no longer exists.",
+                    Message = "Board no longer exists.",
                     Data = null
                 };
             }
+
 
             var boardMember = new BoardMember
             {
@@ -160,6 +175,9 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 MemberId = invitedUser.Id,
                 Member = invitedUser
             };
+
+            invitation.IsAcceptedAt = DateTimeOffset.UtcNow;
+            _context.BoardMembershipInvitations.Update(invitation);
 
             await _context.BoardMembers.AddAsync(boardMember);
             await _context.SaveChangesAsync();
@@ -175,11 +193,83 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             return new ServiceResponse<BoardMemberModel>
             {
                 IsSuccess = true,
-                Message = "Member successfully added.",
+                Message = $"You were successfully added to board \"{board.Name}\".",
                 Data = _mapper.Map<BoardMemberModel>(boardMember)
             };
         }
 
+
+
+        public async Task<ServiceResponse<BoardMemberModel>> DeclineInvitation(string invitationToken)
+        {
+
+            var invitation = await _context.BoardMembershipInvitations
+                    .Where(x => x.InvitationToken == invitationToken)
+                    .FirstOrDefaultAsync();
+
+            if (invitation == null)
+            {
+                return new ServiceResponse<BoardMemberModel>
+                {
+                    IsSuccess = false,
+                    Message = "Invitation is not valid.",
+                    Data = null
+                };
+            }
+
+            if (invitation.IsDeclined == true)
+            {
+                return new ServiceResponse<BoardMemberModel>
+                {
+                    IsSuccess = false,
+                    Message = "Invitation has already been declined.",
+                    Data = null
+                };
+            }
+
+            if (invitation.IsAcceptedAt != null)
+            {
+                return new ServiceResponse<BoardMemberModel>
+                {
+                    IsSuccess = false,
+                    Message = "This invitation has already been accepted.",
+                    Data = null
+                };
+            }
+
+            var board = await _context.Boards
+                   .FirstOrDefaultAsync(x => x.Id == invitation.BoardId);
+
+            if (board == null)
+            {
+                return new ServiceResponse<BoardMemberModel>
+                {
+                    IsSuccess = false,
+                    Message = "Board no longer exists.",
+                    Data = null
+                };
+            }
+
+            invitation.IsDeclined = true;
+
+            _context.BoardMembershipInvitations.Update(invitation);
+            await _context.SaveChangesAsync();
+
+            var notificationModel = new CreateNotificationModel
+            {
+                Text = $"{invitation.InvitedPersonEmail} declined your invitation to join board \"{board.Name}\".",
+                UserId = invitation.InviterId
+            };
+
+            await _notificationService.CreateNotification(notificationModel);
+
+            return new ServiceResponse<BoardMemberModel>
+            {
+                IsSuccess = true,
+                Message = $"Invitation to board \"{board.Name}\" declined.",
+                Data = null
+            };
+        }
 
         public async Task DeleteBoardMember(int boardId, int userId)
         {

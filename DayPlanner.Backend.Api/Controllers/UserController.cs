@@ -58,7 +58,8 @@ namespace DayPlanner.Backend.Api.Controllers
         public async Task<ActionResult> Verify([FromBody] SmallTokenModel verificationToken)
         {
 
-            await _userService.Verify(WebUtility.UrlDecode(verificationToken.Token));
+            //await _userService.Verify(WebUtility.UrlDecode(verificationToken.Token));
+            await _userService.Verify(verificationToken.Token);
 
             return Ok("User successfully verified.");
         }
