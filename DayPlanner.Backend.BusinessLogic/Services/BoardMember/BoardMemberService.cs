@@ -1,7 +1,10 @@
-﻿using DayPlanner.Backend.ApiModels;
+﻿using AutoMapper;
+using DayPlanner.Backend.ApiModels;
+using DayPlanner.Backend.ApiModels.BoardMember;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.BusinessLogic.Interfaces.BoardMember;
 using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
+using DayPlanner.Backend.BusinessLogic.Services.Security;
 using DayPlanner.Backend.DataAccess;
 using DayPlanner.Backend.Domain;
 using Microsoft.EntityFrameworkCore;
@@ -13,15 +16,24 @@ namespace DayPlanner.Backend.BusinessLogic.Services
         private readonly DataContext _context;
         private readonly IUserContextService _userContextService;
         private readonly INotificationService _notificationService;
+        private readonly IEmailService _emailService;
+        private readonly IHashService _hashService;
+        private readonly IMapper _mapper;
         public BoardMemberService(DataContext context,
             IUserContextService userContextService,
-            INotificationService notificationService) 
+            INotificationService notificationService,
+            IEmailService emailService,
+            IHashService hashService,
+            IMapper mapper) 
         {
             _context = context;
             _userContextService = userContextService;
             _notificationService = notificationService;
+            _emailService = emailService;
+            _hashService = hashService;
+            _mapper = mapper;
         }
-        public async Task<ServiceResponse<int>> AddBoardMemberByEmail(int boardId, string userEmail)
+        public async Task<ServiceResponse<int>> InviteBoardMemberByEmail(int boardId, string userEmail)
         {
             var currentUserId = _userContextService.GetCurrentUserId();
             
@@ -47,20 +59,6 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 };
             }
 
-            var userToAdd = await _context.Users
-                .Where(u => u.Email == userEmail)
-                .FirstOrDefaultAsync();
-
-            if (userToAdd == null)
-            {
-                return new ServiceResponse<int>
-                {
-                    IsSuccess = false,
-                    Message = "User with such email not found.",
-                    Data = 0
-                };
-            }
-
             var hasAnyMemberByEmail = await _context.BoardMembers.Where(x => (x.Member.Email == userEmail) && (x.BoardId == boardId)).AnyAsync();
             if (hasAnyMemberByEmail)
             {
@@ -72,35 +70,116 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 };
             }
 
+            var invitation = new BoardMembershipInvitation
+            {
+                InviterId = currentUserId,
+                InvitedPersonEmail = userEmail,
+                BoardId = boardId,
+                CreatedAt = DateTimeOffset.UtcNow,
+                InvitationToken = _hashService.GenerateRandomToken(64)
+            };
+
+            await _context.BoardMembershipInvitations.AddAsync(invitation);
+            await _context.SaveChangesAsync();
+
+            var success = await _emailService.SendInviteToBoardEmail(currentUserId, userEmail, boardId);
+
+            if (success == true)
+            {
+                return new ServiceResponse<int>
+                {
+                    IsSuccess = true,
+                    Message = "Invitation successfully sent to the user's mailbox.",
+                    Data = invitation.Id
+                };
+            }
+
+            return new ServiceResponse<int>
+            {
+                IsSuccess = false,
+                Message = "Invitation has not been sent. Please, check email entered for correctness!",
+                Data = 0
+            };
+
+        }
+
+        
+        public async Task<ServiceResponse<BoardMemberModel>> AcceptInvitation(string invitationToken)
+        {
+
+            var invitation = await _context.BoardMembershipInvitations
+                    .Where(x => x.InvitationToken == invitationToken)
+                    .FirstOrDefaultAsync();
+
+            if (invitation == null)
+            {
+                return new ServiceResponse<BoardMemberModel>
+                {
+                    IsSuccess = false,
+                    Message = "Invitation is not valid.",
+                    Data = null
+                };
+            }
+
+            var invitedUser = await _context.Users
+                    .FirstOrDefaultAsync(x => x.Email == invitation.InvitedPersonEmail);
+
+            if (invitedUser == null)
+            {
+                return new ServiceResponse<BoardMemberModel>
+                {
+                    IsSuccess = false,
+                    Message = "User has to be registered to join board.",
+                    Data = null
+                };
+            }
+
+
+            invitation.IsAcceptedAt = DateTimeOffset.UtcNow;
+
+            _context.BoardMembershipInvitations.Update(invitation);
+            await _context.SaveChangesAsync();
+
+            var board = await _context.Boards
+                   .FirstOrDefaultAsync(x => x.Id == invitation.BoardId);
+
+            if (board == null)
+            {
+                return new ServiceResponse<BoardMemberModel>
+                {
+                    IsSuccess = false,
+                    Message = "Sorry... Board no longer exists.",
+                    Data = null
+                };
+            }
+
             var boardMember = new BoardMember
             {
-                BoardId = boardId,
+                BoardId = board.Id,
                 Board = board,
-                MemberId = userToAdd.Id,
-                Member = userToAdd
+                MemberId = invitedUser.Id,
+                Member = invitedUser
             };
 
             await _context.BoardMembers.AddAsync(boardMember);
             await _context.SaveChangesAsync();
-            
-            var currentUser = await _context.Users
-                .Where(x => x.Id == currentUserId)
-                .FirstOrDefaultAsync();
 
             var notificationModel = new CreateNotificationModel
             {
-                Text = $"{currentUser?.FirstName} {currentUser?.LastName} added you to board \"{board.Name}\".",
-                UserId = userToAdd.Id
+                Text = $"{invitedUser?.FirstName} {invitedUser?.LastName} accepted your invitation to join board \"{board.Name}\".",
+                UserId = invitation.InviterId
             };
+
             await _notificationService.CreateNotification(notificationModel);
 
-            return new ServiceResponse<int>
+            return new ServiceResponse<BoardMemberModel>
             {
                 IsSuccess = true,
                 Message = "Member successfully added.",
-                Data = boardMember.MemberId
+                Data = _mapper.Map<BoardMemberModel>(boardMember)
             };
         }
+
 
         public async Task DeleteBoardMember(int boardId, int userId)
         {

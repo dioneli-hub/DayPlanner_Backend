@@ -5,6 +5,7 @@ using MailKit.Net.Smtp;
 using Microsoft.EntityFrameworkCore;
 using MimeKit;
 using DayPlanner.Backend.Domain;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace DayPlanner.Backend.BusinessLogic.Services
 {
@@ -73,6 +74,80 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             else throw new ApplicationException("User to send email to not found...");
         }
 
+        public async Task<bool> SendInviteToBoardEmail(int inviterId, string invitedPersonEmail, int boardId)
+        {
+
+            var inviter = await _context.Users.Where(x => x.Id == inviterId).FirstOrDefaultAsync();
+            var board = await _context.Boards.Where(x => x.Id == boardId).FirstOrDefaultAsync();
+
+            if (inviter == null)
+            {
+                throw new ApplicationException("The inviting person seems not to be registered at DayPlanner...");
+            }
+
+            var invitation = await _context.BoardMembershipInvitations.Where(x => (x.InviterId == inviterId) && (x.InvitedPersonEmail == invitedPersonEmail) && (x.BoardId == boardId)).FirstOrDefaultAsync();
+
+            if (invitation == null)
+            {
+                throw new ApplicationException("Such invitation not found in the DayPlanner's database...");
+            }
+
+            try
+            {
+                var email = new MimeMessage();
+                email.From.Add(MailboxAddress.Parse("dianka_levchenko@outlook.com"));//this.FromEmail
+                email.To.Add(MailboxAddress.Parse(invitedPersonEmail));// user.Email //"round.world@bk.ru"
+                email.Subject = "DayPlanner Board Join Invitation";
+
+                var bodyBuilder = new BodyBuilder();
+
+                bodyBuilder.HtmlBody = $@"
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset='utf-8'>
+                <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+                <title>DayPlanner: Verify Your Email</title>
+                <meta name='viewport' content='width=device-width, initial-scale=1'>
+                <style>
+
+                </style>
+            </head>
+            <body>
+                <div class='container'>
+                    <h1>Board Join Invitation</h1>
+                    <p>Dear User,</p>
+                    <p>{inviter.Email} is inviting you to join board {board.Name} at DayPlanner. In order to accomplish your join process, please, register (if you are still not with us) and click the Join button below:</p>
+                    <p>
+                        <a href='http://localhost:4200/join-board?token={Uri.EscapeDataString(invitation.InvitationToken)}' class='button' type='button'>Join</a>
+                    </p>
+                    <hr/>
+                    <p>Or decline the invitation: </p>
+                    <p>
+                        <a href='http://localhost:4200/join-board?decline=true' class='button' type='button'>Decline</a>
+                    </p>
+                    <p><i>Please, ignore this email if you did not try to register at DayPlanner.</i></p>
+                </div>
+            </body>
+            </html>";
+
+                email.Body = bodyBuilder.ToMessageBody();
+                using var smtp = new SmtpClient();
+                smtp.Connect("smtp.outlook.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
+                await smtp.AuthenticateAsync("dianka_levchenko@outlook.com", "Lbfyf1mamapapacats");//this.FromEmail, this.FromEmailPswd
+                smtp.Send(email);
+                smtp.Disconnect(true);
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+            return false;
+        }
+
+
         private string GetHTMLVerificationTemplate(User user)
         {
             return $@"
@@ -90,7 +165,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             <body>
                 <div class='container'>
                     <h1>Email Verification</h1>
-                    <p>Dearr {user.FirstName} {user.LastName},</p>
+                    <p>Dear {user.FirstName} {user.LastName},</p>
                     <p>Thank you for joining us at DayPlanner. In order to accomplish your registration process, click the verification button below:</p>
                     <p>
                         <a href='http://localhost:4200/verify?token={Uri.EscapeDataString(user.VerificationToken)}' class='button' type='button'>Verify</a>
@@ -146,5 +221,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             ";
         }
+
+ 
     }
 }

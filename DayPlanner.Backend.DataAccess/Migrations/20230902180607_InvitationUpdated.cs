@@ -8,11 +8,30 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DayPlanner.Backend.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class UserUpdated : Migration
+    public partial class InvitationUpdated : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "BoardMembershipInvitations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    InviterId = table.Column<int>(type: "int", nullable: false),
+                    InvitedPersonEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BoardId = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    InvitationToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsAcceptedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    IsDeclined = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BoardMembershipInvitations", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "RecurringPatterns",
                 columns: table => new
@@ -221,6 +240,9 @@ namespace DayPlanner.Backend.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "BoardMembers");
+
+            migrationBuilder.DropTable(
+                name: "BoardMembershipInvitations");
 
             migrationBuilder.DropTable(
                 name: "Notifications");

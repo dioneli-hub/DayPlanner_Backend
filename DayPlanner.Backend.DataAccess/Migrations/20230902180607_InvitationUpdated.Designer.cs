@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DayPlanner.Backend.DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230830154614_UserUpdated")]
-    partial class UserUpdated
+    [Migration("20230902180607_InvitationUpdated")]
+    partial class InvitationUpdated
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -63,6 +63,42 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.HasIndex("MemberId");
 
                     b.ToTable("BoardMembers", (string)null);
+                });
+
+            modelBuilder.Entity("DayPlanner.Backend.Domain.BoardMembershipInvitation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BoardId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("InvitationToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InvitedPersonEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("InviterId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset?>("IsAcceptedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsDeclined")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BoardMembershipInvitations", (string)null);
                 });
 
             modelBuilder.Entity("DayPlanner.Backend.Domain.Notification", b =>

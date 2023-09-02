@@ -8,6 +8,8 @@ using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.BusinessLogic.Services;
 using DayPlanner.Backend.ApiModels.User;
 using DayPlanner.Backend.Domain;
+using System.Net;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
@@ -41,26 +43,36 @@ namespace DayPlanner.Backend.Api.Controllers
         }
 
         [HttpPost]
-        [Route("boards/{boardId}/add-board-member-by-email/{userEmail}", Name = nameof(AddBoardMemberByEmail))]
-        public async Task<ActionResult<UserModel>> AddBoardMemberByEmail(
+        [Route("boards/{boardId}/add-board-member-by-email/{userEmail}", Name = nameof(InviteBoardMemberByEmail))]
+        public async Task<ActionResult<ServiceResponse<int>>> InviteBoardMemberByEmail(
             [FromRoute] int boardId,
             [FromRoute] string userEmail 
             )
         {
-            var userIdResponse = await _boardMemberService.AddBoardMemberByEmail(boardId, userEmail);
-            var userId = userIdResponse.Data;
+            var invitationIdResponse = await _boardMemberService.InviteBoardMemberByEmail(boardId, userEmail);
+            //var userId = userIdResponse.Data;
 
-            var user = await _userProvider.GetUser(userId);
+            //var user = await _userProvider.GetUser(userId);
 
-            var response = new ServiceResponse<UserModel>
-            {
-                IsSuccess = userIdResponse.IsSuccess,
-                Message = userIdResponse.Message,
-                Data = user
-            };
+            //var response = new ServiceResponse<UserModel>
+            //{
+            //    IsSuccess = userIdResponse.IsSuccess,
+            //    Message = userIdResponse.Message,
+            //    Data = user
+            //};
 
-            return Ok(response);
+            return Ok(invitationIdResponse);
 
+        }
+
+        [HttpPatch("accept-invitation", Name = nameof(AcceptInvitation))]
+        [AllowAnonymous]
+        public async Task<ActionResult> AcceptInvitation([FromBody] SmallTokenModel invitationToken)
+        {
+            //var boardMemberResponse = await _boardMemberService.AcceptInvitation(invitationToken.Token);
+            var boardMemberResponse = await _boardMemberService.AcceptInvitation(WebUtility.UrlDecode(invitationToken.Token));
+
+            return Ok(boardMemberResponse);
         }
 
         [HttpDelete]

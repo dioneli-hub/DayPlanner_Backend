@@ -18,6 +18,7 @@ namespace DayPlanner.Backend.DataAccess
         public DbSet<BoardMember> BoardMembers { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<RecurringPattern> RecurringPatterns { get; set; }
+        public DbSet<BoardMembershipInvitation> BoardMembershipInvitations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,6 +30,7 @@ namespace DayPlanner.Backend.DataAccess
             new BoardMemberConfiguration().Configure(modelBuilder.Entity<BoardMember>());
             new NotificationConfiguration().Configure(modelBuilder.Entity<Notification>());
             new RecurringPatternConfiguration().Configure(modelBuilder.Entity<RecurringPattern>());
+            new BoardMembershipInvitationConfiguration().Configure(modelBuilder.Entity<BoardMembershipInvitation>());
 
 
 

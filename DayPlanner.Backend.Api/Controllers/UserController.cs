@@ -55,12 +55,12 @@ namespace DayPlanner.Backend.Api.Controllers
 
         [HttpPatch("verify", Name = nameof(Verify))]
         [AllowAnonymous]
-        public async Task<ActionResult> Verify([FromBody]VerificationTokenModel verificationToken)
+        public async Task<ActionResult> Verify([FromBody] SmallTokenModel verificationToken)
         {
-            
+
             await _userService.Verify(WebUtility.UrlDecode(verificationToken.Token));
 
-            return Ok("User successfully verified."); 
+            return Ok("User successfully verified.");
         }
 
         [HttpPatch("forgot-password", Name = nameof(ForgotPassword))]
@@ -88,11 +88,6 @@ namespace DayPlanner.Backend.Api.Controllers
         //    var userBoards = await _userProvider.GetUserBoards(userId);
         //    return Ok(userBoards);
         //}
-    }
-
-    public class VerificationTokenModel
-    {
-        public string Token { get; set; }
     }
 }
 
