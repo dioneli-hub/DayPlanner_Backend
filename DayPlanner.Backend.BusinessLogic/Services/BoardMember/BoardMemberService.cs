@@ -104,7 +104,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
         }
 
         
-        public async Task<ServiceResponse<BoardMemberModel>> AcceptInvitation(string invitationToken)
+        public async Task<ServiceResponse<SmallBoardMemberModel>> AcceptInvitation(string invitationToken)
         {
 
             var invitation = await _context.BoardMembershipInvitations
@@ -113,7 +113,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             if (invitation == null)
             {
-                return new ServiceResponse<BoardMemberModel>
+                return new ServiceResponse<SmallBoardMemberModel>
                 {
                     IsSuccess = false,
                     Message = "Invitation is not valid.",
@@ -123,7 +123,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             if(invitation.IsDeclined == true)
             {
-                return new ServiceResponse<BoardMemberModel>
+                return new ServiceResponse<SmallBoardMemberModel>
                 {
                     IsSuccess = false,
                     Message = "Invitation has already been declined.",
@@ -133,7 +133,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             if(invitation.IsAcceptedAt != null)
             {
-                return new ServiceResponse<BoardMemberModel>
+                return new ServiceResponse<SmallBoardMemberModel>
                 {
                     IsSuccess = false,
                     Message = "This invitation has already been accepted.",
@@ -146,7 +146,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             if (invitedUser == null)
             {
-                return new ServiceResponse<BoardMemberModel>
+                return new ServiceResponse<SmallBoardMemberModel>
                 {
                     IsSuccess = false,
                     Message = "User has to be registered to join board.",
@@ -159,7 +159,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             if (board == null)
             {
-                return new ServiceResponse<BoardMemberModel>
+                return new ServiceResponse<SmallBoardMemberModel>
                 {
                     IsSuccess = false,
                     Message = "Board no longer exists.",
@@ -190,17 +190,17 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             await _notificationService.CreateNotification(notificationModel);
 
-            return new ServiceResponse<BoardMemberModel>
+            return new ServiceResponse<SmallBoardMemberModel>
             {
                 IsSuccess = true,
                 Message = $"You were successfully added to board \"{board.Name}\".",
-                Data = _mapper.Map<BoardMemberModel>(boardMember)
+                Data = _mapper.Map<SmallBoardMemberModel>(boardMember)
             };
         }
 
 
 
-        public async Task<ServiceResponse<BoardMemberModel>> DeclineInvitation(string invitationToken)
+        public async Task<ServiceResponse<SmallBoardMemberModel>> DeclineInvitation(string invitationToken)
         {
 
             var invitation = await _context.BoardMembershipInvitations
@@ -209,7 +209,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             if (invitation == null)
             {
-                return new ServiceResponse<BoardMemberModel>
+                return new ServiceResponse<SmallBoardMemberModel>
                 {
                     IsSuccess = false,
                     Message = "Invitation is not valid.",
@@ -219,7 +219,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             if (invitation.IsDeclined == true)
             {
-                return new ServiceResponse<BoardMemberModel>
+                return new ServiceResponse<SmallBoardMemberModel>
                 {
                     IsSuccess = false,
                     Message = "Invitation has already been declined.",
@@ -229,7 +229,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             if (invitation.IsAcceptedAt != null)
             {
-                return new ServiceResponse<BoardMemberModel>
+                return new ServiceResponse<SmallBoardMemberModel>
                 {
                     IsSuccess = false,
                     Message = "This invitation has already been accepted.",
@@ -241,8 +241,8 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                    .FirstOrDefaultAsync(x => x.Id == invitation.BoardId);
 
             if (board == null)
-            {
-                return new ServiceResponse<BoardMemberModel>
+            {   
+                return new ServiceResponse<SmallBoardMemberModel>
                 {
                     IsSuccess = false,
                     Message = "Board no longer exists.",
@@ -263,7 +263,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             await _notificationService.CreateNotification(notificationModel);
 
-            return new ServiceResponse<BoardMemberModel>
+            return new ServiceResponse<SmallBoardMemberModel>
             {
                 IsSuccess = true,
                 Message = $"Invitation to board \"{board.Name}\" declined.",

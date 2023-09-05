@@ -6,11 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DayPlanner.Backend.BusinessLogic.Interfaces
+namespace DayPlanner.Backend.BusinessLogic.Interfaces.Recurrence
 {
     public interface IRecurrenceService
     {
         Task<int> AddRecurrence(RecurringPatternModel patternModel);
         Task<List<TaskItemModel>> GenerateChildTasks(int patternId);
+        Task RescheduleChildTasks(int parentTaskId, TimeSpan timeShift);
+
     }
 }

@@ -6,6 +6,7 @@ using DayPlanner.Backend.BusinessLogic.Services.Security;
 using DayPlanner.Backend.BusinessLogic.Services.Auth;
 using DayPlanner.Backend.BusinessLogic.Services.Validation;
 using DayPlanner.Backend.BusinessLogic.Services.Recurrence;
+using DayPlanner.Backend.BusinessLogic.Interfaces.Recurrence;
 
 namespace DayPlanner.Backend.BusinessLogic
 {
@@ -30,6 +31,7 @@ namespace DayPlanner.Backend.BusinessLogic
             services.AddScoped<INotificationProvider, NotificationProvider>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IRecurrenceService, RecurrenceService>();
+            services.AddScoped<IRecurrenceProvider, RecurrenceProvider>();
 
 
             return services;

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using DayPlanner.Backend.ApiModels.Recurrence;
 using DayPlanner.Backend.ApiModels.TaskItem;
-using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
+using DayPlanner.Backend.BusinessLogic.Interfaces.Recurrence;
 using DayPlanner.Backend.DataAccess;
 using DayPlanner.Backend.Domain;
 using Microsoft.EntityFrameworkCore;
@@ -133,6 +133,26 @@ namespace DayPlanner.Backend.BusinessLogic.Services.Recurrence
             taskModelsList = _mapper.Map<List<TaskItemModel>>(tasksList);
             
             return taskModelsList;
+        }
+
+        public async Task RescheduleChildTasks(int parentTaskId, TimeSpan timeShift)
+        {
+            try
+            {
+                var childTasks = await _context.TaskItems
+                                     .Where(x => x.ParentTaskId == parentTaskId)
+                                     .ToListAsync();
+
+                foreach (var childTask in childTasks)
+                {
+                    childTask.DueDate = childTask.DueDate + timeShift;
+                    _context.Update(childTask);
+                }
+            } catch
+            {
+                throw new ApplicationException("Something went wrong during rescheduling child tasks...");
+            };
+
         }
     }
 

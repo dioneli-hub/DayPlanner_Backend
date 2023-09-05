@@ -54,10 +54,27 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 throw new ApplicationException("Task not found.");
             }
 
-            //if (task.CreatorId != currentUserId)
-            //{
-            //    throw new ApplicationException("Access denied.");
-            //}
+            if (task.CreatorId != currentUserId)
+            {
+                throw new ApplicationException("Access denied. Only task creator can delete the task.");
+            }
+
+            if (task.ChangeRecurredChildren == true)
+            {
+
+                try
+                {
+                    var childTasks = await _context.TaskItems
+                                         .Where(x => x.ParentTaskId == task.Id)
+                                         .ToListAsync();
+                  
+                   _context.TaskItems.RemoveRange(childTasks);
+                }
+                catch
+                {
+                    throw new ApplicationException("Something went wrong during deleting child tasks...");
+                };
+            }
 
             _context.TaskItems.Remove(task);
             await _context.SaveChangesAsync();
@@ -108,7 +125,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
 
 
-        public async Task UpdateTask(int taskId, EditTaskItemModel editedTaskModel)
+        public async Task<int> UpdateTask(int taskId, EditTaskItemModel editedTaskModel)
         {
             if (editedTaskModel == null)
             {
@@ -147,20 +164,30 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             }
 
 
+            if (task.ChangeRecurredChildren == true && task.DueDate != editedTaskModel.DueDate)
+            {
 
-            //if(task.ChangeRecurredChildren == true)
-            //{
-            //    var childTasks = await _context.TaskItems
-            //                                     .Where(x => x.ParentTaskId == task.Id)
-            //                                     .ToListAsync();
+                var timeDifference = editedTaskModel.DueDate - task.DueDate;
+                try
+                {
+                    var childTasks = await _context.TaskItems
+                                         .Where(x => x.ParentTaskId == task.Id)
+                                         .ToListAsync();
 
-            //    var timeDifference = editedTaskModel.DueDate - task.DueDate ;
-            //    foreach ( var childTask in childTasks)
-            //    {
-            //        childTask.DueDate = childTask.DueDate + timeDifference;
-            //        _context.Update(childTask);
-            //    }
-            //}
+                    foreach (var childTask in childTasks)
+                    {
+                        //    if (childTask.IsCompleted == false)
+                        //    {
+                        childTask.DueDate = childTask.DueDate + timeDifference;
+                            _context.Update(childTask);
+                        //}
+                    }
+                }
+                catch
+                {
+                    throw new ApplicationException("Something went wrong during rescheduling child tasks...");
+                };
+            }
 
             task.Text = editedTaskModel.Text;
             task.DueDate = editedTaskModel.DueDate;
@@ -168,6 +195,8 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             _context.Update(task);
             await _context.SaveChangesAsync();
+
+            return task.Id;
         }
 
         public async Task UpdateTaskPerformer(int taskId, int newPerformerId)

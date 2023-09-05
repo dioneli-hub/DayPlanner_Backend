@@ -6,6 +6,7 @@ using DayPlanner.Backend.ApiModels.Recurrence;
 using DayPlanner.Backend.BusinessLogic.Services.Recurrence;
 using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.BusinessLogic.Services;
+using DayPlanner.Backend.BusinessLogic.Interfaces.Recurrence;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
@@ -17,16 +18,19 @@ namespace DayPlanner.Backend.Api.Controllers
         private readonly ITaskItemProvider _taskItemProvider;
         private readonly ITaskItemService _taskItemService;
         private readonly IRecurrenceService _recurrenceService;
+        private readonly IRecurrenceProvider _recurrenceProvider;
 
         public TaskItemController(
             ITaskItemProvider taskItemProvider,
             ITaskItemService taskItemService,
-            IRecurrenceService recurrenceService
+            IRecurrenceService recurrenceService,
+            IRecurrenceProvider recurrenceProvider
             )
         {
             _taskItemService = taskItemService;
             _taskItemProvider = taskItemProvider;
             _recurrenceService = recurrenceService;
+            _recurrenceProvider = recurrenceProvider;
         }
 
         [HttpGet(Name = nameof(GetTasks))]
@@ -65,10 +69,17 @@ namespace DayPlanner.Backend.Api.Controllers
            [FromRoute] int taskId,
            [FromBody] EditTaskItemModel editedTaskModel)
         {
-            await _taskItemService.UpdateTask(taskId, editedTaskModel);
-            var updatedTask = await _taskItemProvider.GetTask(taskId);
+            var updatedTaskId = await _taskItemService.UpdateTask(taskId, editedTaskModel);
+            var updatedTask = await _taskItemProvider.GetTask(updatedTaskId);
 
             return Ok(updatedTask);
+        }
+
+        [HttpGet("recurrence/{parentTaskId}/child-tasks", Name = nameof(GetChildTasks))]
+        public async Task<ActionResult<List<TaskItemModel>>> GetChildTasks([FromRoute] int parentTaskId)
+        {
+            var childTasks = await _recurrenceProvider.GetChildTasks(parentTaskId);
+            return Ok(childTasks);
         }
 
         [HttpPatch("{taskId}/update-performer/{newPerformerId}", Name = nameof(UpdateTaskPerformer))]

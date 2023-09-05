@@ -117,6 +117,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 // Use custom error handler
-app.UseMiddleware<ErrorHandler>();
+//app.UseMiddleware<ErrorHandler>();
 
 app.Run();

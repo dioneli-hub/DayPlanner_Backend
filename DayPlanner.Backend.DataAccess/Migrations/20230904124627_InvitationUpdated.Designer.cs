@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DayPlanner.Backend.DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230902180607_InvitationUpdated")]
+    [Migration("20230904124627_InvitationUpdated")]
     partial class InvitationUpdated
     {
         /// <inheritdoc />
@@ -282,7 +282,7 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                         {
                             Id = 3,
                             CreatedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
-                            Email = "vikdim@gmail.com",
+                            Email = "vikdim@madeup.mail.com",
                             FirstName = "Viktor",
                             LastName = "Dimashevski",
                             PasswordHash = "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=",
@@ -294,7 +294,7 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                         {
                             Id = 4,
                             CreatedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
-                            Email = "liamwall@gmail.com",
+                            Email = "liamwall@madeup.mail.com",
                             FirstName = "Liam",
                             LastName = "Wall",
                             PasswordHash = "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=",
@@ -306,7 +306,7 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                         {
                             Id = 5,
                             CreatedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
-                            Email = "kktailor@gmail.com",
+                            Email = "kktailor@madeup.mail.com",
                             FirstName = "Karen",
                             LastName = "Tailor",
                             PasswordHash = "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=",
