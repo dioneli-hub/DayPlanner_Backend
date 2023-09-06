@@ -4,6 +4,8 @@ using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.ApiModels.User;
 using static MailKit.Net.Imap.ImapMailboxFilter;
+using Microsoft.EntityFrameworkCore;
+using MimeKit.Encodings;
 
 namespace DayPlanner.Backend.BusinessLogic.Services
 {
@@ -102,13 +104,12 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 PasswordHash = Convert.ToBase64String(hashModel.Hash),
                 SaltHash = Convert.ToBase64String(hashModel.Salt),
                 CreatedAt = DateTimeOffset.UtcNow,
-                VerificationToken = _hashService.GenerateRandomToken(64)
             };
 
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
 
-            await _emailService.SendVerificationEmail(user.Id);
+            await GenerateAndSendVerificationToken(user);
 
             return new ServiceResponse<UserModel>()
             {
@@ -116,6 +117,63 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 Message = "User successfully registered. Email verification is needed. Please, check your mailbox to confirm your email address.",
                 Data = await _userProvider.GetUser(user.Id)
             };
+        }
+
+        public async Task<ServiceResponse<UserModel>> TriggerVerification(VerifyUserModel model)
+        {
+            try
+            {
+                var hasAnyByEmail = await _userProvider.UserExists(model.Email);
+
+                if (!hasAnyByEmail)
+                {
+                    return new ServiceResponse<UserModel>()
+                    {
+                        IsSuccess = false,
+                        Message = "The user with this email does not exist.",
+                        Data = null
+                    };
+                }
+
+                var user = await _context.Users
+                                    .Where(x => x.Email == model.Email)
+                                    .FirstOrDefaultAsync();
+
+                await GenerateAndSendVerificationToken(user);
+
+                return new ServiceResponse<UserModel>()
+                {
+                    IsSuccess = true,
+                    Message = "New email verification message sent to the your mailbox. Please, check it to confirm your email address.",
+                    Data = await _userProvider.GetUser(user.Id)
+                };
+            }
+            catch
+            {
+                return new ServiceResponse<UserModel>()
+                {
+                    IsSuccess = false,
+                    Message = "Something went wrong. Please, make sure the email entered is valid and the user is already registered.",
+                    Data = null
+                };
+            }
+        }
+
+
+        private async Task GenerateAndSendVerificationToken(User user)
+        {
+            try
+            {
+                user.VerificationToken = _hashService.GenerateRandomToken(64);
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+
+                await _emailService.SendVerificationEmail(user.Id);
+            }
+            catch
+            {
+                throw new ApplicationException("Some error has occured while trying to send verification token to the user's mailbox.");
+            }
         }
 
         public async Task Verify(string verificationToken)

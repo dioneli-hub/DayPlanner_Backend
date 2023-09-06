@@ -59,9 +59,19 @@ namespace DayPlanner.Backend.Api.Controllers
         {
 
             //await _userService.Verify(WebUtility.UrlDecode(verificationToken.Token));
-            await _userService.Verify(verificationToken.Token);
+            await _userService.Verify(verificationToken.Token);E
 
             return Ok("User successfully verified.");
+        }
+
+
+        [HttpPost("trigger-verification", Name = nameof(TriggerVerification))]
+        [AllowAnonymous]
+        public async Task<ActionResult<ServiceResponse<UserModel>>> TriggerVerification([FromBody] VerifyUserModel model)
+        {
+            var response = await _userService.TriggerVerification(model);
+
+            return Ok(response);
         }
 
         [HttpPatch("forgot-password", Name = nameof(ForgotPassword))]

@@ -10,5 +10,6 @@ namespace DayPlanner.Backend.BusinessLogic.Interfaces
         Task Verify(string verificationToken);
         Task<ServiceResponse<bool>> ForgotPassword(string email);
         Task<ServiceResponse<bool>> ResetPassword(ResetPasswordModel model);
+        Task<ServiceResponse<UserModel>> TriggerVerification(VerifyUserModel model);
     }
 }
