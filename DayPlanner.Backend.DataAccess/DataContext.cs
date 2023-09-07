@@ -1,7 +1,6 @@
 ﻿using DayPlanner.Backend.DataAccess.Configurations;
 using DayPlanner.Backend.Domain;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DayPlanner.Backend.DataAccess
 {

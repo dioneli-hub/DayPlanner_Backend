@@ -1,12 +1,9 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.Domain;
 using DayPlanner.Backend.ApiModels.User;
-using System.Linq.Expressions;
-using System.Net;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
@@ -17,17 +14,14 @@ namespace DayPlanner.Backend.Api.Controllers
     {
         private readonly IUserProvider _userProvider;
         private readonly IUserService _userService;
-        private readonly IEmailService _emailService;
 
         public UserController(
             IUserProvider userProvider,
-            IUserService userService,
-            IEmailService emailService
+            IUserService userService
             )
         {
             _userProvider = userProvider;
             _userService = userService;
-            _emailService = emailService;
         }
 
         [HttpGet(Name = nameof(GetAllUsers))]
@@ -59,7 +53,7 @@ namespace DayPlanner.Backend.Api.Controllers
         {
 
             //await _userService.Verify(WebUtility.UrlDecode(verificationToken.Token));
-            await _userService.Verify(verificationToken.Token);E
+            await _userService.Verify(verificationToken.Token);
 
             return Ok("User successfully verified.");
         }
@@ -91,14 +85,6 @@ namespace DayPlanner.Backend.Api.Controllers
 
             return Ok(response);
         }
-
-
-        //[HttpGet("{userId}/user-boards", Name = nameof(GetUserBoards))]
-        //public async Task<ActionResult<BoardModel>> GetUserBoards(int userId)
-        //{
-        //    var userBoards = await _userProvider.GetUserBoards(userId);
-        //    return Ok(userBoards);
-        //}
     }
 }
 

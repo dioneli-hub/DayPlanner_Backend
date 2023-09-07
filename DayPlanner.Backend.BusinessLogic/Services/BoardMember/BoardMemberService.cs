@@ -4,7 +4,6 @@ using DayPlanner.Backend.ApiModels.BoardMember;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.BusinessLogic.Interfaces.BoardMember;
 using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
-using DayPlanner.Backend.BusinessLogic.Services.Security;
 using DayPlanner.Backend.DataAccess;
 using DayPlanner.Backend.Domain;
 using Microsoft.EntityFrameworkCore;
@@ -82,24 +81,24 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             await _context.BoardMembershipInvitations.AddAsync(invitation);
             await _context.SaveChangesAsync();
 
-            var success = await _emailService.SendInviteToBoardEmail(currentUserId, userEmail, boardId);
-
-            if (success == true)
+            try
             {
+                await _emailService.SendInviteToBoardEmail(currentUserId, userEmail, boardId);
                 return new ServiceResponse<int>
                 {
                     IsSuccess = true,
                     Message = "Invitation successfully sent to the user's mailbox.",
                     Data = invitation.Id
                 };
-            }
-
-            return new ServiceResponse<int>
+            } catch
             {
-                IsSuccess = false,
-                Message = "Invitation has not been sent. Please, check email entered for correctness!",
-                Data = 0
-            };
+                return new ServiceResponse<int>
+                {
+                    IsSuccess = false,
+                    Message = "Invitation has not been sent. Please, check email entered for correctness!",
+                    Data = 0
+                };
+            }
 
         }
 
@@ -273,71 +272,86 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
         public async Task DeleteBoardMember(int boardId, int userId)
         {
-            var currentUserId = _userContextService.GetCurrentUserId();
-            var board = await _context.Boards.FindAsync(boardId);
-
-            if (board == null)
+            try
             {
-                throw new ApplicationException("Board not found.");
+                var currentUserId = _userContextService.GetCurrentUserId();
+                var board = await _context.Boards.FindAsync(boardId);
+
+                if (board == null)
+                {
+                    throw new ApplicationException("Board not found.");
+                }
+
+                if (board.CreatorId != currentUserId)
+                {
+                    throw new ApplicationException("Access denied: only board owner can delete board members.");
+                }
+
+                var boardMember = await _context.BoardMembers
+                    .Where(m => m.BoardId == boardId && m.MemberId == userId)
+                    .FirstOrDefaultAsync();
+
+                _context.BoardMembers.Remove(boardMember);
+                await _context.SaveChangesAsync();
+
+                var notificationModel = new CreateNotificationModel
+                {
+                    Text = $"You were deleted from board \"{board.Name}\".",
+                    UserId = userId
+                };
+                await _notificationService.CreateNotification(notificationModel);
             }
-
-            if (board.CreatorId != currentUserId)
+            catch
             {
-                throw new ApplicationException("Access denied: only board owner can delete board members.");
+                throw new ApplicationException("Some error has occured while deleting the board member.");
             }
-
-            var boardMember = await _context.BoardMembers
-                .Where(m => m.BoardId == boardId && m.MemberId == userId)
-                .FirstOrDefaultAsync();
-
-            _context.BoardMembers.Remove(boardMember);
-            await _context.SaveChangesAsync();
-
-            var notificationModel = new CreateNotificationModel
-            {
-                Text = $"You were deleted from board \"{board.Name}\".",
-                UserId = userId
-            };
-            await _notificationService.CreateNotification(notificationModel);
+            
         }
 
         public async Task LeaveBoard(int userId, int boardId)
         {
-            var currentUserId = _userContextService.GetCurrentUserId();
-            var board = await _context.Boards.FindAsync(boardId);
-
-            if(userId != currentUserId)
+            try
             {
-                throw new ApplicationException("Cannot leave as another user.");
+                var currentUserId = _userContextService.GetCurrentUserId();
+                var board = await _context.Boards.FindAsync(boardId);
+
+                if (userId != currentUserId)
+                {
+                    throw new ApplicationException("Cannot leave as another user.");
+                }
+
+                if (board == null)
+                {
+                    throw new ApplicationException("Board not found.");
+                }
+
+                var boardMembership = await _context.BoardMembers
+                    .Where(m => m.BoardId == boardId && m.MemberId == userId)
+                    .FirstOrDefaultAsync();
+
+                if (boardMembership == null)
+                {
+                    throw new ApplicationException("Current user is not a member of the board.");
+                }
+
+                _context.BoardMembers.Remove(boardMembership);
+                await _context.SaveChangesAsync();
+
+                var currentUser = await _context.Users
+                                    .Where(x => x.Id == currentUserId)
+                                    .FirstOrDefaultAsync();
+
+                var notificationModel = new CreateNotificationModel
+                {
+                    Text = $"{currentUser?.FirstName} {currentUser?.LastName} left board \"{board.Name}\".",
+                    UserId = board.CreatorId
+                };
+                await _notificationService.CreateNotification(notificationModel);
+            } catch
+            {
+                throw new ApplicationException("Some error has occured while attemting to leave the board.");
             }
-
-            if (board == null)
-            {
-                throw new ApplicationException("Board not found.");
-            }
-
-            var boardMembership = await _context.BoardMembers
-                .Where(m => m.BoardId == boardId && m.MemberId == userId)
-                .FirstOrDefaultAsync();
-
-            if (boardMembership == null)
-            {
-                throw new ApplicationException("Current user is not a member of the board.");
-            }
-
-            _context.BoardMembers.Remove(boardMembership);
-            await _context.SaveChangesAsync();
-
-            var currentUser = await _context.Users
-                                .Where(x=> x.Id == currentUserId)
-                                .FirstOrDefaultAsync();
-
-            var notificationModel = new CreateNotificationModel
-            {
-                Text = $"{currentUser?.FirstName} {currentUser?.LastName} left board \"{board.Name}\".",
-                UserId = board.CreatorId
-            };
-            await _notificationService.CreateNotification(notificationModel);
+           
         }
     }
 }

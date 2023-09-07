@@ -1,7 +1,7 @@
-﻿using DayPlanner.Backend.Api.Controllers;
-using DayPlanner.Backend.ApiModels;
+﻿using DayPlanner.Backend.ApiModels.BoardMember;
 using DayPlanner.Backend.BusinessLogic.Interfaces.BoardMember;
-using FluentAssertions;
+using DayPlanner.Backend.Domain;
+using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DayPlanner.Backend.Tests.Controllers
@@ -38,7 +38,7 @@ namespace DayPlanner.Backend.Tests.Controllers
 
 
         [Fact] //improve test
-        public async void BoardMemberController_AddBoardMemberByEmail_ReturnOkAndUserModel()
+        public async void BoardMemberController_InviteBoardMemberByEmail_ReturnOkAndUserModel()
         {
             //Arrange
             int boardId = 1;
@@ -53,11 +53,11 @@ namespace DayPlanner.Backend.Tests.Controllers
             var controller = new BoardMemberController(_boardMemberService, _boardMemberProvider, _userProvider);
 
             //Act
-            var result = await controller.AddBoardMemberByEmail(boardId, email);
+            var result = await controller.InviteBoardMemberByEmail(boardId, email);
 
             //Assert
             result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(ActionResult<UserModel>));
+            result.Should().BeOfType(typeof(ActionResult<ServiceResponse<int>>));
         }
 
         [Fact]
@@ -114,6 +114,54 @@ namespace DayPlanner.Backend.Tests.Controllers
             result.Should().BeOfType(typeof(ActionResult<List<BoardModel>>));
         }
 
+        [Fact]
+        public async void BoardMemberController_AcceptInvitation_ReturnOkAndSmallBoardMemberModelServiceResponse()
+        {
+            //Arrange
+            var invitationTokenModel = A.Fake<SmallTokenModel>();
+            A.CallTo(() => _boardMemberService.AcceptInvitation(invitationTokenModel.Token)).Returns(new ServiceResponse<SmallBoardMemberModel>());
+            var controller = new BoardMemberController(_boardMemberService, _boardMemberProvider, _userProvider);
 
+            //Act
+            var result = await controller.AcceptInvitation(invitationTokenModel);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Should().BeOfType(typeof(ActionResult<ServiceResponse<SmallBoardMemberModel>>));
+        }
+
+        [Fact]
+        public async void BoardMemberController_DeclineInvitation_ReturnOkAndSmallBoardMemberModelServiceResponse()
+        {
+            //Arrange
+            var invitationTokenModel = A.Fake<SmallTokenModel>();
+            A.CallTo(() => _boardMemberService.DeclineInvitation(invitationTokenModel.Token)).Returns(new ServiceResponse<SmallBoardMemberModel>());
+            var controller = new BoardMemberController(_boardMemberService, _boardMemberProvider, _userProvider);
+
+            //Act
+            var result = await controller.DeclineInvitation(invitationTokenModel);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Should().BeOfType(typeof(ActionResult<ServiceResponse<SmallBoardMemberModel>>));
+        }
+
+
+        [Fact]
+        public async void BoardMemberController_GetSuggestedSearchEmails_ReturnOkAndStringList()
+        {
+            //Arrange
+            string emailSearched = "example@email.com";
+            A.CallTo(() => _boardMemberProvider.GetSuggestedSearchEmails(emailSearched)).Returns(new List<string>());
+            var controller = new BoardMemberController(_boardMemberService, _boardMemberProvider, _userProvider);
+
+            //Act
+            var result = await controller.GetSuggestedSearchEmails(emailSearched);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Should().BeOfType(typeof(ActionResult<List<string>>));
+        }
     }
 }
+

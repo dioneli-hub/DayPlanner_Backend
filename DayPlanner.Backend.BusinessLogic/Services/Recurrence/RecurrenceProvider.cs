@@ -3,11 +3,6 @@ using DayPlanner.Backend.ApiModels.TaskItem;
 using DayPlanner.Backend.BusinessLogic.Interfaces.Recurrence;
 using DayPlanner.Backend.DataAccess;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DayPlanner.Backend.BusinessLogic.Services.Recurrence
 {

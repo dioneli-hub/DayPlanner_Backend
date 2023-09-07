@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DayPlanner.Backend.Domain
+﻿namespace DayPlanner.Backend.Domain
 {
     public class ServiceResponse<T>
     {

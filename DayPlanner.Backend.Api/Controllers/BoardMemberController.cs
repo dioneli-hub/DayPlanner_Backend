@@ -1,15 +1,10 @@
-﻿using AutoMapper;
-using DayPlanner.Backend.ApiModels;
+﻿using DayPlanner.Backend.ApiModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using DayPlanner.Backend.BusinessLogic.Interfaces.BoardMember;
-using DayPlanner.Backend.ApiModels.BoardMember;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
-using DayPlanner.Backend.BusinessLogic.Services;
-using DayPlanner.Backend.ApiModels.User;
 using DayPlanner.Backend.Domain;
-using System.Net;
-using Microsoft.EntityFrameworkCore.Metadata;
+using DayPlanner.Backend.ApiModels.BoardMember;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
@@ -50,16 +45,6 @@ namespace DayPlanner.Backend.Api.Controllers
             )
         {
             var invitationIdResponse = await _boardMemberService.InviteBoardMemberByEmail(boardId, userEmail);
-            //var userId = userIdResponse.Data;
-
-            //var user = await _userProvider.GetUser(userId);
-
-            //var response = new ServiceResponse<UserModel>
-            //{
-            //    IsSuccess = userIdResponse.IsSuccess,
-            //    Message = userIdResponse.Message,
-            //    Data = user
-            //};
 
             return Ok(invitationIdResponse);
 
@@ -67,7 +52,7 @@ namespace DayPlanner.Backend.Api.Controllers
 
         [HttpPatch("accept-invitation", Name = nameof(AcceptInvitation))]
         [AllowAnonymous]
-        public async Task<ActionResult> AcceptInvitation([FromBody] SmallTokenModel invitationToken)
+        public async Task<ActionResult<ServiceResponse<SmallBoardMemberModel>>> AcceptInvitation([FromBody] SmallTokenModel invitationToken)
         {
             var boardMemberResponse = await _boardMemberService.AcceptInvitation(invitationToken.Token);
             //var boardMemberResponse = await _boardMemberService.AcceptInvitation(WebUtility.UrlDecode(invitationToken.Token));
@@ -77,7 +62,7 @@ namespace DayPlanner.Backend.Api.Controllers
 
         [HttpPatch("decline-invitation", Name = nameof(DeclineInvitation))]
         [AllowAnonymous]
-        public async Task<ActionResult> DeclineInvitation([FromBody] SmallTokenModel invitationToken)
+        public async Task<ActionResult<ServiceResponse<SmallBoardMemberModel>>> DeclineInvitation([FromBody] SmallTokenModel invitationToken)
         {
             var boardMemberResponse = await _boardMemberService.DeclineInvitation(invitationToken.Token);
             //var boardMemberResponse = await _boardMemberService.DeclineInvitation(WebUtility.UrlDecode(invitationToken.Token));
@@ -125,7 +110,7 @@ namespace DayPlanner.Backend.Api.Controllers
         //}
 
         [HttpGet("get-suggested-search-users/{emailSearched}", Name = nameof(GetSuggestedSearchEmails))]
-        public async Task<ActionResult<List<UserModel>>> GetSuggestedSearchEmails([FromRoute] string emailSearched)
+        public async Task<ActionResult<List<string>>> GetSuggestedSearchEmails([FromRoute] string emailSearched)
         {
 
             var emails = await _boardMemberProvider.GetSuggestedSearchEmails(emailSearched);

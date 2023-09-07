@@ -1,5 +1,4 @@
-﻿using Azure;
-using DayPlanner.Backend.Api.Managers;
+﻿using DayPlanner.Backend.Api.Managers;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.DataAccess;
 using DayPlanner.Backend.Domain;
@@ -66,11 +65,4 @@ namespace DayPlanner.Backend.BusinessLogic.Services
     }
 }
 
-            //var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
-
-            //if (user == null || !await _passwordVerifier.Verify(user.Id, password))
-            //{
-            //    throw new ApplicationException("Incorrect email or password.");
-            //}
-
-            //return _jwtService.GenerateJwtToken(user.Id);
+   

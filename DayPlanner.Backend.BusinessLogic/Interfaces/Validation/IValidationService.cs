@@ -1,6 +1,4 @@
-﻿
-
-namespace DayPlanner.Backend.BusinessLogic.Interfaces
+﻿namespace DayPlanner.Backend.BusinessLogic.Interfaces
 {
     public interface IValidationService
     {

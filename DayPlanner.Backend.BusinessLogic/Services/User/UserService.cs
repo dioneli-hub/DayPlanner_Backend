@@ -3,9 +3,7 @@ using DayPlanner.Backend.Domain;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.ApiModels.User;
-using static MailKit.Net.Imap.ImapMailboxFilter;
 using Microsoft.EntityFrameworkCore;
-using MimeKit.Encodings;
 
 namespace DayPlanner.Backend.BusinessLogic.Services
 {
@@ -31,31 +29,6 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
 
         }
-        //public async Task<int> RegisterUser(CreateUserModel model)
-        //{
-        //    var hasAnyByEmail = await _context.Users.AnyAsync(x => x.Email == model.Email);
-        //    if (hasAnyByEmail)
-        //    {
-        //        throw new ApplicationException("User with the email provided already exists.");
-        //    }
-
-        //    var hashModel = _hashService.Generate(model.Password); 
-
-        //    var user = new User
-        //    {
-        //        FirstName = model.FirstName,
-        //        LastName = model.LastName,
-        //        Email = model.Email,
-        //        PasswordHash = Convert.ToBase64String(hashModel.Hash),
-        //        SaltHash = Convert.ToBase64String(hashModel.Salt),
-        //        CreatedAt = DateTimeOffset.UtcNow
-        //    };
-
-        //    await _context.Users.AddAsync(user);
-        //    await _context.SaveChangesAsync();
-
-        //    return user.Id;
-        //}
 
         public async Task<ServiceResponse<UserModel>> RegisterUser(CreateUserModel model)
         {
@@ -178,15 +151,23 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
         public async Task Verify(string verificationToken)
         {
-            var user =  _context.Users
-                .FirstOrDefault(x => x.VerificationToken == verificationToken);
-
-            if (user == null)
+            try
             {
-                throw new ApplicationException("Could not verify unexisting user.");
+                var user = _context.Users
+               .FirstOrDefault(x => x.VerificationToken == verificationToken);
+
+                if (user == null)
+                {
+                    throw new ApplicationException("Could not verify unexisting user.");
+                }
+                user.VerifiedAt = DateTimeOffset.UtcNow;
+                await _context.SaveChangesAsync();
             }
-            user.VerifiedAt = DateTimeOffset.UtcNow;
-            await _context.SaveChangesAsync();
+            catch
+            {
+                throw new ApplicationException("Some error has occured while attempring to verify the user.");
+            }
+           
         }
 
         public async Task<ServiceResponse<bool>> ForgotPassword(string email)

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Net;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Net;
 using Newtonsoft.Json;
-using Microsoft.AspNetCore.Http;
 
 namespace DayPlanner.Backend.Api.Helper
 {
