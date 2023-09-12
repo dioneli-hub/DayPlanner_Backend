@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DayPlanner.Backend.DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230904124627_InvitationUpdated")]
+    [Migration("20230908104352_InvitationUpdated")]
     partial class InvitationUpdated
     {
         /// <inheritdoc />
@@ -93,8 +93,8 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.Property<DateTimeOffset?>("IsAcceptedAt")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<bool>("IsDeclined")
-                        .HasColumnType("bit");
+                    b.Property<DateTimeOffset?>("IsDeclinedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 

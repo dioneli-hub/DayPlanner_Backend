@@ -120,7 +120,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 };
             }
 
-            if(invitation.IsDeclined == true)
+            if(invitation.IsDeclinedAt != null)
             {
                 return new ServiceResponse<SmallBoardMemberModel>
                 {
@@ -216,7 +216,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 };
             }
 
-            if (invitation.IsDeclined == true)
+            if (invitation.IsDeclinedAt != null)
             {
                 return new ServiceResponse<SmallBoardMemberModel>
                 {
@@ -249,7 +249,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 };
             }
 
-            invitation.IsDeclined = true;
+            invitation.IsDeclinedAt = DateTimeOffset.UtcNow;
 
             _context.BoardMembershipInvitations.Update(invitation);
             await _context.SaveChangesAsync();

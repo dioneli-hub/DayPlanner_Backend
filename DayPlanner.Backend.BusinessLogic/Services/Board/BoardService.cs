@@ -95,6 +95,9 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 _context.TaskItems.RemoveRange(board.Tasks);
                 _context.Boards.Remove(board);
 
+                var boardMembershipInvitations = await _context.BoardMembershipInvitations.Where(x => x.BoardId == board.Id).ToListAsync();
+                _context.BoardMembershipInvitations.RemoveRange(boardMembershipInvitations);
+
                 await _context.SaveChangesAsync();
             } catch
             {

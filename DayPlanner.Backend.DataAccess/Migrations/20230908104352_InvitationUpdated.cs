@@ -25,7 +25,7 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     InvitationToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsAcceptedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    IsDeclined = table.Column<bool>(type: "bit", nullable: false)
+                    IsDeclinedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                 },
                 constraints: table =>
                 {

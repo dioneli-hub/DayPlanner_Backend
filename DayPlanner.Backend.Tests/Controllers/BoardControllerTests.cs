@@ -1,9 +1,5 @@
-﻿
-using DayPlanner.Backend.Api.Controllers;
-using DayPlanner.Backend.ApiModels;
-using DayPlanner.Backend.ApiModels.TaskItem;
+﻿using DayPlanner.Backend.ApiModels.TaskItem;
 using DayPlanner.Backend.Domain;
-using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 
 

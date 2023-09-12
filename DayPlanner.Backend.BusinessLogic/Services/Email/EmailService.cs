@@ -27,7 +27,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 if (user != null)
                 {
                     var email = new MimeMessage();
-                    email.From.Add(MailboxAddress.Parse("dianka_levchenko@outlook.com"));//this.FromEmail
+                    email.From.Add(MailboxAddress.Parse("dayplanner_team@outlook.com"));//this.FromEmail
                     email.To.Add(MailboxAddress.Parse(user.Email));// user.Email //"round.world@bk.ru"
                     email.Subject = "DayPlanner Email Verification";
                     var bodyBuilder = new BodyBuilder();
@@ -36,7 +36,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
                     using var smtp = new SmtpClient();
                     smtp.Connect("smtp.outlook.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
-                    await smtp.AuthenticateAsync("dianka_levchenko@outlook.com", "Lbfyf1mamapapacats");//this.FromEmail, this.FromEmailPswd
+                    await smtp.AuthenticateAsync("dayplanner_team@outlook.com", "D1!q2222@ru");//this.FromEmail, this.FromEmailPswd
                     smtp.Send(email);
                     smtp.Disconnect(true);
                 }
@@ -56,7 +56,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 if (user != null)
                 {
                     var email = new MimeMessage();
-                    email.From.Add(MailboxAddress.Parse("dianka_levchenko@outlook.com"));//this.FromEmail
+                    email.From.Add(MailboxAddress.Parse("dayplanner_team@outlook.com"));//this.FromEmail
                     email.To.Add(MailboxAddress.Parse(user.Email));// user.Email //"round.world@bk.ru"
                     email.Subject = "DayPlanner Reset Password";
 
@@ -74,7 +74,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
                     using var smtp = new SmtpClient();
                     smtp.Connect("smtp.outlook.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
-                    await smtp.AuthenticateAsync("dianka_levchenko@outlook.com", "Lbfyf1mamapapacats");//this.FromEmail, this.FromEmailPswd
+                    await smtp.AuthenticateAsync("dayplanner_team@outlook.com", "D1!q2222@ru");//this.FromEmail, this.FromEmailPswd
                     smtp.Send(email);
                     smtp.Disconnect(true);
                 }

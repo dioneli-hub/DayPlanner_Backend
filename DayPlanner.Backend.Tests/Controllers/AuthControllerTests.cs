@@ -1,11 +1,6 @@
-﻿using DayPlanner.Backend.Api.Controllers;
-using DayPlanner.Backend.Api.Managers;
-using DayPlanner.Backend.ApiModels;
+﻿using DayPlanner.Backend.Api.Managers;
 using DayPlanner.Backend.ApiModels.Auth;
 using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
-using DayPlanner.Backend.Domain;
-using FakeItEasy;
-using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DayPlanner.Backend.Tests.Controllers

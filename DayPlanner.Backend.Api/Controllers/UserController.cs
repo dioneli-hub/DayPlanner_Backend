@@ -24,20 +24,6 @@ namespace DayPlanner.Backend.Api.Controllers
             _userService = userService;
         }
 
-        [HttpGet(Name = nameof(GetAllUsers))]
-        public async Task<ActionResult<List<UserModel>>> GetAllUsers()
-        {
-            var users = await _userProvider.GetAllUsers();
-            return Ok(users);
-        }
-
-        [HttpGet("{userId}", Name = nameof(GetUser))]
-        public async Task<ActionResult<UserModel>> GetUser(int userId)
-        {
-            var user = await _userProvider.GetUser(userId);
-            return Ok(user);
-        }
-
         [HttpPost(Name = nameof(RegisterUser))]
         [AllowAnonymous]
         public async Task<ActionResult<ServiceResponse<UserModel>>> RegisterUser([FromBody] CreateUserModel model)

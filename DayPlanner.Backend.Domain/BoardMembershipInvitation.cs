@@ -10,6 +10,6 @@ namespace DayPlanner.Backend.Domain
         public DateTimeOffset CreatedAt { get; set; }
         public string InvitationToken { get; set; }
         public DateTimeOffset? IsAcceptedAt { get; set; }
-        public bool IsDeclined { get; set; } = false;
+        public DateTimeOffset? IsDeclinedAt { get; set; } 
     }
 }

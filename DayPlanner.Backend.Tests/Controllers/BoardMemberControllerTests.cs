@@ -1,7 +1,6 @@
 ﻿using DayPlanner.Backend.ApiModels.BoardMember;
 using DayPlanner.Backend.BusinessLogic.Interfaces.BoardMember;
 using DayPlanner.Backend.Domain;
-using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DayPlanner.Backend.Tests.Controllers

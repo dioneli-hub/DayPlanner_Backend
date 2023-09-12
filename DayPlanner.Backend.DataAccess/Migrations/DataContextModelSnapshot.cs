@@ -90,8 +90,8 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.Property<DateTimeOffset?>("IsAcceptedAt")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<bool>("IsDeclined")
-                        .HasColumnType("bit");
+                    b.Property<DateTimeOffset?>("IsDeclinedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
