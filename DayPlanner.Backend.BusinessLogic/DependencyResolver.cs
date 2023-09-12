@@ -1,12 +1,10 @@
 ﻿using DayPlanner.Backend.BusinessLogic.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using DayPlanner.Backend.BusinessLogic.Services;
-using DayPlanner.Backend.BusinessLogic.Interfaces.BoardMember;
 using DayPlanner.Backend.BusinessLogic.Services.Security;
 using DayPlanner.Backend.BusinessLogic.Services.Auth;
 using DayPlanner.Backend.BusinessLogic.Services.Validation;
 using DayPlanner.Backend.BusinessLogic.Services.Recurrence;
-using DayPlanner.Backend.BusinessLogic.Interfaces.Recurrence;
 
 namespace DayPlanner.Backend.BusinessLogic
 {

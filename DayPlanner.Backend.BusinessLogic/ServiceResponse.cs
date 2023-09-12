@@ -1,4 +1,4 @@
-﻿namespace DayPlanner.Backend.Domain
+﻿namespace DayPlanner.Backend.BusinessLogic.ServiceResponse
 {
     public class ServiceResponse<T>
     {

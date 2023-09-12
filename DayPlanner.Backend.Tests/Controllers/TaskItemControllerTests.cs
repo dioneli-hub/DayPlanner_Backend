@@ -2,7 +2,6 @@
 
 using DayPlanner.Backend.ApiModels.Recurrence;
 using DayPlanner.Backend.ApiModels.TaskItem;
-using DayPlanner.Backend.BusinessLogic.Interfaces.Recurrence;
 using DayPlanner.Backend.BusinessLogic.Services;
 using Microsoft.AspNetCore.Mvc;
 

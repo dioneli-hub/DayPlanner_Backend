@@ -2,18 +2,8 @@
 using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.ApiModels.TaskItem;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
-using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
 using DayPlanner.Backend.DataAccess;
-using DayPlanner.Backend.Domain;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq.Expressions;
-using System.Linq;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using Org.BouncyCastle.Tls;
 
 namespace DayPlanner.Backend.BusinessLogic.Services
 {

@@ -1,6 +1,5 @@
 ﻿using DayPlanner.Backend.Api.Managers;
 using DayPlanner.Backend.ApiModels.Auth;
-using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DayPlanner.Backend.Tests.Controllers
@@ -44,7 +43,7 @@ namespace DayPlanner.Backend.Tests.Controllers
         {
             //Arrange
             var authModel = A.Fake<AuthenticateModel>();
-            var tokenResponse = A.Fake<Domain.ServiceResponse<TokenModel>>();
+            var tokenResponse = A.Fake<ServiceResponse<TokenModel>>();
 
             A.CallTo(() => _authService.Authenticate(authModel.Email, authModel.Password)).Returns(tokenResponse);
 
@@ -55,7 +54,7 @@ namespace DayPlanner.Backend.Tests.Controllers
 
             //Assert
             result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(ActionResult<Domain.ServiceResponse<TokenModel>>));
+            result.Should().BeOfType(typeof(ActionResult<ServiceResponse<TokenModel>>));
         }
 
     }

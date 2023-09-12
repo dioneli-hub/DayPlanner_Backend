@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using DayPlanner.Backend.ApiModels.TaskItem;
-using DayPlanner.Backend.BusinessLogic.Interfaces.Recurrence;
+using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.DataAccess;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,8 +1,8 @@
 ﻿
 using DayPlanner.Backend.ApiModels.BoardMember;
-using DayPlanner.Backend.Domain;
+using DayPlanner.Backend.BusinessLogic.ServiceResponse;
 
-namespace DayPlanner.Backend.BusinessLogic.Interfaces.BoardMember
+namespace DayPlanner.Backend.BusinessLogic.Interfaces
 {
     public interface IBoardMemberService
     {

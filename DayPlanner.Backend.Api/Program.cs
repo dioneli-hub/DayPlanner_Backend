@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using DayPlanner.Backend.Api.Helper;
-using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
 using DayPlanner.Backend.BusinessLogic;
+using DayPlanner.Backend.BusinessLogic.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

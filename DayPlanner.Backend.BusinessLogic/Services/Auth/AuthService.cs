@@ -1,7 +1,7 @@
 ﻿using DayPlanner.Backend.Api.Managers;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
+using DayPlanner.Backend.BusinessLogic.ServiceResponse;
 using DayPlanner.Backend.DataAccess;
-using DayPlanner.Backend.Domain;
 using Microsoft.EntityFrameworkCore;
 
 

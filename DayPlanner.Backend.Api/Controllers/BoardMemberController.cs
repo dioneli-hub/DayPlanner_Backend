@@ -1,10 +1,10 @@
 ﻿using DayPlanner.Backend.ApiModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using DayPlanner.Backend.BusinessLogic.Interfaces.BoardMember;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
-using DayPlanner.Backend.Domain;
 using DayPlanner.Backend.ApiModels.BoardMember;
+using DayPlanner.Backend.ApiModels.Auth;
+using DayPlanner.Backend.BusinessLogic.ServiceResponse;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
@@ -100,15 +100,6 @@ namespace DayPlanner.Backend.Api.Controllers
         }
 
 
-        //[HttpGet("search", Name = nameof(SearchUser))]
-        //public async Task<ActionResult<UserModel>> SearchUser([FromBody] SearchUserModel model)
-        //{
-
-        //    var user = await _userProvider.SearchUser(model);
-
-        //    return Ok(user);
-        //}
-
         [HttpGet("get-suggested-search-users/{emailSearched}", Name = nameof(GetSuggestedSearchEmails))]
         public async Task<ActionResult<List<string>>> GetSuggestedSearchEmails([FromRoute] string emailSearched)
         {
@@ -117,29 +108,6 @@ namespace DayPlanner.Backend.Api.Controllers
 
             return Ok(emails);
         }
-
-
-
-        /*
-[HttpGet]
-[Route("boards/{boardId}/memberships", Name = nameof(GetBoardMembers))]
-public async Task<ActionResult<List<BoardMemberModel>>> GetBoardMembers(
-    [FromRoute] int boardId)
-{
-    var boardMembers = await _boardMemberProvider.GetBoardMembers(boardId);
-    return Ok(boardMembers);
-}
-*/
-
-
-        //[HttpGet("users/{userId}/get-user-boards", Name = nameof(GetMemberBoards))]
-        //public async Task<ActionResult<List<BoardModel>>> GetMemberBoards(int userId)
-        //{
-        //    var boards = await _boardMemberProvider.GetMemberBoards(userId);
-
-        //    return Ok(boards);
-        //}
-
     }
 }
 

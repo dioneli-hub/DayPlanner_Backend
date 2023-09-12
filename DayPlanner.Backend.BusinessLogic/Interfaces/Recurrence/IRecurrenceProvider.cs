@@ -1,6 +1,6 @@
 ﻿using DayPlanner.Backend.ApiModels.TaskItem;
 
-namespace DayPlanner.Backend.BusinessLogic.Interfaces.Recurrence
+namespace DayPlanner.Backend.BusinessLogic.Interfaces
 {
     public interface IRecurrenceProvider
     {

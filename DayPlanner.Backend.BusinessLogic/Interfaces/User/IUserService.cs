@@ -1,6 +1,6 @@
 ﻿using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.ApiModels.User;
-using DayPlanner.Backend.Domain;
+using DayPlanner.Backend.BusinessLogic.ServiceResponse;
 
 namespace DayPlanner.Backend.BusinessLogic.Interfaces
 {

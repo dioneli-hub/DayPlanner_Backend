@@ -1,4 +1,4 @@
-﻿using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
+﻿using DayPlanner.Backend.BusinessLogic.Interfaces;
 using System.Security.Principal;
 namespace DayPlanner.Backend.Api.Helper
 {

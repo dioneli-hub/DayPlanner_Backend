@@ -5,7 +5,6 @@ using DayPlanner.Backend.ApiModels.TaskItem;
 using DayPlanner.Backend.ApiModels.Recurrence;
 using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.BusinessLogic.Services;
-using DayPlanner.Backend.BusinessLogic.Interfaces.Recurrence;
 
 namespace DayPlanner.Backend.Api.Controllers
 {

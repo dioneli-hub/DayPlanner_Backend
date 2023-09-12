@@ -1,6 +1,5 @@
-﻿using DayPlanner.Backend.ApiModels.BoardMember;
-using DayPlanner.Backend.BusinessLogic.Interfaces.BoardMember;
-using DayPlanner.Backend.Domain;
+﻿using DayPlanner.Backend.ApiModels.Auth;
+using DayPlanner.Backend.ApiModels.BoardMember;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DayPlanner.Backend.Tests.Controllers

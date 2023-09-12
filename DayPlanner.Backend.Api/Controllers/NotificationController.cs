@@ -49,13 +49,3 @@ namespace DayPlanner.Backend.Api.Controllers
         }
     }
 }
-
-//[HttpPost(Name = nameof(CreateNotification))]
-//public async Task<ActionResult<NotificationModel>> CreateNotification(
-//    [FromBody] CreateNotificationModel notificationModel)
-//{
-//    var notificationId = await _notificationService.CreateNotification(notificationModel);
-//    var notification = await _notificationProvider.GetNotification(notificationId);
-
-//    return Ok(notification);
-//}
