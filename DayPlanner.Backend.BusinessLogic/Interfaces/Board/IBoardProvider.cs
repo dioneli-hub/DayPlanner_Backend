@@ -7,7 +7,7 @@ namespace DayPlanner.Backend.BusinessLogic.Interfaces
         Task<List<BoardModel>> GetBoards();
         Task<BoardModel> GetBoard(int boardId);
 
-        
+        Task<bool> IsUserAllowedToBoard(int userId, int boardId);
 
     }
 }

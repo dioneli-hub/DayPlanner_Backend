@@ -30,6 +30,13 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             return boardModels;
         }
 
+
+        public async Task<bool> IsUserAllowedToBoard(int userId, int boardId)
+        {
+            var isAllowed = await _context.BoardMembers.AnyAsync(x => x.MemberId == userId && x.BoardId == boardId);
+            return isAllowed;
+        }
+
         // TESTED
         public async Task<BoardModel> GetBoard(int boardId)
         {

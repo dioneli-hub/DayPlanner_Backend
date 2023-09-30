@@ -22,7 +22,6 @@ namespace DayPlanner.Backend.BusinessLogic.Services
         }
 
 
-
         public async Task<int> CreateBoard(CreateBoardModel createBoardModel)
         {
             var currentUserId = _userContextService.GetCurrentUserId();

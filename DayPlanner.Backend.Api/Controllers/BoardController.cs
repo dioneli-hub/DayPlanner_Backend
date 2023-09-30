@@ -33,7 +33,16 @@ namespace DayPlanner.Backend.Api.Controllers
             
             return Ok(board);
         }
-        
+
+        //test
+        [HttpGet("{boardId}/user/{userId}/is-allowed-to-board", Name = nameof(IsUserAllowedToBoard))]
+        public async Task<ActionResult<bool>> IsUserAllowedToBoard(int boardId, int userId)
+        {
+            var isAllowed = await _boardProvider.IsUserAllowedToBoard(userId, boardId);
+
+            return Ok(isAllowed);
+        }
+
 
         [HttpPost (Name = nameof(CreateBoard))]
         public async Task<ActionResult<BoardModel>> CreateBoard([FromBody] CreateBoardModel createBoardModel)

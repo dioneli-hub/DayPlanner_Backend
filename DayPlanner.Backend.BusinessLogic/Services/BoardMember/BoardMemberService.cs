@@ -107,7 +107,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             var invitation = await _context.BoardMembershipInvitations
                     .Where(x => x.InvitationToken == invitationToken)
-                    .FirstOrDefaultAsync();
+                    .SingleOrDefaultAsync();
 
             if (invitation == null)
             {
@@ -119,7 +119,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 };
             }
 
-            if(invitation.IsDeclinedAt != null)
+            if (invitation.IsDeclinedAt != null)
             {
                 return new ServiceResponse<SmallBoardMemberModel>
                 {
@@ -129,7 +129,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 };
             }
 
-            if(invitation.IsAcceptedAt != null)
+            if (invitation.IsAcceptedAt != null)
             {
                 return new ServiceResponse<SmallBoardMemberModel>
                 {
@@ -178,6 +178,8 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             _context.BoardMembershipInvitations.Update(invitation);
 
             await _context.BoardMembers.AddAsync(boardMember);
+
+
             await _context.SaveChangesAsync();
 
             var notificationModel = new CreateNotificationModel
@@ -192,7 +194,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             {
                 IsSuccess = true,
                 Message = $"You were successfully added to board \"{board.Name}\".",
-                Data = _mapper.Map<SmallBoardMemberModel>(boardMember)
+                Data = null//_mapper.Map<SmallBoardMemberModel>(boardMember)
             };
         }
 

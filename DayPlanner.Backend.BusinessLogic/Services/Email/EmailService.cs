@@ -107,7 +107,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 }
 
                 var email = new MimeMessage();
-                email.From.Add(MailboxAddress.Parse("dianka_levchenko@outlook.com"));//this.FromEmail
+                email.From.Add(MailboxAddress.Parse("dayplanner_team@outlook.com"));//this.FromEmail
                 email.To.Add(MailboxAddress.Parse(invitedPersonEmail));// user.Email //"round.world@bk.ru"
                 email.Subject = "DayPlanner Board Join Invitation";
 
@@ -146,7 +146,7 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 email.Body = bodyBuilder.ToMessageBody();
                 using var smtp = new SmtpClient();
                 smtp.Connect("smtp.outlook.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
-                await smtp.AuthenticateAsync("dianka_levchenko@outlook.com", "Lbfyf1mamapapacats");//this.FromEmail, this.FromEmailPswd
+                await smtp.AuthenticateAsync("dayplanner_team@outlook.com", "D1!q2222@ru");//this.FromEmail, this.FromEmailPswd
                 smtp.Send(email);
                 smtp.Disconnect(true);
             }
