@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using DayPlanner.Backend.BusinessLogic.Interfaces;
-using DayPlanner.Backend.Domain;
-
+﻿using DayPlanner.Backend.BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using DayPlanner.Backend.ApiModels.TaskItem;
@@ -29,14 +26,6 @@ namespace DayPlanner.Backend.Api.Controllers
             
         }
 
-        [HttpGet(Name = nameof(GetBoards))]
-        public async Task<ActionResult<List<BoardModel>>> GetBoards()
-        {
-            var boards = await _boardProvider.GetBoards();
-
-            return Ok(boards);
-        }
-
         [HttpGet("{boardId}", Name = nameof(GetBoard))]
         public async Task<ActionResult<BoardModel>> GetBoard(int boardId)
         {
@@ -45,8 +34,15 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok(board);
         }
 
+        //test
+        [HttpGet("{boardId}/user/{userId}/is-allowed-to-board", Name = nameof(IsUserAllowedToBoard))]
+        public async Task<ActionResult<bool>> IsUserAllowedToBoard(int boardId, int userId)
+        {
+            var isAllowed = await _boardProvider.IsUserAllowedToBoard(userId, boardId);
 
-        
+            return Ok(isAllowed);
+        }
+
 
         [HttpPost (Name = nameof(CreateBoard))]
         public async Task<ActionResult<BoardModel>> CreateBoard([FromBody] CreateBoardModel createBoardModel)
@@ -65,18 +61,8 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok();
         }
 
-        [HttpPut("{boardId}", Name = nameof(UpdateBoard))]
 
-        public async Task<ActionResult<BoardModel>> UpdateBoard(
-            [FromRoute] int boardId,
-            [FromBody] EditBoardModel editedBoardModel)
-        {
-            await _boardService.UpdateBoard(boardId, editedBoardModel);
-            var updatedBoard = await _boardProvider.GetBoard(boardId);
-
-            return Ok(updatedBoard);
-        }
-
+        
         [HttpPost]
         [Route("{boardId}/tasks")]
         public async Task<ActionResult<TaskItemModel>> AddTaskToBoard(
@@ -89,6 +75,7 @@ namespace DayPlanner.Backend.Api.Controllers
             return Ok(task);
         }
 
-        
+
+
     }
 }

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.ApiModels.Auth;
-using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
+using DayPlanner.Backend.BusinessLogic.ServiceResponse;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
@@ -37,7 +37,7 @@ namespace DayPlanner.Backend.Api.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult<TokenModel>> Authenticate(AuthenticateModel model)
+        public async Task<ActionResult<ServiceResponse<TokenModel>>> Authenticate(AuthenticateModel model)
         {
             var tokenResponse = await _authService.Authenticate(model.Email, model.Password);
             return Ok(tokenResponse);

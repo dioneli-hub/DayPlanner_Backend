@@ -1,5 +1,5 @@
 ﻿using DayPlanner.Backend.Api.Managers;
-using DayPlanner.Backend.Domain;
+using DayPlanner.Backend.BusinessLogic.ServiceResponse;
 
 
 namespace DayPlanner.Backend.BusinessLogic.Interfaces

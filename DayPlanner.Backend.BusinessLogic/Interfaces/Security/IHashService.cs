@@ -6,5 +6,7 @@ namespace DayPlanner.Backend.BusinessLogic.Interfaces
     {
         HashModel Generate(string password);
         byte[] HashPassword(string password, byte[] salt);
+
+        string GenerateRandomToken(int size);
     }
 }

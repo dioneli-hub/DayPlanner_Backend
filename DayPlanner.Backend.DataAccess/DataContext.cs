@@ -16,6 +16,8 @@ namespace DayPlanner.Backend.DataAccess
         public DbSet<User> Users { get; set; }
         public DbSet<BoardMember> BoardMembers { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<RecurringPattern> RecurringPatterns { get; set; }
+        public DbSet<BoardMembershipInvitation> BoardMembershipInvitations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,6 +28,8 @@ namespace DayPlanner.Backend.DataAccess
             new UserConfiguration().Configure(modelBuilder.Entity<User>());
             new BoardMemberConfiguration().Configure(modelBuilder.Entity<BoardMember>());
             new NotificationConfiguration().Configure(modelBuilder.Entity<Notification>());
+            new RecurringPatternConfiguration().Configure(modelBuilder.Entity<RecurringPattern>());
+            new BoardMembershipInvitationConfiguration().Configure(modelBuilder.Entity<BoardMembershipInvitation>());
 
 
 
@@ -44,12 +48,14 @@ namespace DayPlanner.Backend.DataAccess
                 new User
                 {
                     Id = 1,
-                    FirstName = "Di",
-                    LastName = "Li",
+                    FirstName = "Madison",
+                    LastName = "Walker",
                     Email = "Dioneli@mail.ru1",
                     CreatedAt = new DateTime(2020, 05, 09, 9, 15, 0),
                     PasswordHash = "x/5fpi8JiMGXxM4Re4fzlamU61mQQMGNR50wxtwCaHw=",
-                    SaltHash = "mlJyHV/cYHAT2ErFkB8d5w=="
+                    SaltHash = "mlJyHV/cYHAT2ErFkB8d5w==",
+                    VerificationToken = "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==",
+                    VerifiedAt = new DateTime(2020, 05, 09, 9, 15, 0)
                 });
 
             modelBuilder.Entity<User>().HasData(
@@ -61,8 +67,50 @@ namespace DayPlanner.Backend.DataAccess
                     Email = "D1!q2222@ru",
                     CreatedAt = new DateTime(2020, 05, 09, 9, 15, 0),
                     PasswordHash = "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=",
-                    SaltHash = "FyQp6hr65+F7jI0btRXMLw=="
+                    SaltHash = "FyQp6hr65+F7jI0btRXMLw==",
+                    VerificationToken = "OCGOOxNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==",
+                    VerifiedAt = new DateTime(2020, 05, 09, 9, 15, 0)
                 });
+
+            modelBuilder.Entity<User>().HasData(
+               new User
+               {
+                   Id = 3,
+                   FirstName = "Viktor",
+                   LastName = "Dimashevski",
+                   Email = "vikdim@madeup.mail.com",
+                   CreatedAt = new DateTime(2020, 05, 09, 9, 15, 0),
+                   PasswordHash = "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=",
+                   SaltHash = "FyQp6hr65+F7jI0btRXMLw==",
+                   VerificationToken = "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==",
+                   VerifiedAt = new DateTime(2020, 05, 09, 9, 15, 0)
+               });
+            modelBuilder.Entity<User>().HasData(
+               new User
+               {
+                   Id = 4,
+                   FirstName = "Liam",
+                   LastName = "Wall",
+                   Email = "liamwall@madeup.mail.com",
+                   CreatedAt = new DateTime(2020, 05, 09, 9, 15, 0),
+                   PasswordHash = "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=",
+                   SaltHash = "FyQp6hr65+F7jI0btRXMLw==",
+                   VerificationToken = "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==",
+                   VerifiedAt = new DateTime(2020, 05, 09, 9, 15, 0)
+               });
+            modelBuilder.Entity<User>().HasData(
+               new User
+               {
+                   Id = 5,
+                   FirstName = "Karen",
+                   LastName = "Tailor",
+                   Email = "kktailor@madeup.mail.com",
+                   CreatedAt = new DateTime(2020, 05, 09, 9, 15, 0),
+                   PasswordHash = "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=",
+                   SaltHash = "FyQp6hr65+F7jI0btRXMLw==",
+                   VerificationToken = "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==",
+                   VerifiedAt = new DateTime(2020, 05, 09, 9, 15, 0)
+               });
         }
     }
 }

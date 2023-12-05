@@ -8,11 +8,45 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DayPlanner.Backend.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial3 : Migration
+    public partial class InvitationUpdated : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "BoardMembershipInvitations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    InviterId = table.Column<int>(type: "int", nullable: false),
+                    InvitedPersonEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BoardId = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    InvitationToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsAcceptedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    IsDeclinedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BoardMembershipInvitations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RecurringPatterns",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TaskId = table.Column<int>(type: "int", nullable: false),
+                    RecurringType = table.Column<int>(type: "int", nullable: false),
+                    OccurencesNumber = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecurringPatterns", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "BoardMembers",
                 columns: table => new
@@ -52,6 +86,10 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SaltHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VerificationToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    VerifiedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    ResetPasswordToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ResetPasswrodTokenExpiresAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     BoardId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -94,10 +132,13 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     DueDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     IsCompleted = table.Column<bool>(type: "bit", nullable: false),
+                    IsRecurring = table.Column<bool>(type: "bit", nullable: false),
+                    ChangeRecurredChildren = table.Column<bool>(type: "bit", nullable: false),
                     CreatorId = table.Column<int>(type: "int", nullable: false),
                     BoardId = table.Column<int>(type: "int", nullable: false),
                     PerformerId = table.Column<int>(type: "int", nullable: true),
-                    IsOverdue = table.Column<bool>(type: "bit", nullable: false)
+                    IsOverdue = table.Column<bool>(type: "bit", nullable: false),
+                    ParentTaskId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -121,11 +162,14 @@ namespace DayPlanner.Backend.DataAccess.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "BoardId", "CreatedAt", "Email", "FirstName", "LastName", "PasswordHash", "SaltHash" },
+                columns: new[] { "Id", "BoardId", "CreatedAt", "Email", "FirstName", "LastName", "PasswordHash", "ResetPasswordToken", "ResetPasswrodTokenExpiresAt", "SaltHash", "VerificationToken", "VerifiedAt" },
                 values: new object[,]
                 {
-                    { 1, null, new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "Dioneli@mail.ru1", "Di", "Li", "x/5fpi8JiMGXxM4Re4fzlamU61mQQMGNR50wxtwCaHw=", "mlJyHV/cYHAT2ErFkB8d5w==" },
-                    { 2, null, new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "D1!q2222@ru", "Sam", "McGregor", "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=", "FyQp6hr65+F7jI0btRXMLw==" }
+                    { 1, null, new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "Dioneli@mail.ru1", "Madison", "Walker", "x/5fpi8JiMGXxM4Re4fzlamU61mQQMGNR50wxtwCaHw=", null, null, "mlJyHV/cYHAT2ErFkB8d5w==", "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==", new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)) },
+                    { 2, null, new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "D1!q2222@ru", "Sam", "McGregor", "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=", null, null, "FyQp6hr65+F7jI0btRXMLw==", "OCGOOxNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==", new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)) },
+                    { 3, null, new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "vikdim@madeup.mail.com", "Viktor", "Dimashevski", "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=", null, null, "FyQp6hr65+F7jI0btRXMLw==", "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==", new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)) },
+                    { 4, null, new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "liamwall@madeup.mail.com", "Liam", "Wall", "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=", null, null, "FyQp6hr65+F7jI0btRXMLw==", "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==", new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)) },
+                    { 5, null, new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), "kktailor@madeup.mail.com", "Karen", "Tailor", "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=", null, null, "FyQp6hr65+F7jI0btRXMLw==", "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==", new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)) }
                 });
 
             migrationBuilder.CreateIndex(
@@ -198,7 +242,13 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                 name: "BoardMembers");
 
             migrationBuilder.DropTable(
+                name: "BoardMembershipInvitations");
+
+            migrationBuilder.DropTable(
                 name: "Notifications");
+
+            migrationBuilder.DropTable(
+                name: "RecurringPatterns");
 
             migrationBuilder.DropTable(
                 name: "TaskItems");

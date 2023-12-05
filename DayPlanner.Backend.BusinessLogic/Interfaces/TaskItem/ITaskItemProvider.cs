@@ -1,5 +1,6 @@
-﻿using DayPlanner.Backend.ApiModels.TaskItem;
-
+﻿using DayPlanner.Backend.ApiModels;
+using DayPlanner.Backend.ApiModels.TaskItem;
+using DayPlanner.Backend.BusinessLogic.Services;
 
 namespace DayPlanner.Backend.BusinessLogic.Interfaces
 {
@@ -17,6 +18,8 @@ namespace DayPlanner.Backend.BusinessLogic.Interfaces
         Task<List<TaskItemModel>> GetUsersCompletedTasks(int userId);
         Task<List<TaskItemModel>> GetUsersToDoTasks(int userId);
 
-        Task<List<TaskItemModel>> GetBoardTasks(int boardId);
+        Task<List<TaskItemModel>> GetBoardTasks(int boardId, bool ifMyTasks);
+        Task<List<TaskGroup<UserModel>>> GetBoardTasksGroupedByPerformer(int boardId);
+        Task<List<TaskGroup<bool>>> GetBoardTasksGroupedByCompleted(int boardId, bool ifMyTasks);
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DayPlanner.Backend.DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230711114429_Initial3")]
-    partial class Initial3
+    [Migration("20230908104352_InvitationUpdated")]
+    partial class InvitationUpdated
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -65,6 +65,42 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.ToTable("BoardMembers", (string)null);
                 });
 
+            modelBuilder.Entity("DayPlanner.Backend.Domain.BoardMembershipInvitation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BoardId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("InvitationToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InvitedPersonEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("InviterId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset?>("IsAcceptedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("IsDeclinedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BoardMembershipInvitations", (string)null);
+                });
+
             modelBuilder.Entity("DayPlanner.Backend.Domain.Notification", b =>
                 {
                     b.Property<int>("Id")
@@ -90,6 +126,28 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                     b.ToTable("Notifications", (string)null);
                 });
 
+            modelBuilder.Entity("DayPlanner.Backend.Domain.RecurringPattern", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("OccurencesNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecurringType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TaskId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RecurringPatterns", (string)null);
+                });
+
             modelBuilder.Entity("DayPlanner.Backend.Domain.TaskItem", b =>
                 {
                     b.Property<int>("Id")
@@ -100,6 +158,9 @@ namespace DayPlanner.Backend.DataAccess.Migrations
 
                     b.Property<int>("BoardId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("ChangeRecurredChildren")
+                        .HasColumnType("bit");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
@@ -115,6 +176,12 @@ namespace DayPlanner.Backend.DataAccess.Migrations
 
                     b.Property<bool>("IsOverdue")
                         .HasColumnType("bit");
+
+                    b.Property<bool>("IsRecurring")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("ParentTaskId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("PerformerId")
                         .HasColumnType("int");
@@ -164,9 +231,21 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ResetPasswordToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("ResetPasswrodTokenExpiresAt")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("SaltHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VerificationToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("VerifiedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
@@ -180,10 +259,12 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                             Id = 1,
                             CreatedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
                             Email = "Dioneli@mail.ru1",
-                            FirstName = "Di",
-                            LastName = "Li",
+                            FirstName = "Madison",
+                            LastName = "Walker",
                             PasswordHash = "x/5fpi8JiMGXxM4Re4fzlamU61mQQMGNR50wxtwCaHw=",
-                            SaltHash = "mlJyHV/cYHAT2ErFkB8d5w=="
+                            SaltHash = "mlJyHV/cYHAT2ErFkB8d5w==",
+                            VerificationToken = "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==",
+                            VerifiedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0))
                         },
                         new
                         {
@@ -193,7 +274,45 @@ namespace DayPlanner.Backend.DataAccess.Migrations
                             FirstName = "Sam",
                             LastName = "McGregor",
                             PasswordHash = "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=",
-                            SaltHash = "FyQp6hr65+F7jI0btRXMLw=="
+                            SaltHash = "FyQp6hr65+F7jI0btRXMLw==",
+                            VerificationToken = "OCGOOxNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==",
+                            VerifiedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0))
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            Email = "vikdim@madeup.mail.com",
+                            FirstName = "Viktor",
+                            LastName = "Dimashevski",
+                            PasswordHash = "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=",
+                            SaltHash = "FyQp6hr65+F7jI0btRXMLw==",
+                            VerificationToken = "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==",
+                            VerifiedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0))
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            Email = "liamwall@madeup.mail.com",
+                            FirstName = "Liam",
+                            LastName = "Wall",
+                            PasswordHash = "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=",
+                            SaltHash = "FyQp6hr65+F7jI0btRXMLw==",
+                            VerificationToken = "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==",
+                            VerifiedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0))
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            Email = "kktailor@madeup.mail.com",
+                            FirstName = "Karen",
+                            LastName = "Tailor",
+                            PasswordHash = "FBHiJLzMEWDHoMgTd1rqQQbDaucEQStWzFba3FRL54I=",
+                            SaltHash = "FyQp6hr65+F7jI0btRXMLw==",
+                            VerificationToken = "bCGM/xNYBYG1jzN5UmkSDY7YqpU8UovU+xz3OP+JlQJS9t0lrW3LTA+lze+KeOvbYXptDmbIDptUcz9L+YeuUg==",
+                            VerifiedAt = new DateTimeOffset(new DateTime(2020, 5, 9, 9, 15, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0))
                         });
                 });
 

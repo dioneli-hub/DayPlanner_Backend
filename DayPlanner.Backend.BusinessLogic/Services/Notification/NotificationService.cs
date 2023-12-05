@@ -1,6 +1,5 @@
 ﻿using DayPlanner.Backend.ApiModels;
-using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
-using DayPlanner.Backend.BusinessLogic.Interfaces.Notification;
+using DayPlanner.Backend.BusinessLogic.Interfaces;
 using DayPlanner.Backend.DataAccess;
 using DayPlanner.Backend.Domain;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +21,6 @@ namespace DayPlanner.Backend.BusinessLogic.Services
         }
         public async Task<int> CreateNotification(CreateNotificationModel notificationModel)
         {
-            //////var currentUserId = _userContextService.GetCurrentUserId();
             var user = await _context.Users.FindAsync(notificationModel.UserId);
 
 
@@ -39,58 +37,58 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
             return notification.Id;
         }
-        //public async Task<int> CreateNotification(CreateNotificationModel notificationModel, int userId)
-        //{
-        //    var user = await _context.Users.FindAsync(userId);
-        //    var notification = new Notification
-        //    {
-        //        Text = notificationModel.Text,
-        //        UserId = userId,
-        //        User = user,
-        //        CreatedAt = DateTimeOffset.UtcNow
-        //    };
 
-        //    await _context.Notifications.AddAsync(notification);
-        //    await _context.SaveChangesAsync();
-
-        //    return notification.Id;
-        //}
 
         public async Task DeleteNotification(int notificationId)
         {
-            var currentUserId = _userContextService.GetCurrentUserId();
-            var notification = await _context.Notifications
-                .FirstOrDefaultAsync(x => x.Id == notificationId);
-
-            if (notification == null)
+            try
             {
-                throw new ApplicationException("Notification not found.");
-            }
+                var currentUserId = _userContextService.GetCurrentUserId();
+                var notification = await _context.Notifications
+                    .FirstOrDefaultAsync(x => x.Id == notificationId);
 
-            if (notification.UserId != currentUserId)
+                if (notification == null)
+                {
+                    throw new ApplicationException("Notification not found.");
+                }
+
+                if (notification.UserId != currentUserId)
+                {
+                    throw new ApplicationException("Access denied.");
+                }
+
+
+                _context.Notifications.Remove(notification);
+
+                await _context.SaveChangesAsync();
+            } catch
             {
-                throw new ApplicationException("Access denied.");
+                throw new ApplicationException("Some error has occured while deleting the notification...");
             }
-
             
-            _context.Notifications.Remove(notification);
-
-            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteUserNotifications() {
-            var currentUserId = _userContextService.GetCurrentUserId();
-            var notifications = await _context.Notifications
-                .Where(x => x.UserId == currentUserId)
-                .ToListAsync();
-
-            if (notifications == null)
+            try
             {
-                throw new ApplicationException("Not found.");
-            }
+                var currentUserId = _userContextService.GetCurrentUserId();
+                var notifications = await _context.Notifications
+                    .Where(x => x.UserId == currentUserId)
+                    .ToListAsync();
 
-            _context.Notifications.RemoveRange(notifications);
-            await _context.SaveChangesAsync();
+                if (notifications == null)
+                {
+                    throw new ApplicationException("Not found.");
+                }
+
+                _context.Notifications.RemoveRange(notifications);
+                await _context.SaveChangesAsync();
+            }
+            catch
+            {
+                throw new ApplicationException("Some error has occured while deleting user's notifications...");
+            }
+           
         }
     }
 }

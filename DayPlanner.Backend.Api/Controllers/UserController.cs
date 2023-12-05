@@ -1,9 +1,10 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
-using DayPlanner.Backend.Domain;
+using DayPlanner.Backend.ApiModels.User;
+using DayPlanner.Backend.ApiModels.Auth;
+using DayPlanner.Backend.BusinessLogic.ServiceResponse;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
@@ -16,7 +17,7 @@ namespace DayPlanner.Backend.Api.Controllers
         private readonly IUserService _userService;
 
         public UserController(
-            IUserProvider userProvider, 
+            IUserProvider userProvider,
             IUserService userService
             )
         {
@@ -24,38 +25,53 @@ namespace DayPlanner.Backend.Api.Controllers
             _userService = userService;
         }
 
-        [HttpGet(Name = nameof(GetAllUsers))] 
-        public async Task<ActionResult<List<UserModel>>> GetAllUsers()
-        {
-            var users = await _userProvider.GetAllUsers();
-            return Ok(users);
-        }
-
-        [HttpGet("{userId}", Name = nameof(GetUser))] 
-        public async Task<ActionResult<UserModel>> GetUser(int userId)
-        {
-            var user = await _userProvider.GetUser(userId);
-            return Ok(user);
-        }
-
         [HttpPost(Name = nameof(RegisterUser))]
         [AllowAnonymous]
         public async Task<ActionResult<ServiceResponse<UserModel>>> RegisterUser([FromBody] CreateUserModel model)
         {
             var userResponse = await _userService.RegisterUser(model);
-            Console.WriteLine("!!!!!!!!!!!!!!!!!!!!!!!");
-            Console.WriteLine(userResponse.IsSuccess);
-            //var user = await _userProvider.GetUser(userId);
 
             return Ok(userResponse);
         }
 
-        //[HttpGet("{userId}/user-boards", Name = nameof(GetUserBoards))]
-        //public async Task<ActionResult<BoardModel>> GetUserBoards(int userId)
-        //{
-        //    var userBoards = await _userProvider.GetUserBoards(userId);
-        //    return Ok(userBoards);
-        //}
+        [HttpPatch("verify", Name = nameof(Verify))]
+        [AllowAnonymous]
+        public async Task<ActionResult> Verify([FromBody] SmallTokenModel verificationToken)
+        {
+
+            //await _userService.Verify(WebUtility.UrlDecode(verificationToken.Token));
+            await _userService.Verify(verificationToken.Token);
+
+            return Ok("User successfully verified.");
+        }
+
+
+        [HttpPost("trigger-verification", Name = nameof(TriggerVerification))]
+        [AllowAnonymous]
+        public async Task<ActionResult<ServiceResponse<UserModel>>> TriggerVerification([FromBody] VerifyUserModel model)
+        {
+            var response = await _userService.TriggerVerification(model);
+
+            return Ok(response);
+        }
+
+        [HttpPatch("forgot-password", Name = nameof(ForgotPassword))]
+        [AllowAnonymous]
+        public async Task<ActionResult<ServiceResponse<bool>>> ForgotPassword([FromBody] ForgotPasswordModel user)
+        {
+            var response = await _userService.ForgotPassword(user.Email);
+            return Ok(response);
+        }
+
+        [HttpPatch("reset-password", Name = nameof(ResetPassword))]
+        [AllowAnonymous]
+        public async Task<ActionResult<ServiceResponse<bool>>> ResetPassword([FromBody] ResetPasswordModel model)
+        {
+
+            var response = await _userService.ResetPassword(model);
+
+            return Ok(response);
+        }
     }
 }
 

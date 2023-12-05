@@ -1,6 +1,4 @@
-﻿using DayPlanner.Backend.Domain;
-
-namespace DayPlanner.Backend.ApiModels
+﻿namespace DayPlanner.Backend.ApiModels
 {
     public class NotificationModel
     {

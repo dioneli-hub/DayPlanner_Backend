@@ -5,9 +5,9 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using DayPlanner.Backend.Api.Helper.HttpContext;
-using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
+using DayPlanner.Backend.Api.Helper;
 using DayPlanner.Backend.BusinessLogic;
+using DayPlanner.Backend.BusinessLogic.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
 //USER HTTP CONTEXT SERVICE & OTHER BLL DEPENDENCIES
 builder.Services.AddBusinessLogicDependencies()
@@ -114,5 +115,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Use custom error handler
+//app.UseMiddleware<ErrorHandler>();
 
 app.Run();

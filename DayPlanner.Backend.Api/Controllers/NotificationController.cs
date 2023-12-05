@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
-using DayPlanner.Backend.BusinessLogic.Interfaces.Notification;
 using DayPlanner.Backend.ApiModels;
+using DayPlanner.Backend.BusinessLogic.Interfaces;
 
 namespace DayPlanner.Backend.Api.Controllers
 {
@@ -13,16 +12,14 @@ namespace DayPlanner.Backend.Api.Controllers
     {
         private readonly INotificationProvider _notificationProvider;
         private readonly INotificationService _notificationService;
-        private readonly IUserContextService _userContextService;
 
         public NotificationController(
             INotificationProvider notificationProvider,
-            INotificationService notificationService,
-            IUserContextService userContextService)
+            INotificationService notificationService
+            )
         {
             _notificationProvider = notificationProvider;
             _notificationService = notificationService;
-            _userContextService = userContextService;
         }
 
         [HttpGet(Name = nameof(GetUserNotifications))]
@@ -32,17 +29,6 @@ namespace DayPlanner.Backend.Api.Controllers
 
             return Ok(notifications);
         }
-
-        //[HttpPost(Name = nameof(CreateNotification))]
-        //public async Task<ActionResult<NotificationModel>> CreateNotification(
-        //    [FromBody] CreateNotificationModel notificationModel)
-        //{
-        //    var notificationId = await _notificationService.CreateNotification(notificationModel);
-        //    var notification = await _notificationProvider.GetNotification(notificationId);
-
-        //    return Ok(notification);
-        //}
-
 
 
         [HttpDelete("{notificationId}", Name = nameof(DeleteNotification))]

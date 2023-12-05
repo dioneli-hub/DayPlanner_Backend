@@ -1,12 +1,9 @@
 ﻿using DayPlanner.Backend.ApiModels;
 using DayPlanner.Backend.ApiModels.TaskItem;
 using DayPlanner.Backend.BusinessLogic.Interfaces;
-using DayPlanner.Backend.BusinessLogic.Interfaces.Context;
-using DayPlanner.Backend.BusinessLogic.Interfaces.Notification;
 using DayPlanner.Backend.DataAccess;
 using DayPlanner.Backend.Domain;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace DayPlanner.Backend.BusinessLogic.Services
 {
@@ -23,7 +20,6 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             _notificationService = notificationService;
             _userContextService = userContextService;
         }
-
 
 
         public async Task<int> CreateBoard(CreateBoardModel createBoardModel)
@@ -68,34 +64,44 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
         public async Task DeleteBoard(int boardId)
         {
-            var currentUserId = _userContextService.GetCurrentUserId();
-            var board = await _context.Boards
-                .Include(x => x.Tasks)
-                .Include(x=> x.BoardMemberships)
-                .FirstOrDefaultAsync(x => x.Id == boardId);
-
-            if (board == null)
+            try
             {
-                throw new ApplicationException("Board not found.");
+                var currentUserId = _userContextService.GetCurrentUserId();
+                var board = await _context.Boards
+                    .Include(x => x.Tasks)
+                    .Include(x => x.BoardMemberships)
+                    .FirstOrDefaultAsync(x => x.Id == boardId);
+
+                if (board == null)
+                {
+                    throw new ApplicationException("Board not found.");
+                }
+
+                if (board.CreatorId != currentUserId)
+                {
+                    throw new ApplicationException("Access denied.");
+                }
+
+                var notificationModel = new CreateNotificationModel
+                {
+                    Text = $"You deleted board \"{board.Name}\".",
+                    UserId = currentUserId
+                };
+                await _notificationService.CreateNotification(notificationModel);
+
+                _context.BoardMembers.RemoveRange(board.BoardMemberships);
+                _context.TaskItems.RemoveRange(board.Tasks);
+                _context.Boards.Remove(board);
+
+                var boardMembershipInvitations = await _context.BoardMembershipInvitations.Where(x => x.BoardId == board.Id).ToListAsync();
+                _context.BoardMembershipInvitations.RemoveRange(boardMembershipInvitations);
+
+                await _context.SaveChangesAsync();
+            } catch
+            {
+                throw new ApplicationException("Some error has occured while deleting the board.");
             }
-
-            if (board.CreatorId != currentUserId)
-            {
-                throw new ApplicationException("Access denied.");
-            }
-
-            var notificationModel = new CreateNotificationModel
-            {
-                Text = $"You deleted board \"{board.Name}\".",
-                UserId = currentUserId
-            };
-            await _notificationService.CreateNotification(notificationModel);
-
-            _context.BoardMembers.RemoveRange(board.BoardMemberships);
-            _context.TaskItems.RemoveRange(board.Tasks);
-            _context.Boards.Remove(board);
-
-            await _context.SaveChangesAsync();
+           
         }
 
         public async Task<int> AddTaskToBoard(int boardId, AddTaskItemToBoardModel addTaskItemToBoardModel)
@@ -104,6 +110,10 @@ namespace DayPlanner.Backend.BusinessLogic.Services
             var currentUser = await _context.Users
                 .Where(u => u.Id == currentUserId)
                 .FirstOrDefaultAsync();
+
+            if (currentUser == null) {
+                throw new ApplicationException("Error retrieving current user. Make sure you are logged in ang try again.");
+            }
             var board = await _context.Boards.FindAsync(boardId);
 
             var boardHasCurrentMember = await _context.BoardMembers.AnyAsync(x => x.BoardId == boardId && x.MemberId == currentUserId);
@@ -128,9 +138,20 @@ namespace DayPlanner.Backend.BusinessLogic.Services
                 Creator = currentUser,
                 BoardId = boardId,
                 Board = board,
-                PerformerId = null, //currentUserId,
-                Performer = null //currentUser
             };
+
+            if (addTaskItemToBoardModel.PerformerId != null)
+            {
+                var performerHasMembership = _context.BoardMembers.Any(m => m.BoardId == boardId && m.MemberId == addTaskItemToBoardModel.PerformerId);
+
+                if (performerHasMembership == false)
+                {
+                    throw new ApplicationException("This performer in not a member of the board.");
+                }
+
+                task.PerformerId = addTaskItemToBoardModel.PerformerId;
+                task.Performer = await _context.Users.Where(u => u.Id == addTaskItemToBoardModel.PerformerId).FirstOrDefaultAsync();
+            } 
 
             await _context.TaskItems.AddAsync(task);
             await _context.SaveChangesAsync();
@@ -140,28 +161,35 @@ namespace DayPlanner.Backend.BusinessLogic.Services
 
         public async Task UpdateBoard(int boardId, EditBoardModel editedBoardModel)
         {
-            if (editedBoardModel == null)
+            try
             {
-                throw new ApplicationException("No data to update entered.");
-            }
+                if (editedBoardModel == null)
+                {
+                    throw new ApplicationException("No data to update entered.");
+                }
 
-            var currentUserId = _userContextService.GetCurrentUserId();
-            var board = await _context.Boards.FirstOrDefaultAsync(x => x.Id == boardId);
+                var currentUserId = _userContextService.GetCurrentUserId();
+                var board = await _context.Boards.FirstOrDefaultAsync(x => x.Id == boardId);
 
-            if (board == null)
+                if (board == null)
+                {
+                    throw new ApplicationException("Board not found.");
+                }
+
+                if (board.CreatorId != currentUserId)
+                {
+                    throw new ApplicationException("Access denied: only board owner can edit board.");
+                }
+
+                board.Name = editedBoardModel.Name;
+
+                _context.Update(board);
+                await _context.SaveChangesAsync();
+            } catch
             {
-                throw new ApplicationException("Board not found.");
+                throw new ApplicationException("Some error has occured while updating the board.");
             }
-
-            if (board.CreatorId != currentUserId)
-            {
-                throw new ApplicationException("Access denied: only board owner can edit board.");
-            }
-
-            board.Name = editedBoardModel.Name;
-
-            _context.Update(board);
-            await _context.SaveChangesAsync();
+           
         }
     }
 }

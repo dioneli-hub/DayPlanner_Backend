@@ -1,11 +1,10 @@
 ﻿using DayPlanner.Backend.BusinessLogic.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using DayPlanner.Backend.BusinessLogic.Services;
-using DayPlanner.Backend.BusinessLogic.Interfaces.BoardMember;
 using DayPlanner.Backend.BusinessLogic.Services.Security;
 using DayPlanner.Backend.BusinessLogic.Services.Auth;
 using DayPlanner.Backend.BusinessLogic.Services.Validation;
-using DayPlanner.Backend.BusinessLogic.Interfaces.Notification;
+using DayPlanner.Backend.BusinessLogic.Services.Recurrence;
 
 namespace DayPlanner.Backend.BusinessLogic
 {
@@ -28,6 +27,10 @@ namespace DayPlanner.Backend.BusinessLogic
             services.AddScoped<IValidationService, ValidationService>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<INotificationProvider, NotificationProvider>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IRecurrenceService, RecurrenceService>();
+            services.AddScoped<IRecurrenceProvider, RecurrenceProvider>();
+
 
             return services;
         }
